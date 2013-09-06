@@ -1,0 +1,4 @@
+ofxFenster
+ofxOsc
+ofxUI
+ofxXmlSettings
