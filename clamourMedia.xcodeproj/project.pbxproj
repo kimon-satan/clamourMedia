@@ -25,6 +25,11 @@
 		9d8e9dd97c73f87403f4f781fc141b4d /* ofxFensterCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = fb624a517b9ca0bd44aa7137b4541340 /* ofxFensterCanvas.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		D9926ED917DA0F4C0090371F /* clamourNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926ED717DA0F4C0090371F /* clamourNode.cpp */; };
+		D9926EDD17DA22200090371F /* libGhost32.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9926EDC17DA22200090371F /* libGhost32.a */; };
+		D9926EE517DA30E70090371F /* displayListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE317DA30E70090371F /* displayListener.cpp */; };
+		D9926EE817DA31B20090371F /* controlListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE617DA31B10090371F /* controlListener.cpp */; };
+		D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE917DA3DDC0090371F /* nodeManager.cpp */; };
+		D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EEC17DA46130090371F /* baseFensterListener.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -174,6 +179,15 @@
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		D9926ED717DA0F4C0090371F /* clamourNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clamourNode.cpp; sourceTree = "<group>"; };
 		D9926ED817DA0F4C0090371F /* clamourNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clamourNode.h; sourceTree = "<group>"; };
+		D9926EDC17DA22200090371F /* libGhost32.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGhost32.a; path = ../../../addons/ofxFenster/libs/ghost/lib/osx32/libGhost32.a; sourceTree = "<group>"; };
+		D9926EE317DA30E70090371F /* displayListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = displayListener.cpp; sourceTree = "<group>"; };
+		D9926EE417DA30E70090371F /* displayListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = displayListener.h; sourceTree = "<group>"; };
+		D9926EE617DA31B10090371F /* controlListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlListener.cpp; sourceTree = "<group>"; };
+		D9926EE717DA31B20090371F /* controlListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = controlListener.h; sourceTree = "<group>"; };
+		D9926EE917DA3DDC0090371F /* nodeManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodeManager.cpp; sourceTree = "<group>"; };
+		D9926EEA17DA3DDC0090371F /* nodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nodeManager.h; sourceTree = "<group>"; };
+		D9926EEC17DA46130090371F /* baseFensterListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = baseFensterListener.cpp; sourceTree = "<group>"; };
+		D9926EED17DA46130090371F /* baseFensterListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = baseFensterListener.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -283,6 +297,7 @@
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 				E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */,
+				D9926EDD17DA22200090371F /* libGhost32.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +486,7 @@
 		991a6de38943d77407e0d0053d1e2c78 /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				D9926EDC17DA22200090371F /* libGhost32.a */,
 				53858516ea2e3237986662d1c420db2b /* ghost */,
 				0ef2fa81f808453a9bc5dd4cec17c804 /* string */,
 			);
@@ -556,6 +572,14 @@
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
 				D9926ED717DA0F4C0090371F /* clamourNode.cpp */,
 				D9926ED817DA0F4C0090371F /* clamourNode.h */,
+				D9926EEC17DA46130090371F /* baseFensterListener.cpp */,
+				D9926EED17DA46130090371F /* baseFensterListener.h */,
+				D9926EE317DA30E70090371F /* displayListener.cpp */,
+				D9926EE417DA30E70090371F /* displayListener.h */,
+				D9926EE617DA31B10090371F /* controlListener.cpp */,
+				D9926EE717DA31B20090371F /* controlListener.h */,
+				D9926EE917DA3DDC0090371F /* nodeManager.cpp */,
+				D9926EEA17DA3DDC0090371F /* nodeManager.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -828,6 +852,10 @@
 				9d44dc88ef9e7991b4a09951e2e4769f /* tinyxmlerror.cpp in Sources */,
 				5a4349e9754d6fa14c0f2a3a1abc30b6 /* tinyxmlparser.cpp in Sources */,
 				D9926ED917DA0F4C0090371F /* clamourNode.cpp in Sources */,
+				D9926EE517DA30E70090371F /* displayListener.cpp in Sources */,
+				D9926EE817DA31B20090371F /* controlListener.cpp in Sources */,
+				D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */,
+				D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1037,7 +1065,9 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../addons/ofxFenster/libs/ghost/lib/osx32\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
 				WRAPPER_EXTENSION = app;
@@ -1123,7 +1153,9 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_49)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../addons/ofxFenster/libs/ghost/lib/osx32\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

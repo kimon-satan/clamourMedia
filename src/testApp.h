@@ -2,7 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
-#include "clamourNode.h"
+#include "displayListener.h"
+#include "controlListener.h"
+#include "ofxFensterManager.h"
+
 
 // listen on port 12345
 #define PORT 41234
@@ -29,20 +32,21 @@ public:
     
     void exit();
     
-    void resetNodes();
     
-    ofTrueTypeFont font;
+    ofxFenster * mDisplay, * mControl;
+    displayListener mDisplayListener;
+    controlListener mControlListener;
+    
     ofxOscReceiver receiver;
     ofxOscSender sender;
+    
+    ofPtr<nodeManager> mNodeManager;
     
     int currentControl;
     int current_msg_string;
     string msg_strings[NUM_MSG_STRINGS];
     float timers[NUM_MSG_STRINGS];
-    
-    map<string, clamourNode> mNodes;
-    vector<string> onNodes;
-    
+        
 
     
 };

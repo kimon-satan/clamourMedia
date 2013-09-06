@@ -4,26 +4,27 @@
 void testApp::setup(){
     
     ofSetFrameRate(60);
-	// listen on the given port
-	cout << "listening for osc messages on port " << PORT << "\n";
+    ofSetVerticalSync(false); //achieves higher frame rates for dual screening
+    
+    mDisplay = ofxFensterManager::get()->createFenster(0,0,640,480, OF_FULLSCREEN);
+    mDisplayListener.setup();
+    mDisplay->addListener(&mDisplayListener);
+    mDisplay->setFrameRate(60);
+    
+    mControlListener.setup();
+    ofxFensterManager::get()->getPrimaryWindow()->addListener(&mControlListener);
+    mControl->setFrameRate(60);
+    
 	receiver.setup(PORT);
     sender.setup("localhost", OUTPORT);
     
 	current_msg_string = 0;
     currentControl = 0;
-
-
-    //populate nodeArray
-    for(int i = 0; i < 10; i++){
-        for(int j = 0; j < 10; j++){
-            
-            string t_index = ofToString(char(65 + j)) + "_" + ofToString(i + 1);
-            clamourNode t_mn(i + 1, ofToString(char(65 + j)));
-            mNodes[t_index] = t_mn;
-            
-        }
-    }
     
+    mNodeManager = ofPtr<nodeManager>(new nodeManager());
+    
+    mDisplayListener.setNodeManager(mNodeManager);
+    mControlListener.setNodeManager(mNodeManager);
     
 	
     
@@ -32,6 +33,10 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
     
+    //this method is overridden !!!
+    
+    //all this needs moving to control
+    
 	// hide old messages
 	for(int i = 0; i < NUM_MSG_STRINGS; i++){
 		if(timers[i] < ofGetElapsedTimef()){
@@ -39,52 +44,47 @@ void testApp::update(){
 		}
 	}
     
+    cout << "test" << endl;
+    
 	// check for waiting messages
 	while(receiver.hasWaitingMessages()){
 		// get the next message
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
         
+        vector<string> s;
+        s = ofSplitString(m.getAddress(), "/");
+        string t_index;
+    
+        if(s[0] == "node"){
+            
+            string row = m.getArgAsString(0);
+            int seat = m.getArgAsInt32(1);
+            t_index = row + "_" + ofToString(seat);
+        
+        }
+        
+        cout << t_index <<endl;
+        
 		// check for mouse moved message
 		if(m.getAddress() == "/node/position"){
     
-            
-            string row = m.getArgAsString(0);
-            int seat = m.getArgAsInt32(1);
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
             
-            cout << row << ":" << seat << ":" << x << ":" << y << ":" << endl;
-            
-            string t_index = row + "_" + ofToString(seat);
-            
-            mNodes[t_index].setPosition(ofVec2f(x,y));
+            mNodeManager->updateNodePosition(t_index, x, y);
             
         }else if(m.getAddress() == "/node/on"){
             
-            string row = m.getArgAsString(0);
-            int seat = m.getArgAsInt32(1);
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
-            string t_index = row + "_" + ofToString(seat);
             
-            mNodes[t_index].setIsOn(true);
-            mNodes[t_index].setPosition(ofVec2f(x, y));
-            onNodes.push_back(t_index);
+            mNodeManager->switchOnNode(t_index, x, y);
             
             
         }else if(m.getAddress() == "/node/off"){
             
-            string row = m.getArgAsString(0);
-            int seat = m.getArgAsInt32(1);
-            string t_index = row + "_" + ofToString(seat);
-            
-            vector<string>::iterator it = remove(onNodes.begin(), onNodes.end(), t_index);
-            onNodes.erase(it);
-            
-            mNodes[t_index].setIsOn(false);
-            mNodes[t_index].clearHistory();
-
+            mNodeManager->switchOffNode(t_index);
             
 		}else{
 			// unrecognized message: display on the bottom of the screen
@@ -119,12 +119,6 @@ void testApp::update(){
         
 	}
     
-    for(int i = 0; i < onNodes.size(); i ++){
-        
-        string t_index = onNodes[i];
-        mNodes[t_index].updateHistory();
-        
-    }
 
     
 }
@@ -133,26 +127,9 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    ofBackground(0);
+   //this does nothing now
     
-    ofSetColor(255);
-	string buf;
-	buf = "listening for osc messages on port: " + ofToString(PORT);
-	ofDrawBitmapString(buf, 10, 20);
-    ofDrawBitmapString("currentControl: " + ofToString(currentControl,0), 10, 40);
-    
-    
-	for(int i = 0; i < NUM_MSG_STRINGS; i++){
-		ofDrawBitmapString(msg_strings[i], 10, 40 + 15 * i);
-	}
-    
-    
-    for(int i = 0; i < onNodes.size(); i ++){
-    
-        string t_index = onNodes[i];
-        ofDrawBitmapString(t_index, mNodes[t_index].getMeanPos());
-        
-    }
+
     
     
 }
@@ -172,7 +149,7 @@ void testApp::keyPressed(int key){
                 currentControl = 0;
                 m.addIntArg(currentControl);
                 m.addStringArg("openFrameworks default text");
-                resetNodes();
+                mNodeManager->resetNodes();
             break;
                 
             case '2':
@@ -183,7 +160,7 @@ void testApp::keyPressed(int key){
             case '3':
                 currentControl = 2;
                 m.addIntArg(currentControl);
-                resetNodes();
+                mNodeManager->resetNodes();
             break;
         
         }
@@ -193,20 +170,6 @@ void testApp::keyPressed(int key){
     
 }
 
-
-void testApp::resetNodes(){
-    
-    //turn off all current nodes
-    for(int i = 0; i < onNodes.size(); i ++){
-    
-        string t_index = onNodes[i];
-        mNodes[t_index].setIsOn(false);
-    
-    }
-    
-    onNodes.clear();
-
-}
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
