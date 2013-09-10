@@ -16,6 +16,7 @@ clamourNode::clamourNode(int ts, string tr){
     position.set(0,0);
     isOn = false;
     smoothFrames = 10;
+    drawType = CLAMOUR_DRAW_FLICKER;
     
 };
 
@@ -39,6 +40,12 @@ void clamourNode::updateHistory(){
     
 }
 
+void clamourNode::updateDrawData(){
+
+    drawData->update(meanPos);
+    
+}
+
 
 //getters and setters
 
@@ -53,3 +60,13 @@ void clamourNode::setMeanPos(ofVec2f v){meanPos = v;}
 void clamourNode::clearHistory(){history.clear();}
 bool clamourNode::getIsOn(){return isOn;}
 void clamourNode::setIsOn(bool b){isOn = b;}
+
+void clamourNode::setDrawType(int i){
+    
+    drawType = nodeDrawType(i);
+    drawData = drawDictionary::createDrawData(drawType);
+
+}
+nodeDrawType clamourNode::getDrawType(){return drawType;}
+
+std::tr1::shared_ptr<baseDrawData> clamourNode::getDrawData(){return drawData;}

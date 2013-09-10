@@ -1,16 +1,8 @@
 #pragma once
 
-#include "ofMain.h"
-#include "ofxOsc.h"
+#include "ofxFensterManager.h"
 #include "displayListener.h"
 #include "controlListener.h"
-#include "ofxFensterManager.h"
-
-
-// listen on port 12345
-#define PORT 41234
-#define OUTPORT 42345
-#define NUM_MSG_STRINGS 20
 
 
 class testApp : public ofBaseApp {
@@ -36,16 +28,6 @@ public:
     ofxFenster * mDisplay, * mControl;
     displayListener mDisplayListener;
     controlListener mControlListener;
-    
-    ofxOscReceiver receiver;
-    ofxOscSender sender;
-    
-    ofPtr<nodeManager> mNodeManager;
-    
-    int currentControl;
-    int current_msg_string;
-    string msg_strings[NUM_MSG_STRINGS];
-    float timers[NUM_MSG_STRINGS];
         
 
     

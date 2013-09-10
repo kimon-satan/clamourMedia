@@ -30,6 +30,9 @@
 		D9926EE817DA31B20090371F /* controlListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE617DA31B10090371F /* controlListener.cpp */; };
 		D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE917DA3DDC0090371F /* nodeManager.cpp */; };
 		D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EEC17DA46130090371F /* baseFensterListener.cpp */; };
+		D9DCB16E17DB33D30057932A /* oscManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9DCB16C17DB33D30057932A /* oscManager.cpp */; };
+		D9DD038C17DDE16000253BE2 /* nodeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */; };
+		D9FD2B9217DF1D7900E77014 /* drawDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9FD2B9017DF1D7900E77014 /* drawDictionary.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -188,6 +191,12 @@
 		D9926EEA17DA3DDC0090371F /* nodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nodeManager.h; sourceTree = "<group>"; };
 		D9926EEC17DA46130090371F /* baseFensterListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = baseFensterListener.cpp; sourceTree = "<group>"; };
 		D9926EED17DA46130090371F /* baseFensterListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = baseFensterListener.h; sourceTree = "<group>"; };
+		D9DCB16C17DB33D30057932A /* oscManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oscManager.cpp; sourceTree = "<group>"; };
+		D9DCB16D17DB33D30057932A /* oscManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oscManager.h; sourceTree = "<group>"; };
+		D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodeRenderer.cpp; sourceTree = "<group>"; };
+		D9DD038B17DDE16000253BE2 /* nodeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nodeRenderer.h; sourceTree = "<group>"; };
+		D9FD2B9017DF1D7900E77014 /* drawDictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = drawDictionary.cpp; sourceTree = "<group>"; };
+		D9FD2B9117DF1D7900E77014 /* drawDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawDictionary.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -570,16 +579,22 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
+				D9926EE617DA31B10090371F /* controlListener.cpp */,
+				D9926EE717DA31B20090371F /* controlListener.h */,
+				D9DCB16C17DB33D30057932A /* oscManager.cpp */,
+				D9DCB16D17DB33D30057932A /* oscManager.h */,
+				D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */,
+				D9DD038B17DDE16000253BE2 /* nodeRenderer.h */,
+				D9926EE917DA3DDC0090371F /* nodeManager.cpp */,
+				D9926EEA17DA3DDC0090371F /* nodeManager.h */,
 				D9926ED717DA0F4C0090371F /* clamourNode.cpp */,
 				D9926ED817DA0F4C0090371F /* clamourNode.h */,
+				D9FD2B9017DF1D7900E77014 /* drawDictionary.cpp */,
+				D9FD2B9117DF1D7900E77014 /* drawDictionary.h */,
 				D9926EEC17DA46130090371F /* baseFensterListener.cpp */,
 				D9926EED17DA46130090371F /* baseFensterListener.h */,
 				D9926EE317DA30E70090371F /* displayListener.cpp */,
 				D9926EE417DA30E70090371F /* displayListener.h */,
-				D9926EE617DA31B10090371F /* controlListener.cpp */,
-				D9926EE717DA31B20090371F /* controlListener.h */,
-				D9926EE917DA3DDC0090371F /* nodeManager.cpp */,
-				D9926EEA17DA3DDC0090371F /* nodeManager.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -856,6 +871,9 @@
 				D9926EE817DA31B20090371F /* controlListener.cpp in Sources */,
 				D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */,
 				D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */,
+				D9DCB16E17DB33D30057932A /* oscManager.cpp in Sources */,
+				D9DD038C17DDE16000253BE2 /* nodeRenderer.cpp in Sources */,
+				D9FD2B9217DF1D7900E77014 /* drawDictionary.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

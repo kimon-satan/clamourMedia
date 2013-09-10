@@ -10,6 +10,10 @@
 #define __clamourMedia__clamourNode__
 
 #include "ofMain.h"
+#include "drawDictionary.h"
+
+
+
 
 class clamourNode{
 
@@ -19,6 +23,7 @@ public:
     clamourNode(int ts, string tr);
     
     void updateHistory();
+    void updateDrawData();
     
     //getters and setters
     int getSeat();
@@ -31,17 +36,23 @@ public:
     void setMeanPos(ofVec2f v);
     bool getIsOn();
     void setIsOn(bool b);
+    void setDrawType(int i);
+    nodeDrawType getDrawType();
+    std::tr1::shared_ptr<baseDrawData> getDrawData();
+    
     void clearHistory();
     
 private:
     
     int smoothFrames;
     int seat;
+    nodeDrawType drawType;
     string row;
     ofVec2f position;
     ofVec2f meanPos;
     bool isOn;
     vector<ofVec2f> history;
+    std::tr1::shared_ptr<baseDrawData> drawData;
     
     
 
