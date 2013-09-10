@@ -52,7 +52,7 @@ private:
     ofPtr<nodeManager> mNodeManager;
     
     vector<string> mPlayerIndexes;
-    vector<ofPtr<group> > mGroups; //this is added instead of in games
+    map<string, ofPtr<group> > mGroups;
     vector<ofPtr<game> > mGames;
     
     

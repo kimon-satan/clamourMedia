@@ -18,11 +18,7 @@ game::game(){
 }
 
 
-void game::addGroup(group g){
 
-    mGroups[g.name] = g;
-    
-}
 
 void game::addCommand(command c){
     
@@ -66,4 +62,3 @@ vector<command> game::getStageCommands(){
     return c;
 }
 
-group game::getGroup(string s){return mGroups[s];}

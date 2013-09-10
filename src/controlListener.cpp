@@ -53,16 +53,16 @@ void controlListener::setupGames(){
     
     ofPtr<game> gm = ofPtr<game>(new game());
     gm->setName("hello world");
-    group grp;
-    grp.name = "allPlyrGrp";
-    grp.indexes = mPlayerIndexes; // all players
+    ofPtr<group> grp = ofPtr<group>(new group());
+    grp->name = "allPlyrGrp";
+    grp->indexes = mPlayerIndexes; // all players
   
-    
-    gm->addGroup(grp);
+    //will eventually need a safety for double allocation 
+    mGroups[grp->name] = grp;
     
     command cmd;
     
-    cmd.targets.push_back(grp.name);
+    cmd.targets.push_back(grp->name);
     cmd.stage = 0;
     cmd.priority = 0;
     cmd.mCommand = "SET_CONTROL";
@@ -196,25 +196,50 @@ void controlListener::implementStage(){
     
     for(int i = 0; i < tComms.size(); i++){
         
-        cout << tComms[i].priority << endl;
+       
         
         //unpack the groups into individual clients
         vector<string> clients;
         
         for(int j = 0; j < tComms[i].targets.size(); j++){
         
-           // mGroups
+            ofPtr<group> tg;
+            tg = mGroups[tComms[i].targets[j]];
+            
+            if(tg){
+                
+                for(int k = 0; k < tg->indexes.size(); k++){
+                    clients.push_back(tg->indexes[k]);
+                }
+                // add all the clients
+            }else{
+            
+                //it must be an individual client
+                clients.push_back(tComms[i].targets[j]);
+                cout << "individual client" << endl;
+            }
         
         }
         
+        //get rid of any double entries
+        vector<string>::iterator it;
+        
+        sort(clients.begin(),clients.end());
+        
+        it = unique(clients.begin(), clients.end());
+        
+        if(it != clients.end())clients.erase(it);
+        
+        
+        //now carry out the command
         
         if(tComms[i].mCommand == "SET_CONTROL"){
             
-           
-        
             mOscManager->setControl(clients, tComms[i].intParams["CONTROL_TYPE"]);
             
         }else if(tComms[i].mCommand == "SET_TEXT"){
+            
+            mOscManager->setText(clients, tComms[i].stringParams["TEXT"]);
         
         }
         

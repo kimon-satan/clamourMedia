@@ -28,6 +28,7 @@ class oscManager{
 
     void setAllClients(int control);
     void setControl(vector<string> clients, int control);
+    void setText(vector<string> clients, string text);
     
     //to SC
     
@@ -44,6 +45,8 @@ class oscManager{
     ofxOscReceiver receiver;
     ofxOscSender sender;
     ofxOscSender SCsender;
+    
+    ofxOscBundle outBundle;
     
     ofPtr<nodeManager> pNodeManager;
     

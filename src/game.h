@@ -46,7 +46,7 @@ class game{
     
     game();
 
-    void addGroup(group g);
+
     void addCommand(command c);
     void incrementStage();
     
@@ -56,7 +56,6 @@ class game{
     int getNumStages();
     
     vector<command> getStageCommands();
-    group getGroup(string s);
     
     
     private:
@@ -65,7 +64,6 @@ class game{
     
     string name;
     int currentStage, numStages;
-    map<string, group> mGroups; //defined at the beginning ?
     vector<command> mCommands;
 
 };

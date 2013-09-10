@@ -65,6 +65,14 @@ void oscManager::update(){
 		}
         
 	}
+    
+    //send the outbundle to Meteor if it has messages waiting
+    
+    if(outBundle.getMessageCount() > 0){
+        
+        sender.sendBundle(outBundle);
+        outBundle.clear();
+    }
 
 
 }
@@ -107,6 +115,9 @@ void oscManager::logMessages(ofxOscMessage m){
 
 void oscManager::setNodeManager(ofPtr<nodeManager> p){pNodeManager = p;}
 
+
+//messages to Meteor need to bundled because of concurrency
+
 void oscManager::setAllClients(int control){
     
     
@@ -122,7 +133,6 @@ void oscManager::setAllClients(int control){
 
 void oscManager::setControl(vector<string> clients, int control){
 
-    ofxOscBundle b;
     
     for(int i = 0; i < clients.size(); i++){
         ofxOscMessage m;
@@ -131,10 +141,28 @@ void oscManager::setControl(vector<string> clients, int control){
         m.addStringArg(clients[i]);
         m.addIntArg(control);
         
-        b.addMessage(m);
-        
-        sender.sendBundle(b);
+        outBundle.addMessage(m);
+    
     }
+
+}
+
+void oscManager::setText(vector<string> clients, string text){
+    
+    
+    for(int i = 0; i < clients.size(); i++){
+        ofxOscMessage m;
+        
+        m.setAddress("/newText");
+        m.addStringArg(clients[i]);
+        m.addStringArg(text);
+        
+        outBundle.addMessage(m);
+        
+       
+    }
+    
+  
     
     
 }
