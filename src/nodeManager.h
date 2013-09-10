@@ -17,6 +17,7 @@ class nodeManager{
     public:
     
     nodeManager();
+    nodeManager(vector<string> indexes);
     
     void resetNodes();
     void updateNodes();

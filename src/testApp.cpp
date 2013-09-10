@@ -7,7 +7,7 @@ void testApp::setup(){
     ofSetVerticalSync(false); //achieves higher frame rates for dual screening
     ofEnableSmoothing();
     
-    mDisplay = ofxFensterManager::get()->createFenster(0,0,640,480, OF_FULLSCREEN);
+    mDisplay = ofxFensterManager::get()->createFenster(0,0,640,480, OF_WINDOW);
     mDisplayListener.setup();
     mDisplay->addListener(&mDisplayListener);
     mDisplay->setFrameRate(60);
@@ -40,6 +40,7 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     
+    //eventually move this to UI element
     if(key == 'F'){
         mDisplay->toggleFullscreen();
     }

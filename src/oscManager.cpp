@@ -120,6 +120,25 @@ void oscManager::setAllClients(int control){
 
 }
 
+void oscManager::setControl(vector<string> clients, int control){
+
+    ofxOscBundle b;
+    
+    for(int i = 0; i < clients.size(); i++){
+        ofxOscMessage m;
+        
+        m.setAddress("/newControl");
+        m.addStringArg(clients[i]);
+        m.addIntArg(control);
+        
+        b.addMessage(m);
+        
+        sender.sendBundle(b);
+    }
+    
+    
+}
+
 
 vector<string> oscManager::getMsgStrings(){return msg_strings;}
 

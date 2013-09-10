@@ -27,6 +27,7 @@ class oscManager{
     vector<string> getMsgStrings();
 
     void setAllClients(int control);
+    void setControl(vector<string> clients, int control);
     
     //to SC
     

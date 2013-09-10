@@ -12,7 +12,15 @@
 parameter::parameter(string n, float mv, float mx, float ab, mapType mt): name(n), min_val(mv), max_val(mx), abs_val(ab), map_type(mt){
 
     
-    //if map_type = random or init then variables need to be set here
+    switch(map_type){
+            
+        case CLAMOUR_MAP_RAND:
+            abs_val = ofRandom(min_val, max_val);
+            break;
+       
+            
+    }
+    
     
 }
 
@@ -25,9 +33,18 @@ void baseDrawData::update(ofVec2f pos){
     map<string, parameter>::iterator it;
     
     for(it = parameters.begin(); it != parameters.end(); it++){
-
-        //replace with switch for maptype code
-        it->second.abs_val = 0;
+        
+        switch(it->second.map_type){
+                
+            case CLAMOUR_MAP_X:
+                it->second.abs_val = ofMap(pos.x, 0, 1, it->second.min_val, it->second.max_val);
+                break;
+            case CLAMOUR_MAP_Y:
+                it->second.abs_val = ofMap(pos.y, 1, 0, it->second.min_val, it->second.max_val);
+                break;
+    
+        }
+        
         
     }
 
@@ -36,6 +53,7 @@ void baseDrawData::update(ofVec2f pos){
 parameter baseDrawData::getParameter(string name){
     
     try{
+        
         return parameters[name];
     }
     
@@ -72,6 +90,7 @@ std::tr1::shared_ptr<baseDrawData> drawDictionary::createDrawData(nodeDrawType d
 
 flickerDrawData::flickerDrawData(){
 
-    parameters["flickerProp"] = parameter("flicker", 0.25, 0.75, 0.5, CLAMOUR_MAP_X);
+    parameters["flicker"] = parameter("flicker", 0.1, 0.75, 0.5, CLAMOUR_MAP_X);
+    parameters["size"] = parameter("size", 3, 20, 5, CLAMOUR_MAP_RAND);
     
 }

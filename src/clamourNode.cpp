@@ -16,7 +16,7 @@ clamourNode::clamourNode(int ts, string tr){
     position.set(0,0);
     isOn = false;
     smoothFrames = 10;
-    drawType = CLAMOUR_DRAW_FLICKER;
+    drawType = CLAMOUR_DRAW_DEBUG;
     
 };
 

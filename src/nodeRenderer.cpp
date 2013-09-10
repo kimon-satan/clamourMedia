@@ -60,8 +60,10 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
         glBegin(GL_POINTS);
         glColor3ub(255,255,255);
         
+        float size = fdd->getParameter("size").abs_val;
+        
         for(int i = 0; i < 50; i ++){
-            glVertex2d(pos.x + ofRandom(-5,5), pos.y + ofRandom(-5,5));
+            glVertex2d(pos.x + ofRandom(-size/2,size/2), pos.y + ofRandom(-size/2,size/2));
         }
         glEnd();
     }
