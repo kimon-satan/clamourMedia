@@ -22,8 +22,8 @@ class controlListener: public baseFensterListener{
     
 public:
     
-    
-    void setup();
+    void setup(){};
+    void setup(ofxFenster * f);
 
     void update(ofxFenster * f);
     void draw();
@@ -36,17 +36,21 @@ public:
     
 private:
     
+    void setupGUI();
+    void setupTextArea(ofxUIWidget * w);
+    void updateGUIElements();
+    
     void setupGames();
     void implementStage();
-    void setControl(group g);
-    void setText(group g);
 
 	void guiEvent(ofxUIEventArgs &e);
     void keyPressed(int key, ofxFenster* window);
     void mousePressed(int x, int y, int button, ofxFenster * window);
     void mouseReleased(int x, int y, int button, ofxFenster * window);
     
+    
     ofxUICanvas *gui;
+    int width, height;
     
     ofPtr<oscManager> mOscManager;
     ofPtr<nodeManager> mNodeManager;
@@ -57,6 +61,7 @@ private:
     
     
     ofPtr<game> mCurrentGame;
+    int mGameBrowseIndex;
     ofxFenster * displayFenster;
     
     bool isMouseDown;

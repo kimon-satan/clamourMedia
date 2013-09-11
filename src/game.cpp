@@ -27,6 +27,12 @@ void game::addCommand(command c){
 
 }
 
+void game::reset(){
+
+    currentStage = 0;
+    //potentially alot more here depending on mechanics
+}
+
 void game::incrementStage(){
     
     currentStage = min(numStages- 1, currentStage + 1);
@@ -45,6 +51,7 @@ void game::calcNumStages(){
 }
 
 void game::setName(string s){name = s;}
+string game::getName(){return name;}
 int game::getCurrentStage(){ return currentStage;}
 int game::getNumStages(){return numStages;}
 

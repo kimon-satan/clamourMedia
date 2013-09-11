@@ -30,12 +30,21 @@ class oscManager{
     void setControl(vector<string> clients, int control);
     void setText(vector<string> clients, string text);
     
+
+   
+    
     //to SC
     
     void sendInit();
     void startSynth(string index);
     void stopSynth(string index);
     void updateSynth(string index);
+    
+    //getters and setters (internal)
+    
+    //get SC msg string
+    //get M_IN msg string
+    //get M_OUT msg string
     
     
     private:

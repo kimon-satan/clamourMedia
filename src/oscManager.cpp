@@ -115,6 +115,9 @@ void oscManager::logMessages(ofxOscMessage m){
 
 void oscManager::setNodeManager(ofPtr<nodeManager> p){pNodeManager = p;}
 
+vector<string> oscManager::getMsgStrings(){return msg_strings;}
+
+//--------------------------Meteor Messages-----------------------------//
 
 //messages to Meteor need to bundled because of concurrency
 
@@ -135,6 +138,7 @@ void oscManager::setControl(vector<string> clients, int control){
 
     
     for(int i = 0; i < clients.size(); i++){
+        
         ofxOscMessage m;
         
         m.setAddress("/newControl");
@@ -164,12 +168,13 @@ void oscManager::setText(vector<string> clients, string text){
     
   
     
-    
 }
 
 
-vector<string> oscManager::getMsgStrings(){return msg_strings;}
 
+
+
+//------------------------------SuperCollider Messages---------------------------------//
 
 void oscManager::sendInit(){
 

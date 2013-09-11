@@ -12,8 +12,10 @@ void testApp::setup(){
     mDisplay->addListener(&mDisplayListener);
     mDisplay->setFrameRate(60);
     
-    mControlListener.setup();
-    ofxFensterManager::get()->getPrimaryWindow()->addListener(&mControlListener);
+    
+    mControl =  ofxFensterManager::get()->getPrimaryWindow();
+    mControl->addListener(&mControlListener);
+    mControlListener.setup(mControl);
     mControl->setFrameRate(60);
     
     

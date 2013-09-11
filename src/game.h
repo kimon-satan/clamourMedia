@@ -48,10 +48,13 @@ class game{
 
 
     void addCommand(command c);
+    void reset();
     void incrementStage();
+    
     
     //getters and setters
     void setName(string s);
+    string getName();
     int getCurrentStage();
     int getNumStages();
     

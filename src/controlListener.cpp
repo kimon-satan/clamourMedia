@@ -8,7 +8,7 @@
 
 #include "controlListener.h"
 
-void controlListener::setup(){
+void controlListener::setup(ofxFenster * f){
     
     isMouseDown = false;
     
@@ -23,6 +23,8 @@ void controlListener::setup(){
         }
     }
     
+    width = f->getWidth();
+    height = f->getHeight();
     
     mOscManager = ofPtr<oscManager>(new oscManager());
     mNodeManager = ofPtr<nodeManager>(new nodeManager(mPlayerIndexes));
@@ -33,23 +35,111 @@ void controlListener::setup(){
     setupGames();
     implementStage();
     
-    gui = new ofxUICanvas(0,0,ofGetWidth(),ofGetHeight());
-	gui->addWidgetDown(new ofxUILabel("CLAMOUR CONTROL PANEL", OFX_UI_FONT_LARGE));
+    mGameBrowseIndex = 0;
     
-    //stage increment
-    gui->addWidgetDown(new ofxUITextArea("CURRENT_STAGE", ofToString(mCurrentGame->getCurrentStage(),1), 50));
-    ofxUILabelButton * spb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "STAGE_PLUS", true ,25));
-    spb->setLabelText("+");
-
-    ofAddListener(gui->newGUIEvent,this,&controlListener::guiEvent);
+    setupGUI();
+ 
  
 
 }
 
+void controlListener::setupGUI(){
+    
+    ofxUIWidget * w;
+    ofxUILabelButton * lb;
+    
+    gui = new ofxUICanvas(0,0,width, height);
+	gui->addWidgetDown(new ofxUILabel("CLAMOUR CONTROL PANEL", OFX_UI_FONT_LARGE));
+    
+    w = gui->addSpacer(1,15);
+    w->setVisible(false);
+    
+    gui->addWidgetDown(new ofxUILabel("Current game: ", OFX_UI_FONT_SMALL));
+    
+    w = gui->addWidgetRight(
+                            new ofxUITextArea("CURRENT_GAME", mCurrentGame->getName(), 200, 15,0,0, OFX_UI_FONT_SMALL)
+                            );
+    
+    setupTextArea(w);
+    
+    gui->addWidgetDown(new ofxUILabel("Browse games: ", OFX_UI_FONT_SMALL));
+    
+    w = gui->addWidgetRight(
+                            new ofxUITextArea("ALL_GAMES", mGames[mGameBrowseIndex]->getName(), 200, 15,0,0, OFX_UI_FONT_SMALL)
+                            );
+    
+    setupTextArea(w);
+    
+    lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "GAME_PLUS", true ,25));
+    lb->setLabelText("+");
+    
+    lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "GAME_MINUS", true ,25));
+    lb->setLabelText("-");
+    
+    lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "GAME_SELECT", true ,70, 25));
+    lb->setLabelText("SELECT");
+    
+    gui->addSpacer();
+    
+    gui->addWidgetDown(new ofxUILabel("Stage: ", OFX_UI_FONT_SMALL));
+    
+    //stage increment
+    w = gui->addWidgetRight(
+                            new ofxUITextArea("CURRENT_STAGE", ofToString(mCurrentGame->getCurrentStage(),1), 25, 15, 0,0 ,OFX_UI_FONT_SMALL)
+                            );
+    
+    setupTextArea(w);
+    
+    lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "STAGE_PLUS", true ,25));
+    lb->setLabelText("+");
+    
+    lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "GAME_RESET", true ,70));
+    lb->setLabelText("RESET");
+    
+    
+    gui->addWidgetDown(new ofxUILabel("Meteor OSC IN: ", OFX_UI_FONT_SMALL));
+    
+    w = gui->addWidgetDown(
+                            new ofxUITextArea("METEOR_OSC_IN", "Meteor OSC in", 400, 100, 0,0 ,OFX_UI_FONT_SMALL)
+                            );
+    
+    setupTextArea(w);
+    
+    gui->addWidgetDown(new ofxUILabel("Meteor OSC OUT: ", OFX_UI_FONT_SMALL));
+    
+    w = gui->addWidgetDown(
+                            new ofxUITextArea("METEOR_OSC_OUT", "Meteor OSC out", 400, 100, 0,0 ,OFX_UI_FONT_SMALL)
+                            );
+    
+    setupTextArea(w);
+    
+    gui->addWidgetDown(new ofxUILabel("SC OSC OUT: ", OFX_UI_FONT_SMALL));
+    
+    w = gui->addWidgetDown(
+                            new ofxUITextArea("SC_OSC_OUT","SC OSC OUT", 400, 100, 0,0 ,OFX_UI_FONT_SMALL)
+                            );
+    
+    setupTextArea(w);
+    
+    
+    ofAddListener(gui->newGUIEvent,this,&controlListener::guiEvent);
+
+}
+
+void controlListener::setupTextArea(ofxUIWidget * w){
+
+    w->setColorBack(ofxUIColor(0));
+    w->setColorFill(ofxUIColor(0,255,255));
+    w->setDrawBack(true);
+    w->setPadding(2);
+    
+}
 
 void controlListener::setupGames(){
 
     //a temporary method before XML interface is implemented
+    
+    /*--------------Game 1 ----------------------*/
     
     ofPtr<game> gm = ofPtr<game>(new game());
     gm->setName("hello world");
@@ -60,37 +150,75 @@ void controlListener::setupGames(){
     //will eventually need a safety for double allocation 
     mGroups[grp->name] = grp;
     
-    command cmd;
-    
-    cmd.targets.push_back(grp->name);
-    cmd.stage = 0;
-    cmd.priority = 0;
-    cmd.mCommand = "SET_CONTROL";
-    cmd.intParams["CONTROL_TYPE"] = 0;
-    
-    gm->addCommand(cmd);
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        cmd.stage = 0;
+        cmd.priority = 0;
+        cmd.mCommand = "SET_CONTROL";
+        cmd.intParams["CONTROL_TYPE"] = 0;
+        
+        gm->addCommand(cmd);
+    }
     
     //next command
     
-    cmd.stage = 0;
-    cmd.priority = 1;
-    cmd.mCommand = "SET_TEXT";
-    cmd.stringParams["TEXT"] = "Welcome to Clamour";
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        cmd.stage = 0;
+        cmd.priority = 1;
+        cmd.mCommand = "SET_TEXT";
+        cmd.stringParams["TEXT"] = "Welcome to Clamour";
+        
+        gm->addCommand(cmd);
     
-    gm->addCommand(cmd);
+    }
     
     //on a new stage
     
-    cmd.stage = 1;
-    cmd.priority = 0;
-    cmd.mCommand = "SET_TEXT";
-    cmd.stringParams["TEXT"] = "This is a new piece of text";
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+    
+        cmd.stage = 1;
+        cmd.priority = 0;
+        cmd.mCommand = "SET_TEXT";
+        cmd.stringParams["TEXT"] = "This is a new piece of text";
 
-    gm->addCommand(cmd);
+        gm->addCommand(cmd);
+    
+    }
     
     mGames.push_back(gm);
     
     mCurrentGame = gm;
+    
+    /*-----------------------Game 2 --------------------*/
+    
+    
+    ofPtr<game> gm2 = ofPtr<game>(new game());
+    gm2->setName("XY free play");
+    
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        
+        cmd.stage = 0;
+        cmd.priority = 0;
+        cmd.mCommand = "SET_CONTROL";
+        cmd.intParams["CONTROL_TYPE"] = 1;
+        
+        gm2->addCommand(cmd);
+        
+    }
+    
+     mGames.push_back(gm2);
+
     
 
 }
@@ -162,6 +290,7 @@ void controlListener::mouseReleased(int x, int y, int button, ofxFenster * windo
 
 void controlListener::guiEvent(ofxUIEventArgs &e){
 
+     cout << "guiEvent \n";
     
     string name = e.widget->getName();
     
@@ -171,21 +300,58 @@ void controlListener::guiEvent(ofxUIEventArgs &e){
     
     if(name == "STAGE_PLUS"){
         
-        if(mCurrentGame){
+        if(!mCurrentGame)return;
             
-            mCurrentGame->incrementStage();
-            implementStage();
-            //update gui element
-            ofxUITextArea * t = (ofxUITextArea *)gui->getWidget("CURRENT_STAGE");
-            t->setTextString(ofToString(mCurrentGame->getCurrentStage(),1));
-        }
+        mCurrentGame->incrementStage();
+        implementStage();
+        updateGUIElements();
+        
+        
+    }else if(name == "GAME_PLUS"){
+        
+        mGameBrowseIndex = min((int)mGames.size()-1, mGameBrowseIndex + 1);
+        updateGUIElements();
+        
+    }else if(name == "GAME_MINUS"){
+        
+        mGameBrowseIndex = max(0, mGameBrowseIndex - 1);
+        updateGUIElements();
+        
+    }else if(name == "GAME_SELECT"){
+        
+        mCurrentGame.reset(); //reset the pointer
+        mCurrentGame = mGames[mGameBrowseIndex];
+        if(!mCurrentGame)return;
+        mCurrentGame->reset();
+        implementStage();
+        updateGUIElements();
+    
+    }else if(name == "GAME_RESET"){
+        
+        if(!mCurrentGame)return;
+        mCurrentGame->reset();
+        implementStage();
+        updateGUIElements();
         
     }else{
         
-        cout << "guiEvent \n";
+       
     
     }
   
+
+}
+
+void controlListener::updateGUIElements(){
+
+    ofxUITextArea * t;
+ 
+    t = (ofxUITextArea *)gui->getWidget("CURRENT_GAME");
+    t->setTextString(mCurrentGame->getName());
+    t = (ofxUITextArea *)gui->getWidget("ALL_GAMES");
+    t->setTextString(mGames[mGameBrowseIndex]->getName());
+    t = (ofxUITextArea *)gui->getWidget("CURRENT_STAGE");
+    t->setTextString(ofToString(mCurrentGame->getCurrentStage(),1));
 
 }
 
@@ -195,8 +361,6 @@ void controlListener::implementStage(){
     //now apply the commands
     
     for(int i = 0; i < tComms.size(); i++){
-        
-       
         
         //unpack the groups into individual clients
         vector<string> clients;
@@ -225,7 +389,7 @@ void controlListener::implementStage(){
         vector<string>::iterator it;
         
         sort(clients.begin(),clients.end());
-        
+
         it = unique(clients.begin(), clients.end());
         
         if(it != clients.end())clients.erase(it);
@@ -252,9 +416,7 @@ void controlListener::implementStage(){
 
 
 
-void controlListener::setText(group g){
 
-}
 
 
 
