@@ -21,9 +21,6 @@ enum nodeDrawType{
 
 
 
-
-
-
 class debugDrawData: public baseData{
     
     public:

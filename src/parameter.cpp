@@ -92,11 +92,9 @@ vector<float> baseData::getAbsVals(){
     for(it = parameters.begin(); it != parameters.end(); it++){
         
         vals[it->second.index] = it->second.abs_val; //ordered by index
-        cout << it->second.index << ":" << vals[it->second.index] << ":";
         
     }
-    
-    cout << endl;
+
     
     return vals;
 }

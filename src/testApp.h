@@ -1,10 +1,16 @@
 #pragma once
 
 #include "ofxFensterManager.h"
+#include "ofxXmlSettings.h"
+#include "ofxUI.h"
+
 #include "displayListener.h"
-#include "controlListener.h"
+#include "oscManager.h"
+#include "game.h"
+
 
 class testApp : public ofBaseApp {
+    
 public:
     
     void setup();
@@ -24,11 +30,39 @@ public:
     void exit();
     
     
-    ofxFenster * mDisplay, * mControl;
+private:
+    
+    void setupGUI();
+    void setupTextArea(ofxUIWidget * w);
+    void updateGUIElements();
+    
+    void loadXML();
+    void setupGames();
+    void implementStage();
+    
+	void guiEvent(ofxUIEventArgs &e);
+    
+    ofxFenster * mDisplay;
     displayListener * mDisplayListener;
     
-    controlListener mControlListener;
-        
-
+    ofxUICanvas *gui;
+    ofxUIFont * uiFont;
+    
+    ofPtr<oscManager> mOscManager;
+    ofPtr<nodeManager> mNodeManager;
+    
+    vector<string> mPlayerIndexes;
+    map<string, ofPtr<group> > mGroups;
+    vector<ofPtr<game> > mGames;
+    
+    
+    ofPtr<game> mCurrentGame;
+    int mGameBrowseIndex;
+    
+    bool isMouseDown;
+    
+    int currentControl;
+    
+    
     
 };

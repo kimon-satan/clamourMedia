@@ -29,7 +29,6 @@
 		D9926ED917DA0F4C0090371F /* clamourNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926ED717DA0F4C0090371F /* clamourNode.cpp */; };
 		D9926EDD17DA22200090371F /* libGhost32.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9926EDC17DA22200090371F /* libGhost32.a */; };
 		D9926EE517DA30E70090371F /* displayListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE317DA30E70090371F /* displayListener.cpp */; };
-		D9926EE817DA31B20090371F /* controlListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE617DA31B10090371F /* controlListener.cpp */; };
 		D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE917DA3DDC0090371F /* nodeManager.cpp */; };
 		D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EEC17DA46130090371F /* baseFensterListener.cpp */; };
 		D9DCB16E17DB33D30057932A /* oscManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9DCB16C17DB33D30057932A /* oscManager.cpp */; };
@@ -192,8 +191,6 @@
 		D9926EDC17DA22200090371F /* libGhost32.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGhost32.a; path = ../../../addons/ofxFenster/libs/ghost/lib/osx32/libGhost32.a; sourceTree = "<group>"; };
 		D9926EE317DA30E70090371F /* displayListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = displayListener.cpp; sourceTree = "<group>"; };
 		D9926EE417DA30E70090371F /* displayListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = displayListener.h; sourceTree = "<group>"; };
-		D9926EE617DA31B10090371F /* controlListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controlListener.cpp; sourceTree = "<group>"; };
-		D9926EE717DA31B20090371F /* controlListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = controlListener.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D9926EE917DA3DDC0090371F /* nodeManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodeManager.cpp; sourceTree = "<group>"; };
 		D9926EEA17DA3DDC0090371F /* nodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nodeManager.h; sourceTree = "<group>"; };
 		D9926EEC17DA46130090371F /* baseFensterListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = baseFensterListener.cpp; sourceTree = "<group>"; };
@@ -614,8 +611,6 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
-				D9926EE617DA31B10090371F /* controlListener.cpp */,
-				D9926EE717DA31B20090371F /* controlListener.h */,
 				D9DCB16C17DB33D30057932A /* oscManager.cpp */,
 				D9DCB16D17DB33D30057932A /* oscManager.h */,
 				D9926EEC17DA46130090371F /* baseFensterListener.cpp */,
@@ -899,7 +894,6 @@
 				5a4349e9754d6fa14c0f2a3a1abc30b6 /* tinyxmlparser.cpp in Sources */,
 				D9926ED917DA0F4C0090371F /* clamourNode.cpp in Sources */,
 				D9926EE517DA30E70090371F /* displayListener.cpp in Sources */,
-				D9926EE817DA31B20090371F /* controlListener.cpp in Sources */,
 				D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */,
 				D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */,
 				D9DCB16E17DB33D30057932A /* oscManager.cpp in Sources */,

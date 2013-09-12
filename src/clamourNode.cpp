@@ -16,7 +16,8 @@ clamourNode::clamourNode(int ts, string tr){
     position.set(0,0);
     isOn = false;
     smoothFrames = 10;
-    drawType = CLAMOUR_DRAW_DEBUG;
+    drawType = nodeDrawType(1);
+    
     
 };
 
@@ -70,9 +71,7 @@ void clamourNode::setIsOn(bool b){isOn = b;}
 void clamourNode::setDrawType(int i){
     
     drawType = nodeDrawType(i);
-    //drawData.reset();
     drawData = drawDictionary::createDrawData(drawType);
-    //cout << "dd: " << drawData->getName() << endl;
     drawData->init(meanPos);
 
 }
