@@ -51,6 +51,7 @@ private:
     
     ofxUICanvas *gui;
     int width, height;
+    ofxUIFont * uiFont;
     
     ofPtr<oscManager> mOscManager;
     ofPtr<nodeManager> mNodeManager;

@@ -7,19 +7,24 @@ void testApp::setup(){
     ofSetVerticalSync(false); //achieves higher frame rates for dual screening
     ofEnableSmoothing();
     
-    mDisplay = ofxFensterManager::get()->createFenster(0,0,640,480, OF_WINDOW);
-    mDisplayListener.setup();
-    mDisplay->addListener(&mDisplayListener);
-    mDisplay->setFrameRate(60);
+    ofxFensterManager::get()->createFenster(0,0,640,480, OF_WINDOW);
+    /*mDisplayListener = new displayListener();
+    mDisplayListener->setup();
+    mDisplay->addListener(mDisplayListener);
+    mDisplay->setFrameRate(60);*/
     
     
+    /*mControlListener = new controlListener();
+    mControlListener->setup();
     mControl =  ofxFensterManager::get()->getPrimaryWindow();
-    mControl->addListener(&mControlListener);
-    mControlListener.setup(mControl);
-    mControl->setFrameRate(60);
+    mControl->addListener(mControlListener);
+    mControlListener->setup(mControl);
+    mControlListener->setDisplayRef(mDisplay);*/
+   
+   // mControl->setFrameRate(60);
     
     
-    mDisplayListener.setNodeManager(mControlListener.getNodeManager());
+    //mDisplayListener->setNodeManager(mControlListener->getNodeManager());
     
     
 }
@@ -94,6 +99,8 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 void testApp::exit(){
 
+    delete mDisplayListener;
+    delete mControlListener;
     
 
 }

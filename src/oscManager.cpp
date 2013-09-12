@@ -15,6 +15,11 @@ oscManager::oscManager(){
     sender.setup("localhost", METEOR_OUT_PORT);
     SCsender.setup("localhost", SC_OUT_PORT);
 
+    for(int i = 0; i < 3; i ++){
+        vector<string> s;
+        msg_strings.push_back(s);
+    }
+    
 }
 
 void oscManager::update(){
@@ -26,7 +31,7 @@ void oscManager::update(){
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
         
-        logMessages(m);
+        logMessages(m, CLAMOUR_MSG_METEOR_IN);
         
         vector<string> s;
         s = ofSplitString(m.getAddress(), "/");
@@ -36,7 +41,7 @@ void oscManager::update(){
         if(s[1] == "node"){
             
             string row = m.getArgAsString(0);
-            int seat = m.getArgAsInt32(1);
+            int seat = (int)m.getArgAsFloat(1);
             t_index = row + "_" + ofToString(seat);
             
         }
@@ -78,16 +83,15 @@ void oscManager::update(){
 }
 
 
-void oscManager::logMessages(ofxOscMessage m){
+void oscManager::logMessages(ofxOscMessage m, int mt){
 
     string msg_string;
     msg_string = m.getAddress();
     msg_string += ": ";
     
     for(int i = 0; i < m.getNumArgs(); i++){
-        // get the argument type
-        msg_string += m.getArgTypeName(i);
-        msg_string += ":";
+        
+        msg_string += ", ";
         
         // display the argument - make sure we get the right type
         if(m.getArgType(i) == OFXOSC_TYPE_INT32){
@@ -105,17 +109,33 @@ void oscManager::logMessages(ofxOscMessage m){
     }
     
     // add to the list of strings to the log
-    msg_strings.push_back(msg_string);
+   /* msg_strings[mt].push_back(msg_string);
     
     //make space for new messages
-    if(msg_strings.size() > NUM_MSG_STRINGS)msg_strings.erase(msg_strings.begin());
+    if(msg_strings[mt].size() > NUM_MSG_STRINGS)msg_strings[mt].erase(msg_strings[mt].begin());*/
 
 }
 
 
+
+
+
 void oscManager::setNodeManager(ofPtr<nodeManager> p){pNodeManager = p;}
 
-vector<string> oscManager::getMsgStrings(){return msg_strings;}
+string oscManager::getMsgString(int mt){
+    
+    string s;
+    
+    for(int i = 0; i < msg_strings[mt].size(); i++){
+        
+        s += msg_strings[mt][i];
+        s += "\n\n";
+        
+    }
+    
+    return s;
+
+}
 
 //--------------------------Meteor Messages-----------------------------//
 
@@ -129,6 +149,8 @@ void oscManager::setAllClients(int control){
     m.addIntArg(control);
     
     if(control == 0)m.addStringArg("default text");
+    
+    logMessages(m, CLAMOUR_MSG_METEOR_OUT);
     
     sender.sendMessage(m);
 
@@ -145,6 +167,8 @@ void oscManager::setControl(vector<string> clients, int control){
         m.addStringArg(clients[i]);
         m.addIntArg(control);
         
+        logMessages(m, CLAMOUR_MSG_METEOR_OUT);
+        
         outBundle.addMessage(m);
     
     }
@@ -160,6 +184,8 @@ void oscManager::setText(vector<string> clients, string text){
         m.setAddress("/newText");
         m.addStringArg(clients[i]);
         m.addStringArg(text);
+        
+        logMessages(m, CLAMOUR_MSG_METEOR_OUT);
         
         outBundle.addMessage(m);
         
@@ -181,19 +207,29 @@ void oscManager::sendInit(){
     ofxOscMessage m;
     m.setAddress("/init");
     SCsender.sendMessage(m);
+    
+    logMessages(m, CLAMOUR_MSG_SC_OUT);
 
 }
 
 void oscManager::startSynth(string index){
     
-    ofVec2f pos(pNodeManager->getNodePosition(index));
+    ofPtr<baseData> sd = pNodeManager->getNode(index)->getSoundData();
     
     ofxOscMessage m;
     m.setAddress("/startSynth");
     m.addStringArg(index);
-    m.addFloatArg(pos.x);
-    m.addFloatArg(1-pos.y);
+    
+    m.addStringArg(sd->getName());
+    
+    vector<float> vals = sd->getAbsVals();
+    
+    for(int i = 0; i < vals.size(); i++){
+        m.addFloatArg(vals[i]);
+    }
+    
     SCsender.sendMessage(m);
+    logMessages(m, CLAMOUR_MSG_SC_OUT);
     
 }
 
@@ -204,9 +240,20 @@ void oscManager::updateSynth(string index){
     ofxOscMessage m;
     m.setAddress("/updateSynth");
     m.addStringArg(index);
-    m.addFloatArg(pos.x);
-    m.addFloatArg(1-pos.y);
+    
+    ofPtr<baseData> sd = pNodeManager->getNode(index)->getSoundData();
+    
+    m.addStringArg(sd->getName()); //add the name to keep the indexing th same for update and start at the SC end
+    
+    vector<float> vals = sd->getAbsVals();
+    
+    for(int i = 0; i < vals.size(); i++){
+        m.addFloatArg(vals[i]);
+    }
+    
     SCsender.sendMessage(m);
+    
+    logMessages(m, CLAMOUR_MSG_SC_OUT);
     
     
 }
@@ -217,5 +264,7 @@ void oscManager::stopSynth(string index){
     m.setAddress("/stopSynth");
     m.addStringArg(index);
     SCsender.sendMessage(m);
+    
+     logMessages(m, CLAMOUR_MSG_SC_OUT);
 
 }

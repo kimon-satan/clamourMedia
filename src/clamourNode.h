@@ -11,7 +11,7 @@
 
 #include "ofMain.h"
 #include "drawDictionary.h"
-
+#include "soundDictionary.h"
 
 
 
@@ -24,6 +24,7 @@ public:
     
     void updateHistory();
     void updateDrawData();
+    void updateSoundData();
     
     //getters and setters
     int getSeat();
@@ -38,7 +39,10 @@ public:
     void setIsOn(bool b);
     void setDrawType(int i);
     nodeDrawType getDrawType();
-    std::tr1::shared_ptr<baseDrawData> getDrawData();
+    std::tr1::shared_ptr<baseData> getDrawData();
+    
+    void setSoundType(string synth);
+    ofPtr<baseData> getSoundData();
     
     void clearHistory();
     
@@ -52,7 +56,8 @@ private:
     ofVec2f meanPos;
     bool isOn;
     vector<ofVec2f> history;
-    std::tr1::shared_ptr<baseDrawData> drawData;
+    std::tr1::shared_ptr<baseData> drawData;
+    ofPtr<baseData> soundData;
     
     
 

@@ -31,6 +31,11 @@ class nodeManager{
     ofVec2f getNodePosition(string index);
     ofPtr<clamourNode> getNode(string index);
     
+    void setNodeDrawType(vector<string> indexes, int dt);
+    void setNodeDrawParam(vector<string> indexes, parameter p);
+    void setNodeSoundType(vector<string> indexes, string st);
+    void setNodeSoundParam(vector<string> indexes, parameter p);
+    
     private:
     
     map< string, ofPtr<clamourNode> > mNodes;

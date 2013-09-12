@@ -46,6 +46,12 @@ void clamourNode::updateDrawData(){
     
 }
 
+void clamourNode::updateSoundData(){
+    
+    soundData->update(meanPos);
+    
+}
+
 
 //getters and setters
 
@@ -64,9 +70,19 @@ void clamourNode::setIsOn(bool b){isOn = b;}
 void clamourNode::setDrawType(int i){
     
     drawType = nodeDrawType(i);
+    //drawData.reset();
     drawData = drawDictionary::createDrawData(drawType);
+    //cout << "dd: " << drawData->getName() << endl;
+    drawData->init(meanPos);
 
 }
 nodeDrawType clamourNode::getDrawType(){return drawType;}
 
-std::tr1::shared_ptr<baseDrawData> clamourNode::getDrawData(){return drawData;}
+std::tr1::shared_ptr<baseData> clamourNode::getDrawData(){return drawData;}
+
+ofPtr<baseData> clamourNode::getSoundData(){return soundData;}
+void clamourNode::setSoundType(string synth){
+    
+    soundData = soundDictionary::createSoundData(synth);
+    soundData->init(meanPos);
+}

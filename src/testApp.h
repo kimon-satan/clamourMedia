@@ -4,7 +4,6 @@
 #include "displayListener.h"
 #include "controlListener.h"
 
-
 class testApp : public ofBaseApp {
 public:
     
@@ -26,8 +25,8 @@ public:
     
     
     ofxFenster * mDisplay, * mControl;
-    displayListener mDisplayListener;
-    controlListener mControlListener;
+    displayListener * mDisplayListener;
+    controlListener * mControlListener;
         
 
     

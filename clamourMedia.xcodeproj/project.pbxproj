@@ -24,6 +24,8 @@
 		9d44dc88ef9e7991b4a09951e2e4769f /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832bdc407620cdba568b713d2252c43c /* tinyxmlerror.cpp */; };
 		9d8e9dd97c73f87403f4f781fc141b4d /* ofxFensterCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = fb624a517b9ca0bd44aa7137b4541340 /* ofxFensterCanvas.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		D9172F3617E1B64900124E49 /* soundDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9172F3417E1B64900124E49 /* soundDictionary.cpp */; };
+		D9172F3E17E1B81300124E49 /* parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9172F3C17E1B81300124E49 /* parameter.cpp */; };
 		D9926ED917DA0F4C0090371F /* clamourNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926ED717DA0F4C0090371F /* clamourNode.cpp */; };
 		D9926EDD17DA22200090371F /* libGhost32.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9926EDC17DA22200090371F /* libGhost32.a */; };
 		D9926EE517DA30E70090371F /* displayListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE317DA30E70090371F /* displayListener.cpp */; };
@@ -181,6 +183,10 @@
 		9cd3afa9bef472a91020ca2aafb609be /* ofxDisplayManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxDisplayManager.cpp; path = ../../../addons/ofxFenster/src/ofxDisplayManager.cpp; sourceTree = SOURCE_ROOT; };
 		9f7986dc4eb05e75fce2c777500fdc01 /* ofxOscSender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxOscSender.h; path = ../../../addons/ofxOsc/src/ofxOscSender.h; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		D9172F3417E1B64900124E49 /* soundDictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = soundDictionary.cpp; sourceTree = "<group>"; };
+		D9172F3517E1B64900124E49 /* soundDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = soundDictionary.h; sourceTree = "<group>"; };
+		D9172F3C17E1B81300124E49 /* parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parameter.cpp; sourceTree = "<group>"; };
+		D9172F3D17E1B81300124E49 /* parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parameter.h; sourceTree = "<group>"; };
 		D9926ED717DA0F4C0090371F /* clamourNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clamourNode.cpp; sourceTree = "<group>"; };
 		D9926ED817DA0F4C0090371F /* clamourNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clamourNode.h; sourceTree = "<group>"; };
 		D9926EDC17DA22200090371F /* libGhost32.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGhost32.a; path = ../../../addons/ofxFenster/libs/ghost/lib/osx32/libGhost32.a; sourceTree = "<group>"; };
@@ -546,6 +552,32 @@
 			name = "3rd party frameworks";
 			sourceTree = "<group>";
 		};
+		D9172F3A17E1B6BE00124E49 /* parameterClasses */ = {
+			isa = PBXGroup;
+			children = (
+				D9172F3C17E1B81300124E49 /* parameter.cpp */,
+				D9172F3D17E1B81300124E49 /* parameter.h */,
+				D9FD2B9017DF1D7900E77014 /* drawDictionary.cpp */,
+				D9FD2B9117DF1D7900E77014 /* drawDictionary.h */,
+				D9172F3417E1B64900124E49 /* soundDictionary.cpp */,
+				D9172F3517E1B64900124E49 /* soundDictionary.h */,
+			);
+			name = parameterClasses;
+			sourceTree = "<group>";
+		};
+		D9172F3B17E1B6EE00124E49 /* nodeClasses */ = {
+			isa = PBXGroup;
+			children = (
+				D9926EE917DA3DDC0090371F /* nodeManager.cpp */,
+				D9926EEA17DA3DDC0090371F /* nodeManager.h */,
+				D9926ED717DA0F4C0090371F /* clamourNode.cpp */,
+				D9926ED817DA0F4C0090371F /* clamourNode.h */,
+				D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */,
+				D9DD038B17DDE16000253BE2 /* nodeRenderer.h */,
+			);
+			name = nodeClasses;
+			sourceTree = "<group>";
+		};
 		E4328144138ABC890047C5CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -584,22 +616,16 @@
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
 				D9926EE617DA31B10090371F /* controlListener.cpp */,
 				D9926EE717DA31B20090371F /* controlListener.h */,
-				D9FD2B9417DF585300E77014 /* game.cpp */,
-				D9FD2B9517DF585300E77014 /* game.h */,
-				D9926EE917DA3DDC0090371F /* nodeManager.cpp */,
-				D9926EEA17DA3DDC0090371F /* nodeManager.h */,
-				D9926ED717DA0F4C0090371F /* clamourNode.cpp */,
-				D9926ED817DA0F4C0090371F /* clamourNode.h */,
 				D9DCB16C17DB33D30057932A /* oscManager.cpp */,
 				D9DCB16D17DB33D30057932A /* oscManager.h */,
-				D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */,
-				D9DD038B17DDE16000253BE2 /* nodeRenderer.h */,
-				D9FD2B9017DF1D7900E77014 /* drawDictionary.cpp */,
-				D9FD2B9117DF1D7900E77014 /* drawDictionary.h */,
 				D9926EEC17DA46130090371F /* baseFensterListener.cpp */,
 				D9926EED17DA46130090371F /* baseFensterListener.h */,
 				D9926EE317DA30E70090371F /* displayListener.cpp */,
 				D9926EE417DA30E70090371F /* displayListener.h */,
+				D9FD2B9417DF585300E77014 /* game.cpp */,
+				D9FD2B9517DF585300E77014 /* game.h */,
+				D9172F3B17E1B6EE00124E49 /* nodeClasses */,
+				D9172F3A17E1B6BE00124E49 /* parameterClasses */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -880,6 +906,8 @@
 				D9DD038C17DDE16000253BE2 /* nodeRenderer.cpp in Sources */,
 				D9FD2B9217DF1D7900E77014 /* drawDictionary.cpp in Sources */,
 				D9FD2B9617DF585400E77014 /* game.cpp in Sources */,
+				D9172F3617E1B64900124E49 /* soundDictionary.cpp in Sources */,
+				D9172F3E17E1B81300124E49 /* parameter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

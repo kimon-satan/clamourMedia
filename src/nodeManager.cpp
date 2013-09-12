@@ -10,6 +10,8 @@
 
 nodeManager::nodeManager(){
     
+    soundDictionary::setup(); //load in default synth parameters from XML
+    
     //populate nodeArray
     for(int i = 0; i < 10; i++){
         for(int j = 0; j < 10; j++){
@@ -26,6 +28,8 @@ nodeManager::nodeManager(){
 }
 
 nodeManager::nodeManager(vector<string> indexes){
+    
+    soundDictionary::setup(); //load in default synth parameters from XML
     
     //populate nodeArray
     for(int i = 0; i < indexes.size(); i++){
@@ -50,6 +54,7 @@ void nodeManager::updateNodes(){
         string t_index = onNodes[i];
         mNodes[t_index]->updateHistory();
         mNodes[t_index]->updateDrawData();
+        mNodes[t_index]->updateSoundData();
         
     }
     
@@ -108,7 +113,6 @@ vector<string> nodeManager::getOnNodes(){
 
 ofVec2f nodeManager::getNodePosition(string index){
     
-    cout << index << ":" << mNodes[index]->getMeanPos() << endl;
     return mNodes[index]->getMeanPos();
     
 }
@@ -116,5 +120,50 @@ ofVec2f nodeManager::getNodePosition(string index){
 ofPtr<clamourNode> nodeManager::getNode(string index){
     
     return mNodes[index];
+}
+
+void nodeManager::setNodeDrawType(vector<string> indexes, int dt){
+
+    for(int i = 0; i < indexes.size(); i ++){
+        
+        mNodes[indexes[i]]->setDrawType(dt);
+        
+    }
+    
+}
+
+
+void nodeManager::setNodeSoundType(vector<string> indexes, string st){
+    
+    for(int i = 0; i < indexes.size(); i ++){
+        
+        mNodes[indexes[i]]->setSoundType(st);
+        
+    }
+    
+}
+
+
+void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p){
+    
+    for(int i = 0; i < indexes.size(); i ++){
+        
+        p.init(mNodes[indexes[i]]->getMeanPos()); //if mapped randomly only reset that parameter
+        mNodes[indexes[i]]->getDrawData()->setParameter(p);
+       
+    }
+
+}
+
+
+void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p){
+    
+    for(int i = 0; i < indexes.size(); i ++){
+        
+        p.init(mNodes[indexes[i]]->getMeanPos());//if mapped randomly only reset that parameter
+        mNodes[indexes[i]]->getSoundData()->setParameter(p);
+        
+    }
+    
 }
 

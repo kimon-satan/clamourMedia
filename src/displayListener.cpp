@@ -17,7 +17,9 @@ void displayListener::setup(){
 
 void displayListener::draw(){
 
-    ofSetColor(255);
+  /*  ofSetColor(255);
+    
+    ofDrawBitmapString(ofToString(ofGetFrameRate(),2), 20,20);
     
     if(mWindow){
         mNodeRenderer.setScreen(mWindow->getWidth(), mWindow->getHeight());
@@ -29,7 +31,7 @@ void displayListener::draw(){
         
         mNodeRenderer.renderNode(pNodeManager->getNode(onNodes[i]));
       
-    }
+    }*/
     
 
 }

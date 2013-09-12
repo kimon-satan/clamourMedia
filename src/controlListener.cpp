@@ -10,6 +10,8 @@
 
 void controlListener::setup(ofxFenster * f){
     
+    ofSetVerticalSync(false); //achieves higher frame rates for dual screening
+    
     isMouseDown = false;
     
     //populate indexes
@@ -44,6 +46,7 @@ void controlListener::setup(ofxFenster * f){
 }
 
 void controlListener::setupGUI(){
+
     
     ofxUIWidget * w;
     ofxUILabelButton * lb;
@@ -217,8 +220,72 @@ void controlListener::setupGames(){
         
     }
     
-     mGames.push_back(gm2);
-
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        
+        cmd.stage = 0;
+        cmd.priority = 1;
+        cmd.mCommand = "SET_DRAW_TYPE";
+        cmd.intParams["DRAW_TYPE"] = CLAMOUR_DRAW_FLICKER;
+        
+        gm2->addCommand(cmd);
+        
+    }
+    
+   /* {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        
+        cmd.stage = 0;
+        cmd.priority = 2;
+        cmd.mCommand = "SET_DRAW_PARAM";
+        cmd.stringParams["PARAM"] = "flicker";
+        cmd.floatParams["MIN_VAL"] = 0;
+        cmd.floatParams["MAX_VAL"] = 0.99;
+        cmd.floatParams["ABS_VAL"] = 0.5;
+        cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_Y;
+        
+        gm2->addCommand(cmd);
+        
+    }*/
+    
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        
+        cmd.stage = 0;
+        cmd.priority = 2;
+        cmd.mCommand = "SET_SOUND_TYPE";
+        cmd.stringParams["SOUND_TYPE"] = "pulseGlitcher";
+        
+        gm2->addCommand(cmd);
+        
+    }
+    
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        
+        cmd.stage = 0;
+        cmd.priority = 3;
+        cmd.mCommand = "SET_SOUND_PARAM";
+        cmd.stringParams["PARAM"] = "resFilFreq";
+        cmd.floatParams["MIN_VAL"] = 100;
+        cmd.floatParams["MAX_VAL"] = 1000;
+        cmd.floatParams["ABS_VAL"] = 500;
+        cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_Y;
+        
+        gm2->addCommand(cmd);
+        
+    }
+    
+    
+    mGames.push_back(gm2);
     
 
 }
@@ -227,6 +294,15 @@ void controlListener::update(ofxFenster *f){
 
     mOscManager->update();
     mNodeManager->updateNodes();
+    
+  /*  ofxUITextArea * t;
+    t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_IN");
+    t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_METEOR_IN));
+    t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_OUT");
+    t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_METEOR_OUT));
+    t = (ofxUITextArea *)gui->getWidget("SC_OSC_OUT");
+    t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_SC_OUT)); */
+    
 
 }
 
@@ -236,17 +312,6 @@ void controlListener::draw(){
     ofSetColor(255);
     
     gui->draw();
-    
-   /*  string buf;
-     buf = "listening for osc messages on port: " + ofToString(METEOR_IN_PORT);
-     ofDrawBitmapString(buf, 10, 20);
-     ofDrawBitmapString("currentControl: " + ofToString(currentControl,0), 10, 40);
-    
-     vector<string> msgs = mOscManager->getMsgStrings();
-     
-     for(int i = 0; i < msgs.size(); i++){
-         ofDrawBitmapString(msgs[i], 10, 40 + 15 * i);
-     };*/
      
     
 
@@ -262,7 +327,7 @@ void controlListener::setDisplayRef (ofxFenster * f){
     displayFenster = f;
 }
 
-void controlListener::keyPressed(int key, ofxFenster* window){
+void controlListener::keyPressed(int key, ofxFenster * window){
     
     
     if(key >= 49 && key <= 51){
@@ -289,8 +354,6 @@ void controlListener::mouseReleased(int x, int y, int button, ofxFenster * windo
 
 
 void controlListener::guiEvent(ofxUIEventArgs &e){
-
-     cout << "guiEvent \n";
     
     string name = e.widget->getName();
     
@@ -352,6 +415,7 @@ void controlListener::updateGUIElements(){
     t->setTextString(mGames[mGameBrowseIndex]->getName());
     t = (ofxUITextArea *)gui->getWidget("CURRENT_STAGE");
     t->setTextString(ofToString(mCurrentGame->getCurrentStage(),1));
+  
 
 }
 
@@ -405,7 +469,25 @@ void controlListener::implementStage(){
             
             mOscManager->setText(clients, tComms[i].stringParams["TEXT"]);
         
+        }else if(tComms[i].mCommand == "SET_DRAW_TYPE"){
+        
+            mNodeManager->setNodeDrawType(clients, tComms[i].intParams["DRAW_TYPE"]);
+        
+        }else if(tComms[i].mCommand == "SET_DRAW_PARAM"){
+        
+            parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
+            mNodeManager->setNodeDrawParam(clients, p);
+        
+        }else if(tComms[i].mCommand == "SET_SOUND_TYPE"){
+            
+            mNodeManager->setNodeSoundType(clients, tComms[i].stringParams["SOUND_TYPE"]);
+            
+        }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
+            
+            parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
+            mNodeManager->setNodeSoundParam(clients, p);
         }
+
         
         
     }

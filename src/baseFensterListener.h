@@ -9,7 +9,6 @@
 #ifndef __clamourMedia__baseFensterListener__
 #define __clamourMedia__baseFensterListener__
 
-
 #include "ofxFenster.h"
 #include "nodeManager.h"
 

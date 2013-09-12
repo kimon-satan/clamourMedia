@@ -15,7 +15,16 @@
 #define METEOR_IN_PORT 41234
 #define METEOR_OUT_PORT 42345
 #define SC_OUT_PORT 57120
-#define NUM_MSG_STRINGS 20
+#define NUM_MSG_STRINGS 6
+
+enum msgType{
+    
+    CLAMOUR_MSG_METEOR_IN,
+    CLAMOUR_MSG_METEOR_OUT,
+    CLAMOUR_MSG_SC_OUT
+
+};
+
 
 class oscManager{
 
@@ -24,15 +33,12 @@ class oscManager{
     oscManager();
     void update();
     void setNodeManager(ofPtr<nodeManager> p);
-    vector<string> getMsgStrings();
 
     void setAllClients(int control);
     void setControl(vector<string> clients, int control);
     void setText(vector<string> clients, string text);
     
 
-   
-    
     //to SC
     
     void sendInit();
@@ -41,15 +47,11 @@ class oscManager{
     void updateSynth(string index);
     
     //getters and setters (internal)
-    
-    //get SC msg string
-    //get M_IN msg string
-    //get M_OUT msg string
-    
+    string getMsgString(int mt);
     
     private:
     
-    void logMessages(ofxOscMessage m);
+    void logMessages(ofxOscMessage m, int type);
     
     ofxOscReceiver receiver;
     ofxOscSender sender;
@@ -59,7 +61,7 @@ class oscManager{
     
     ofPtr<nodeManager> pNodeManager;
     
-    vector<string> msg_strings;
+    vector<vector<string> > msg_strings;
     
 
 };
