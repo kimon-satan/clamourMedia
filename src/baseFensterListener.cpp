@@ -8,3 +8,9 @@
 
 #include "baseFensterListener.h"
 
+void baseFensterListener::setWindowDims(float w, float h){
+
+    width = w;
+    height = h;
+    
+}

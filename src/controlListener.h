@@ -22,8 +22,7 @@ class controlListener: public baseFensterListener{
     
 public:
     
-    void setup(){};
-    void setup(ofxFenster * f);
+    void setup();
 
     void update(ofxFenster * f);
     void draw();
@@ -31,6 +30,7 @@ public:
     void setDisplayRef(ofxFenster * f);
     
     ofPtr<nodeManager> getNodeManager();
+
     
 
     
@@ -50,7 +50,6 @@ private:
     
     
     ofxUICanvas *gui;
-    int width, height;
     ofxUIFont * uiFont;
     
     ofPtr<oscManager> mOscManager;

@@ -8,7 +8,7 @@
 
 #include "controlListener.h"
 
-void controlListener::setup(ofxFenster * f){
+void controlListener::setup(){
     
     ofSetVerticalSync(false); //achieves higher frame rates for dual screening
     
@@ -25,9 +25,6 @@ void controlListener::setup(ofxFenster * f){
         }
     }
     
-    width = f->getWidth();
-    height = f->getHeight();
-    
     mOscManager = ofPtr<oscManager>(new oscManager());
     mNodeManager = ofPtr<nodeManager>(new nodeManager(mPlayerIndexes));
     mOscManager->setNodeManager(mNodeManager);
@@ -40,7 +37,6 @@ void controlListener::setup(ofxFenster * f){
     mGameBrowseIndex = 0;
     
     setupGUI();
- 
  
 
 }
@@ -295,13 +291,13 @@ void controlListener::update(ofxFenster *f){
     mOscManager->update();
     mNodeManager->updateNodes();
     
-  /*  ofxUITextArea * t;
+    ofxUITextArea * t;
     t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_IN");
     t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_METEOR_IN));
     t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_OUT");
     t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_METEOR_OUT));
     t = (ofxUITextArea *)gui->getWidget("SC_OSC_OUT");
-    t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_SC_OUT)); */
+    t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_SC_OUT));
     
 
 }

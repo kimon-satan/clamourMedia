@@ -7,25 +7,24 @@ void testApp::setup(){
     ofSetVerticalSync(false); //achieves higher frame rates for dual screening
     ofEnableSmoothing();
     
-    ofxFensterManager::get()->createFenster(0,0,640,480, OF_WINDOW);
-    /*mDisplayListener = new displayListener();
+    mDisplay = ofxFensterManager::get()->createFenster(0,0,640,480, OF_WINDOW);
+    mDisplayListener = new displayListener();
     mDisplayListener->setup();
     mDisplay->addListener(mDisplayListener);
-    mDisplay->setFrameRate(60);*/
+    //mDisplay->setFrameRate(60);
     
     
-    /*mControlListener = new controlListener();
-    mControlListener->setup();
     mControl =  ofxFensterManager::get()->getPrimaryWindow();
+    mControlListener = new controlListener();
+    mControlListener->setWindowDims(mControl->getWidth(), mControl->getHeight());
+    mControlListener->setup();
     mControl->addListener(mControlListener);
-    mControlListener->setup(mControl);
-    mControlListener->setDisplayRef(mDisplay);*/
-   
-   // mControl->setFrameRate(60);
+    mControlListener->setDisplayRef(mDisplay);
+    //mControl->setFrameRate(60);
     
     
-    //mDisplayListener->setNodeManager(mControlListener->getNodeManager());
-    
+    mDisplayListener->setNodeManager(mControlListener->getNodeManager());
+
     
 }
 
@@ -50,6 +49,8 @@ void testApp::keyPressed(int key){
     //eventually move this to UI element
     if(key == 'F'){
         mDisplay->toggleFullscreen();
+       // cout << mDisplay->getScreenSize() << endl;
+       // mDisplayListener->setWindowDims(mDisplay->getScreenSize().x, mDisplay->getScreenSize().y);
     }
     
         
@@ -99,8 +100,6 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 void testApp::exit(){
 
-    delete mDisplayListener;
-    delete mControlListener;
     
 
 }

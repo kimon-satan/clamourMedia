@@ -17,13 +17,9 @@ void displayListener::setup(){
 
 void displayListener::draw(){
 
-  /*  ofSetColor(255);
+   ofSetColor(255);
     
     ofDrawBitmapString(ofToString(ofGetFrameRate(),2), 20,20);
-    
-    if(mWindow){
-        mNodeRenderer.setScreen(mWindow->getWidth(), mWindow->getHeight());
-    }
     
     vector<string> onNodes(pNodeManager->getOnNodes());
     
@@ -31,14 +27,13 @@ void displayListener::draw(){
         
         mNodeRenderer.renderNode(pNodeManager->getNode(onNodes[i]));
       
-    }*/
+    }
     
 
 }
 
 void displayListener::keyPressed(int key, ofxFenster* window){
     
-    mWindow = window;
     
 }
 
@@ -46,4 +41,11 @@ void displayListener::setNodeManager(ofPtr<nodeManager> p){
     
     pNodeManager = p;
     
+}
+
+void displayListener::setWindowDims(float w, float h){
+    
+    width = w;
+    height = h;
+    mNodeRenderer.setScreen((int)w, (int)h);
 }

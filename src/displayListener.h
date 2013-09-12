@@ -18,13 +18,14 @@ class displayListener: public baseFensterListener {
     
     void setup();
     void draw();
+   
     void setNodeManager(ofPtr<nodeManager> p);
     void keyPressed(int key, ofxFenster* window);
+    void setWindowDims(float width, float height);
     
     private:
     
     ofPtr<nodeManager> pNodeManager;
-    ofxFenster * mWindow;
     nodeRenderer mNodeRenderer;
 
 };

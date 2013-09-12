@@ -18,7 +18,11 @@ class baseFensterListener: public ofxFensterListener {
     
     virtual void setup() = 0;
     virtual void draw() = 0;
+    virtual void setWindowDims(float width, float height);
     
+    protected:
+    
+    int width, height;
 
     
     
