@@ -37,7 +37,6 @@ private:
     void updateGUIElements();
     
     void loadXML();
-    void setupGames();
     void implementStage();
     
 	void guiEvent(ofxUIEventArgs &e);

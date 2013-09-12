@@ -36,7 +36,9 @@ void testApp::setup(){
     
     mOscManager->sendInit();
     
-    setupGames();
+    loadXML();
+    mCurrentGame = mGames[0];
+    
     implementStage();
     
     mGameBrowseIndex = 0;
@@ -145,10 +147,98 @@ void testApp::loadXML(){
     
     ofxXmlSettings XML;
     
-    if(XML.loadFile("data/xml/draft.xml")){
+    if(XML.loadFile("XMLs/draft.xml")){
     
-        cout << "file loaded" << endl;
+        if(XML.pushTag("CLAMOUR_MEDIA")){
+            
+            
+            int numGroups = XML.getNumTags("GROUP");
+            
+            for(int gp = 0; gp < numGroups; gp++){
+                
+                if(XML.pushTag("GROUP", gp)){
+                    
+                    string action = XML.getValue("ACTION", "create");
+                    
+                    if(action == "create"){
+                    
+                        ofPtr<group> grp = ofPtr<group>(new group());
+                        grp->name = XML.getValue("NAME", "default");
+                        
+                        string selector = XML.getValue("SELECTOR", "all");
+                        
+                        if(selector == "all"){
+                            grp->indexes = mPlayerIndexes; //add all players
+                        }
+                        
+                        //will eventually need a safety for double allocation
+                        mGroups[grp->name] = grp;
+                        
+                    }
+                
+                    XML.popTag(); //GROUP
+                }
+            
+            }
         
+            int numGames = XML.getNumTags("GAME");
+            
+            for(int gm = 0; gm < numGames; gm++){
+                
+                if(XML.pushTag("GAME", gm)){
+                    
+                    ofPtr<game> gm = ofPtr<game>(new game());
+                    gm->setName(XML.getValue("NAME", "default"));
+                    
+                    int numCmds = XML.getNumTags("COMMAND");
+                    
+                    for(int cmd = 0; cmd < numCmds; cmd++){
+                    
+                        if(XML.pushTag("COMMAND", cmd)){
+                            
+                            command cmd;
+                            
+                            int numTargets = XML.getNumTags("TARGET");
+                            
+                            for(int tgt = 0; tgt < numTargets; tgt++){
+                               cmd.targets.push_back(XML.getValue("TARGET", "",tgt));
+                            }
+                            
+                            cmd.stage = XML.getValue("STAGE", 0);
+                            cmd.priority = XML.getValue("PRIORITY", 0);
+                            cmd.mCommand = XML.getValue("ACTION", "none");
+                            
+                            
+                            if(XML.tagExists("CONTROL_TYPE"))cmd.intParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE",-1);
+                            if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
+                            if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
+                            if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
+                            if(XML.tagExists("PARAM"))cmd.stringParams["PARAM"] = XML.getValue("PARAM", "");
+                            if(XML.tagExists("MIN_VAL"))cmd.floatParams["MIN_VAL"] = XML.getValue("MIN_VAL", 0.0);
+                            if(XML.tagExists("MAX_VAL"))cmd.floatParams["MAX_VAL"] = XML.getValue("MAX_VAL", 1.0);
+                            if(XML.tagExists("ABS_VAL"))cmd.floatParams["ABS_VAL"] = XML.getValue("ABS_VAL", 0.0);
+                            if(XML.tagExists("MAP_TYPE"))cmd.intParams["MAP_TYPE"] = XML.getValue("MAP_TYPE",0);
+                            
+                            gm->addCommand(cmd);
+                            
+                        
+                            XML.popTag(); // COMMAND
+                        }
+                    
+                    }
+                    
+                    
+                    mGames.push_back(gm);
+                    
+                    XML.popTag(); //GAME
+                
+                }
+            
+            }
+            
+            
+            XML.popTag(); //CLAMOUR_MEDIA
+        }
     
     }else{
     
@@ -158,175 +248,6 @@ void testApp::loadXML(){
 
 }
 
-void testApp::setupGames(){
-    
-    //a temporary method before XML interface is implemented
-    
-    /*--------------Game 1 ----------------------*/
-    
-    ofPtr<game> gm = ofPtr<game>(new game());
-    gm->setName("hello world");
-    ofPtr<group> grp = ofPtr<group>(new group());
-    grp->name = "allPlyrGrp";
-    grp->indexes = mPlayerIndexes; // all players
-    
-    //will eventually need a safety for double allocation
-    mGroups[grp->name] = grp;
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        cmd.stage = 0;
-        cmd.priority = 0;
-        cmd.mCommand = "SET_CONTROL";
-        cmd.intParams["CONTROL_TYPE"] = 0;
-        
-        gm->addCommand(cmd);
-    }
-    
-    //next command
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        cmd.stage = 0;
-        cmd.priority = 1;
-        cmd.mCommand = "SET_TEXT";
-        cmd.stringParams["TEXT"] = "Welcome to Clamour";
-        
-        gm->addCommand(cmd);
-        
-    }
-    
-    //on a new stage
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        
-        cmd.stage = 1;
-        cmd.priority = 0;
-        cmd.mCommand = "SET_TEXT";
-        cmd.stringParams["TEXT"] = "This is a new piece of text";
-        
-        gm->addCommand(cmd);
-        
-    }
-    
-    mGames.push_back(gm);
-    
-    mCurrentGame = gm;
-    
-    /*-----------------------Game 2 --------------------*/
-    
-    
-    ofPtr<game> gm2 = ofPtr<game>(new game());
-    gm2->setName("XY free play");
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        
-        cmd.stage = 0;
-        cmd.priority = 0;
-        cmd.mCommand = "SET_CONTROL";
-        cmd.intParams["CONTROL_TYPE"] = 1;
-        
-        gm2->addCommand(cmd);
-        
-    }
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        
-        cmd.stage = 0;
-        cmd.priority = 1;
-        cmd.mCommand = "SET_DRAW_TYPE";
-        cmd.intParams["DRAW_TYPE"] = CLAMOUR_DRAW_FLICKER;
-        
-        gm2->addCommand(cmd);
-        
-    }
-    
-    /* {
-     command cmd;
-     
-     cmd.targets.push_back(grp->name);
-     
-     cmd.stage = 0;
-     cmd.priority = 2;
-     cmd.mCommand = "SET_DRAW_PARAM";
-     cmd.stringParams["PARAM"] = "flicker";
-     cmd.floatParams["MIN_VAL"] = 0;
-     cmd.floatParams["MAX_VAL"] = 0.99;
-     cmd.floatParams["ABS_VAL"] = 0.5;
-     cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_Y;
-     
-     gm2->addCommand(cmd);
-     
-     }*/
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        
-        cmd.stage = 0;
-        cmd.priority = 2;
-        cmd.mCommand = "SET_SOUND_TYPE";
-        cmd.stringParams["SOUND_TYPE"] = "pulseGlitcher";
-        
-        gm2->addCommand(cmd);
-        
-    }
-    
-    /*  {
-     command cmd;
-     
-     cmd.targets.push_back(grp->name);
-     
-     cmd.stage = 0;
-     cmd.priority = 3;
-     cmd.mCommand = "SET_SOUND_PARAM";
-     cmd.stringParams["PARAM"] = "resFilFreq";
-     cmd.floatParams["MIN_VAL"] = 100;
-     cmd.floatParams["MAX_VAL"] = 1000;
-     cmd.floatParams["ABS_VAL"] = 500;
-     cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_Y;
-     
-     gm2->addCommand(cmd);
-     
-     } */
-    
-    {
-        command cmd;
-        
-        cmd.targets.push_back(grp->name);
-        
-        cmd.stage = 0;
-        cmd.priority = 3;
-        cmd.mCommand = "SET_SOUND_PARAM";
-        cmd.stringParams["PARAM"] = "pulseRate";
-        cmd.floatParams["MIN_VAL"] = 4;
-        cmd.floatParams["MAX_VAL"] = 20;
-        cmd.floatParams["ABS_VAL"] = 4;
-        cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_X;
-        
-        gm2->addCommand(cmd);
-        
-    }
-    
-    
-    mGames.push_back(gm2);
-    
-    
-}
 
 
 //--------------------------------------------------------------
