@@ -16,12 +16,12 @@ class soundDictionary{
 
 public:
     
-    static void setup();
-    static ofPtr<baseData> createSoundData(string synthName);
+    soundDictionary();
+    baseData createSoundData(string synthName);
     
 private:
     
-    static map <string, baseData> synthDictionary;
+    map <string, baseData> synthDictionary;
     
 };
 

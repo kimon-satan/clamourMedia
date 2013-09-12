@@ -47,7 +47,7 @@ void controlListener::setupGUI(){
     ofxUIWidget * w;
     ofxUILabelButton * lb;
     
-    gui = new ofxUICanvas(0,0, ofGetWidth(), ofGetHeight());
+    gui = new ofxUICanvas(0,0,450,600);
 	gui->addWidgetDown(new ofxUILabel("CLAMOUR CONTROL PANEL", OFX_UI_FONT_LARGE));
     
     w = gui->addSpacer(1,15);
@@ -230,7 +230,7 @@ void controlListener::setupGames(){
         
     }
     
-   /* {
+  /* {
         command cmd;
         
         cmd.targets.push_back(grp->name);
@@ -262,7 +262,7 @@ void controlListener::setupGames(){
         
     }
     
-    {
+  /*  {
         command cmd;
         
         cmd.targets.push_back(grp->name);
@@ -275,6 +275,24 @@ void controlListener::setupGames(){
         cmd.floatParams["MAX_VAL"] = 1000;
         cmd.floatParams["ABS_VAL"] = 500;
         cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_Y;
+        
+        gm2->addCommand(cmd);
+        
+    } */
+    
+    {
+        command cmd;
+        
+        cmd.targets.push_back(grp->name);
+        
+        cmd.stage = 0;
+        cmd.priority = 3;
+        cmd.mCommand = "SET_SOUND_PARAM";
+        cmd.stringParams["PARAM"] = "pulseRate";
+        cmd.floatParams["MIN_VAL"] = 4;
+        cmd.floatParams["MAX_VAL"] = 20;
+        cmd.floatParams["ABS_VAL"] = 4;
+        cmd.intParams["MAP_TYPE"] = CLAMOUR_MAP_X;
         
         gm2->addCommand(cmd);
         
@@ -320,18 +338,6 @@ ofPtr<nodeManager> controlListener::getNodeManager(){
 
 
 
-void controlListener::keyPressed(int key){
-    
-    
-    if(key >= 49 && key <= 51){
-     
-        mOscManager->setAllClients(key - 49);
-        mNodeManager->resetNodes();
-   
-    }
-
-    
-}
 
 void controlListener::mousePressed(int x, int y, int button){
     
@@ -478,6 +484,8 @@ void controlListener::implementStage(){
         }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
             
             parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
+            
+            
             mNodeManager->setNodeSoundParam(clients, p);
         }
 

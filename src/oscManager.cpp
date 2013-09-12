@@ -51,8 +51,10 @@ void oscManager::update(){
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
             
-            pNodeManager->updateNodePosition(t_index, x, y);
-            updateSynth(t_index);
+            if(pNodeManager->getNode(t_index)->getIsOn()){
+                pNodeManager->updateNodePosition(t_index, x, y);
+                updateSynth(t_index);
+            }
             
         }else if(m.getAddress() == "/node/on"){
             
@@ -235,7 +237,7 @@ void oscManager::startSynth(string index){
 
 void oscManager::updateSynth(string index){
     
-    ofVec2f pos(pNodeManager->getNodePosition(index));
+   ofVec2f pos(pNodeManager->getNodePosition(index));
     
     ofxOscMessage m;
     m.setAddress("/updateSynth");
@@ -265,6 +267,6 @@ void oscManager::stopSynth(string index){
     m.addStringArg(index);
     SCsender.sendMessage(m);
     
-     logMessages(m, CLAMOUR_MSG_SC_OUT);
+    logMessages(m, CLAMOUR_MSG_SC_OUT);
 
 }

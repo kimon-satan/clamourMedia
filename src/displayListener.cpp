@@ -19,6 +19,7 @@ void displayListener::draw(){
 
    ofSetColor(255);
     
+    
     ofDrawBitmapString(ofToString(ofGetFrameRate(),2), 20,20);
     
     vector<string> onNodes(pNodeManager->getOnNodes());
@@ -33,6 +34,12 @@ void displayListener::draw(){
 }
 
 void displayListener::keyPressed(int key, ofxFenster* window){
+   
+    //eventually move this to UI element
+    if(key == 'F'){
+         mNodeRenderer.setScreen(ofGetScreenWidth(), ofGetScreenHeight());
+        ofToggleFullscreen();
+    }
     
     
 }

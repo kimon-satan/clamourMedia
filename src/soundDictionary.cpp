@@ -8,9 +8,9 @@
 
 #include "soundDictionary.h"
 
-map<string ,baseData> soundDictionary::synthDictionary;
 
-void soundDictionary::setup(){
+
+soundDictionary::soundDictionary(){
 
     //load the XML definitions into synth Dictionary
     
@@ -75,15 +75,10 @@ void soundDictionary::setup(){
 }
 
 
-ofPtr<baseData> soundDictionary::createSoundData(string synthName){
+baseData soundDictionary::createSoundData(string synthName){
     
-    ofPtr<baseData> data;
+    return synthDictionary[synthName]; 
     
-    //cout << synthDictionary[synthName].getName() << endl;
-    
-    data = ofPtr<baseData>(new baseData(synthDictionary[synthName])); //using default copy constructor
-    
-    return data;
     
 }
 

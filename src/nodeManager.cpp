@@ -10,7 +10,7 @@
 
 nodeManager::nodeManager(){
     
-    soundDictionary::setup(); //load in default synth parameters from XML
+   // soundDictionary::setup(); //load in default synth parameters from XML
     
     //populate nodeArray
     for(int i = 0; i < 10; i++){
@@ -29,7 +29,7 @@ nodeManager::nodeManager(){
 
 nodeManager::nodeManager(vector<string> indexes){
     
-    soundDictionary::setup(); //load in default synth parameters from XML
+    //soundDictionary::setup(); //load in default synth parameters from XML
     
     //populate nodeArray
     for(int i = 0; i < indexes.size(); i++){
@@ -135,9 +135,11 @@ void nodeManager::setNodeDrawType(vector<string> indexes, int dt){
 
 void nodeManager::setNodeSoundType(vector<string> indexes, string st){
     
+    baseData sd = mSoundDictionary.createSoundData(st);
+    
     for(int i = 0; i < indexes.size(); i ++){
         
-        mNodes[indexes[i]]->setSoundType(st);
+        mNodes[indexes[i]]->setSoundData(sd);
         
     }
     
@@ -157,6 +159,12 @@ void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p){
 
 
 void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p){
+    
+    //sorry could be neater but it's late !
+    
+    parameter t = mNodes[indexes[0]]->getSoundData()->getParameter(p.name); //a copy of the original
+    p.index = t.index; //copy these over
+    p.warp = t.warp;
     
     for(int i = 0; i < indexes.size(); i ++){
         

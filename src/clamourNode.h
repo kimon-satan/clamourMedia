@@ -41,7 +41,7 @@ public:
     nodeDrawType getDrawType();
     std::tr1::shared_ptr<baseData> getDrawData();
     
-    void setSoundType(string synth);
+    void setSoundData(baseData sd);
     ofPtr<baseData> getSoundData();
     
     void clearHistory();

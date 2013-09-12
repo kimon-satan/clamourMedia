@@ -40,6 +40,8 @@ class nodeManager{
     
     map< string, ofPtr<clamourNode> > mNodes;
     vector<string> onNodes;
+    
+    soundDictionary mSoundDictionary;
 
 
 };

@@ -13,7 +13,9 @@ void testApp::setup(){
     mDisplay->addListener(mDisplayListener);
     //mDisplay->setFrameRate(60);
     
+    
     mControlListener.setup();
+    
     mDisplayListener->setNodeManager(mControlListener.getNodeManager());
 
     
@@ -42,12 +44,7 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     
-    //eventually move this to UI element
-    if(key == 'F'){
-        mDisplay->toggleFullscreen();
-       // cout << mDisplay->getScreenSize() << endl;
-       // mDisplayListener->setWindowDims(mDisplay->getScreenSize().x, mDisplay->getScreenSize().y);
-    }
+
     
         
 }

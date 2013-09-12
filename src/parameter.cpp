@@ -70,7 +70,9 @@ string baseData::getName(){return name;}
 
 void baseData::setName(string s){name = s;}
 
-float baseData::warp(string type, float mnv, float mxv, float v){
+float baseData::warp(string type, float v, float mnv, float mxv){
+    
+    
     
     //potentially add safeties for 0 values or cross pole vals
     if(type == "exp"){
@@ -90,9 +92,11 @@ vector<float> baseData::getAbsVals(){
     for(it = parameters.begin(); it != parameters.end(); it++){
         
         vals[it->second.index] = it->second.abs_val; //ordered by index
+        cout << it->second.index << ":" << vals[it->second.index] << ":";
         
     }
     
+    cout << endl;
     
     return vals;
 }

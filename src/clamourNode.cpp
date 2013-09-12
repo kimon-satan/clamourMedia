@@ -81,8 +81,8 @@ nodeDrawType clamourNode::getDrawType(){return drawType;}
 std::tr1::shared_ptr<baseData> clamourNode::getDrawData(){return drawData;}
 
 ofPtr<baseData> clamourNode::getSoundData(){return soundData;}
-void clamourNode::setSoundType(string synth){
+void clamourNode::setSoundData(baseData sd){
     
-    soundData = soundDictionary::createSoundData(synth);
+    soundData = ofPtr<baseData>(new baseData(sd));
     soundData->init(meanPos);
 }
