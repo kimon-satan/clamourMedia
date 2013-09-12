@@ -26,7 +26,8 @@ public:
     
     ofxFenster * mDisplay, * mControl;
     displayListener * mDisplayListener;
-    controlListener * mControlListener;
+    
+    controlListener mControlListener;
         
 
     

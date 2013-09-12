@@ -13,17 +13,12 @@ void testApp::setup(){
     mDisplay->addListener(mDisplayListener);
     //mDisplay->setFrameRate(60);
     
-    
-    mControl =  ofxFensterManager::get()->getPrimaryWindow();
-    mControlListener = new controlListener();
-    mControlListener->setWindowDims(mControl->getWidth(), mControl->getHeight());
-    mControlListener->setup();
-    mControl->addListener(mControlListener);
-    mControlListener->setDisplayRef(mDisplay);
-    //mControl->setFrameRate(60);
+    mControlListener.setup();
+    mDisplayListener->setNodeManager(mControlListener.getNodeManager());
+
     
     
-    mDisplayListener->setNodeManager(mControlListener->getNodeManager());
+    
 
     
 }
@@ -31,7 +26,7 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    //this method is overridden !!!
+    mControlListener.update();
     
 }
 
@@ -39,6 +34,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
+    mControlListener.draw();
    //this does nothing now
     
 }
@@ -76,11 +72,14 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
+    
+    mControlListener.mousePressed(x,y,button);
 }
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
     
+     mControlListener.mouseReleased(x,y,button);
 }
 
 //--------------------------------------------------------------

@@ -47,7 +47,7 @@ void controlListener::setupGUI(){
     ofxUIWidget * w;
     ofxUILabelButton * lb;
     
-    gui = new ofxUICanvas(0,0,width, height);
+    gui = new ofxUICanvas(0,0, ofGetWidth(), ofGetHeight());
 	gui->addWidgetDown(new ofxUILabel("CLAMOUR CONTROL PANEL", OFX_UI_FONT_LARGE));
     
     w = gui->addSpacer(1,15);
@@ -286,7 +286,7 @@ void controlListener::setupGames(){
 
 }
 
-void controlListener::update(ofxFenster *f){
+void controlListener::update(){
 
     mOscManager->update();
     mNodeManager->updateNodes();
@@ -318,12 +318,9 @@ ofPtr<nodeManager> controlListener::getNodeManager(){
     return mNodeManager;
 }
 
-void controlListener::setDisplayRef (ofxFenster * f){
 
-    displayFenster = f;
-}
 
-void controlListener::keyPressed(int key, ofxFenster * window){
+void controlListener::keyPressed(int key){
     
     
     if(key >= 49 && key <= 51){
@@ -336,13 +333,13 @@ void controlListener::keyPressed(int key, ofxFenster * window){
     
 }
 
-void controlListener::mousePressed(int x, int y, int button, ofxFenster * window){
+void controlListener::mousePressed(int x, int y, int button){
     
     isMouseDown = true;
     
 }
 
-void controlListener::mouseReleased(int x, int y, int button, ofxFenster * window){
+void controlListener::mouseReleased(int x, int y, int button){
     
     isMouseDown = false;
 }

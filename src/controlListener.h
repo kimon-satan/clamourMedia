@@ -9,14 +9,13 @@
 #ifndef __clamourMedia__controlListener__
 #define __clamourMedia__controlListener__
 
-#include "baseFensterListener.h"
 #include "oscManager.h"
 #include "ofxUI.h"
 #include "game.h"
 #include "ofxXmlSettings.h"
 
 
-class controlListener: public baseFensterListener{
+class controlListener{
     
     //this basically replaces the testApp
     
@@ -24,13 +23,14 @@ public:
     
     void setup();
 
-    void update(ofxFenster * f);
+    void update();
     void draw();
-    
-    void setDisplayRef(ofxFenster * f);
     
     ofPtr<nodeManager> getNodeManager();
 
+    void keyPressed(int key);
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
     
 
     
@@ -44,9 +44,7 @@ private:
     void implementStage();
 
 	void guiEvent(ofxUIEventArgs &e);
-    void keyPressed(int key, ofxFenster* window);
-    void mousePressed(int x, int y, int button, ofxFenster * window);
-    void mouseReleased(int x, int y, int button, ofxFenster * window);
+
     
     
     ofxUICanvas *gui;
@@ -62,11 +60,11 @@ private:
     
     ofPtr<game> mCurrentGame;
     int mGameBrowseIndex;
-    ofxFenster * displayFenster;
     
     bool isMouseDown;
     
     int currentControl;
+    int width, height;
     
 };
 

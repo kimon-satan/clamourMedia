@@ -109,10 +109,10 @@ void oscManager::logMessages(ofxOscMessage m, int mt){
     }
     
     // add to the list of strings to the log
-   /* msg_strings[mt].push_back(msg_string);
+     msg_strings[mt].push_back(msg_string);
     
     //make space for new messages
-    if(msg_strings[mt].size() > NUM_MSG_STRINGS)msg_strings[mt].erase(msg_strings[mt].begin());*/
+    if(msg_strings[mt].size() > NUM_MSG_STRINGS)msg_strings[mt].erase(msg_strings[mt].begin());
 
 }
 
