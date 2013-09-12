@@ -1,0 +1,82 @@
+<CLAMOUR_MEDIA>
+
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>allPlayers</NAME>
+		<SELECTOR>all</SELECTOR>
+	</GROUP>
+
+
+	<GAME>
+		<NAME>Hello World</NAME>
+		<COMMAND>
+		 <TARGET>allPlayers</TARGET>
+		 <STAGE>0</STAGE>
+		 <PRIORITY>0</PRIORITY>
+		 <ACTION>SET_CONTROL</ACTION>
+		 <CONTROL_TYPE>0</CONTROL_TYPE>
+		</COMMAND>   
+    
+		<COMMAND>
+		 <TARGET>allPlayers</TARGET>
+		 <STAGE>0</STAGE>
+		 <PRIORITY>1</PRIORITY>
+		 <ACTION>SET_TEXT</ACTION>
+		 <TEXT>Hello there !</TEXT>
+		</COMMAND>  
+        
+		<COMMAND>
+		<TARGET>allPlayers</TARGET>
+		<STAGE>1</STAGE>
+		<PRIORITY>0</PRIORITY>
+		<ACTION>SET_TEXT</ACTION>
+		<TEXT>... and welcome to Clamour</TEXT>
+		</COMMAND>
+		
+	</GAME>
+	
+	<GAME>
+	
+		<NAME>XY free play</NAME>
+		<COMMAND>
+			 <TARGET>allPlayers</TARGET>
+			 <STAGE>0</STAGE>
+			 <PRIORITY>0</PRIORITY>
+			 <ACTION>SET_CONTROL</ACTION>
+			 <CONTROL_TYPE>1</CONTROL_TYPE>
+		</COMMAND> 
+		
+		<COMMAND>
+			 <TARGET>allPlayers</TARGET>
+			 <STAGE>0</STAGE>
+			 <PRIORITY>1</PRIORITY>
+			 <ACTION>SET_DRAW_TYPE</ACTION>
+			 <DRAW_TYPE>1</DRAW_TYPE>
+		</COMMAND> 
+		
+		<COMMAND>
+			 <TARGET>allPlayers</TARGET>
+			 <STAGE>0</STAGE>
+			 <PRIORITY>1</PRIORITY>
+			 <ACTION>SET_SOUND_TYPE</ACTION>
+			 <SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
+		</COMMAND>
+		
+
+        <COMMAND>
+		 	<TARGET>allPlayers</TARGET>
+		 	<STAGE>0</STAGE>
+		  	<PRIORITY>2</PRIORITY>
+ 		  	<ACTION>SET_SOUND_PARAM</ACTION>
+		  	<PARAM>pulseRate</PARAM>
+        	<MIN_VAL>4</MIN_VAL>
+        	<MAX_VAL>20</MAX_VAL>
+        	<ABS_VAL>4</ABS_VAL>
+			<MAP_TYPE>1</MAP_TYPE>
+		</COMMAND>
+	
+	</GAME>
+
+
+
+</CLAMOUR_MEDIA>
