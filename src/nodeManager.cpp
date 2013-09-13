@@ -107,6 +107,9 @@ void nodeManager::updateNodePosition(string t_index, float x, float y){
     
 }
 
+void nodeManager::updateOnlineClients(vector<string> v){mOnlineClients = v;}
+vector<string> nodeManager::getOnlineClients(){return mOnlineClients;}
+
 vector<string> nodeManager::getOnNodes(){
     return onNodes;
 }

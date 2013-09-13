@@ -25,7 +25,8 @@ class nodeManager{
     void switchOnNode(string t_index, float x, float y);
     void switchOffNode(string t_index);
     void updateNodePosition(string t_index, float x, float y);
-    
+    void updateOnlineClients(vector<string> v);
+    vector<string> getOnlineClients();
     
     vector<string> getOnNodes();
     ofVec2f getNodePosition(string index);
@@ -36,10 +37,13 @@ class nodeManager{
     void setNodeSoundType(vector<string> indexes, string st);
     void setNodeSoundParam(vector<string> indexes, parameter p);
     
+    
+    
     private:
     
     map< string, ofPtr<clamourNode> > mNodes;
     vector<string> onNodes;
+    vector<string> mOnlineClients;
     
     soundDictionary mSoundDictionary;
 

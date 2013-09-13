@@ -172,65 +172,12 @@ void testApp::loadXML(){
                         
                         int numSelect = XML.getNumTags("SELECTOR");
                         
-                        for(int sel = 0; sel < numSelect; sel++){
-                            
-                            string selector = XML.getValue("SELECTOR", "all", sel);
-                            
-                            vector<string>::iterator it;
-                            
-                            vector<string> t_indexes;
-                            
-                            for(it = grp->indexes.begin(); it !=grp->indexes.end(); it++){
-                            
-                                if(selector == "odd"){
-                                    
-                                    if(ofToInt((*it).substr(2))%2 != 0){
-                                        t_indexes.push_back((*it));
-                                    }
-                                    
-                                }else if(selector == "even"){
-                                    
-                                    if(ofToInt((*it).substr(2))%2 == 0){
-                                        t_indexes.push_back((*it));
-                                    }
-                                    
-                                }else if(selector == "right"){
-                                    
-                                    if(ofToInt((*it).substr(2)) <= NUM_SEATS/2){
-                                        t_indexes.push_back((*it));
-                                    }
-                                
-                                }else if(selector == "left"){
-                                    
-                                    if(ofToInt((*it).substr(2)) > NUM_SEATS/2 ){
-                                        t_indexes.push_back((*it));
-                                    }
-                                
-                                }else if(selector == "back"){
-                                    
-                                    string s = (*it).substr(0,1);
-                                    int i = s[0] - 64; //convert into an integer
-                                    
-                                    if(i > NUM_ROWS/2){
-                                        t_indexes.push_back((*it));
-                                    }
-                                
-                                }else if(selector == "front"){
-                                
-                                    string s = (*it).substr(0,1);
-                                    int i = s[0] - 64; //convert into an integer
-                                    
-                                    if(i <= NUM_ROWS/2){
-                                        t_indexes.push_back((*it));
-                                    }
-                                }
-                                
-                            }
-                            
-                            grp->indexes = t_indexes;
+                        vector<string> selectors;
                         
+                        for(int sel = 0; sel < numSelect; sel++)selectors.push_back(XML.getValue("SELECTOR", "all", sel));
                             
-                        }
+                        selectClients(selectors, grp);
+                        
                         //will eventually need a safety for double allocation
                         mGroups[grp->name] = grp;
                         
@@ -352,6 +299,99 @@ void testApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("ATTACK_SECS"))cmd.floatParams["ATTACK_SECS"] = XML.getValue("ATTACK_SECS", 0.0);
     if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
     if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
+
+}
+
+void testApp::selectClients(vector<string> selectors, ofPtr<group> grp){
+
+    for(int selector =0; selector > selectors.size(); selector++){
+    
+        
+        
+        vector<string> t_indexes;
+        
+        if(selectors[selector] == "all"){
+            t_indexes = mPlayerIndexes;
+        }else if(selectors[selector] == "online"){
+            t_indexes = mNodeManager->getOnlineClients();
+        }else if(selectors[selector] == "single"){
+            
+            if(grp->indexes.size() > 1){
+                int i = ofRandom(0, grp->indexes.size() - 1);
+                t_indexes.push_back(grp->indexes[i]);
+            }else{
+                t_indexes = grp->indexes;
+            }
+            
+        }else if(selectors[selector] == "pair"){
+            
+            if(grp->indexes.size() > 2){
+                int first = ofRandom(0, grp->indexes.size() - 2);
+                int second = ofRandom(0, grp->indexes.size() - 1);
+                if (second == first)second = grp->indexes.size() - 1;
+                
+                t_indexes.push_back(grp->indexes[first]);
+                t_indexes.push_back(grp->indexes[second]);
+                
+            }else{
+                t_indexes = grp->indexes;
+            }
+            
+        }
+
+        vector<string>::iterator it;
+    
+        for(it = grp->indexes.begin(); it !=grp->indexes.end(); it++){
+            
+            if(selectors[selector] == "odd"){
+                
+                if(ofToInt((*it).substr(2))%2 != 0){
+                    t_indexes.push_back((*it));
+                }
+                
+            }else if(selectors[selector] == "even"){
+                
+                if(ofToInt((*it).substr(2))%2 == 0){
+                    t_indexes.push_back((*it));
+                }
+                
+            }else if(selectors[selector] == "right"){
+                
+                if(ofToInt((*it).substr(2)) <= NUM_SEATS/2){
+                    t_indexes.push_back((*it));
+                }
+                
+            }else if(selectors[selector] == "left"){
+                
+                if(ofToInt((*it).substr(2)) > NUM_SEATS/2 ){
+                    t_indexes.push_back((*it));
+                }
+                
+            }else if(selectors[selector] == "back"){
+                
+                string s = (*it).substr(0,1);
+                int i = s[0] - 64; //convert into an integer
+                
+                if(i > NUM_ROWS/2){
+                    t_indexes.push_back((*it));
+                }
+                
+            }else if(selectors[selector] == "front"){
+                
+                string s = (*it).substr(0,1);
+                int i = s[0] - 64; //convert into an integer
+                
+                if(i <= NUM_ROWS/2){
+                    t_indexes.push_back((*it));
+                }
+            }            
+        }
+        
+        grp->indexes = t_indexes;
+    
+    }
+
+
 
 }
 

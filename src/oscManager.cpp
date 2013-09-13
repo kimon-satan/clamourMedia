@@ -73,7 +73,17 @@ void oscManager::update(){
             pNodeManager->switchOffNode(t_index);
             stopSynth(t_index);
             
-		}
+		}else if(m.getAddress() == "/update/onlineUsers"){
+            
+            vector<string> v;
+            
+            for(int i = 0; i < m.getNumArgs(); i++){
+                v.push_back(m.getArgAsString(i));
+            }
+            
+            pNodeManager->updateOnlineClients(v);
+        
+        }
         
 	}
     
@@ -106,7 +116,6 @@ void oscManager::logMessages(ofxOscMessage m, int mt){
     
     for(int i = 0; i < m.getNumArgs(); i++){
         
-        msg_string += ", ";
         
         // display the argument - make sure we get the right type
         if(m.getArgType(i) == OFXOSC_TYPE_INT32){
@@ -121,11 +130,14 @@ void oscManager::logMessages(ofxOscMessage m, int mt){
         else{
             msg_string += "unknown";
         }
+        
+        msg_string += ", ";
     }
     
     // add to the list of strings to the log
-    msg_strings[mt].push_back(msg_string);
+    msg_strings[mt].push_back( msg_string.substr(0,50)); //maximum 50 chars
     msg_string_count[mt] += 1;
+   
     
     //make space for new messages
     if(msg_strings[mt].size() > NUM_MSG_STRINGS)msg_strings[mt].erase(msg_strings[mt].begin());
