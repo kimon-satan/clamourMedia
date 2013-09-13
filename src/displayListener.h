@@ -24,6 +24,9 @@ class displayListener: public baseFensterListener {
     void setNodeManager(ofPtr<nodeManager> p);
     void keyPressed(int key, ofxFenster* window);
 
+    void addTitle(string s, title t);
+    void endTitle(string s);
+    
     
     private:
     

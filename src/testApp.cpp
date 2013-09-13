@@ -10,8 +10,8 @@ void testApp::setup(){
     
     //populate indexes
     //eventually find this out by message to meteor
-    for(int i = 0; i < 10; i++){
-        for(int j = 0; j < 10; j++){
+    for(int i = 0; i < NUM_ROWS; i++){
+        for(int j = 0; j < NUM_SEATS; j++){
             
             string t_index = ofToString(char(65 + j)) + "_" + ofToString(i + 1);
             mPlayerIndexes.push_back(t_index);
@@ -168,14 +168,72 @@ void testApp::loadXML(){
                         ofPtr<group> grp = ofPtr<group>(new group());
                         grp->name = XML.getValue("NAME", "default");
                         
-                        string selector = XML.getValue("SELECTOR", "all");
+                        grp->indexes = mPlayerIndexes; //start with all players
                         
-                        if(selector == "all"){
-                            grp->indexes = mPlayerIndexes; //add all players
+                        int numSelect = XML.getNumTags("SELECTOR");
+                        
+                        for(int sel = 0; sel < numSelect; sel++){
+                            
+                            string selector = XML.getValue("SELECTOR", "all", sel);
+                            
+                            vector<string>::iterator it;
+                            
+                            vector<string> t_indexes;
+                            
+                            for(it = grp->indexes.begin(); it !=grp->indexes.end(); it++){
+                            
+                                if(selector == "odd"){
+                                    
+                                    if(ofToInt((*it).substr(2))%2 != 0){
+                                        t_indexes.push_back((*it));
+                                    }
+                                    
+                                }else if(selector == "even"){
+                                    
+                                    if(ofToInt((*it).substr(2))%2 == 0){
+                                        t_indexes.push_back((*it));
+                                    }
+                                    
+                                }else if(selector == "right"){
+                                    
+                                    if(ofToInt((*it).substr(2)) <= NUM_SEATS/2){
+                                        t_indexes.push_back((*it));
+                                    }
+                                
+                                }else if(selector == "left"){
+                                    
+                                    if(ofToInt((*it).substr(2)) > NUM_SEATS/2 ){
+                                        t_indexes.push_back((*it));
+                                    }
+                                
+                                }else if(selector == "back"){
+                                    
+                                    string s = (*it).substr(0,1);
+                                    int i = s[0] - 64; //convert into an integer
+                                    
+                                    if(i > NUM_ROWS/2){
+                                        t_indexes.push_back((*it));
+                                    }
+                                
+                                }else if(selector == "front"){
+                                
+                                    string s = (*it).substr(0,1);
+                                    int i = s[0] - 64; //convert into an integer
+                                    
+                                    if(i <= NUM_ROWS/2){
+                                        t_indexes.push_back((*it));
+                                    }
+                                }
+                                
+                            }
+                            
+                            grp->indexes = t_indexes;
+                        
+                            
                         }
-                        
                         //will eventually need a safety for double allocation
                         mGroups[grp->name] = grp;
+                        
                         
                     }
                 
@@ -280,16 +338,20 @@ void testApp::parseActions(command &cmd, ofxXmlSettings &XML){
     
     cmd.mCommand = XML.getValue("ACTION", "none");
     
-    
     if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
     if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
     if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
     if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
+    
     if(XML.tagExists("PARAM"))cmd.stringParams["PARAM"] = XML.getValue("PARAM", "");
     if(XML.tagExists("MIN_VAL"))cmd.floatParams["MIN_VAL"] = XML.getValue("MIN_VAL", 0.0);
     if(XML.tagExists("MAX_VAL"))cmd.floatParams["MAX_VAL"] = XML.getValue("MAX_VAL", 1.0);
     if(XML.tagExists("ABS_VAL"))cmd.floatParams["ABS_VAL"] = XML.getValue("ABS_VAL", 0.0);
     if(XML.tagExists("MAP_TYPE"))cmd.intParams["MAP_TYPE"] = XML.getValue("MAP_TYPE",0);
+    
+    if(XML.tagExists("ATTACK_SECS"))cmd.floatParams["ATTACK_SECS"] = XML.getValue("ATTACK_SECS", 0.0);
+    if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
+    if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
 
 }
 
@@ -463,6 +525,22 @@ void testApp::implementStage(){
             
             
             mNodeManager->setNodeSoundParam(clients, p);
+            
+        }else if(tComms[i].mCommand == "ADD_TITLE"){
+            
+            title t;
+    
+            t.text = tComms[i].stringParams["TEXT"];
+            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["ATTACK_SECS"];
+            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["DECAY_SECS"];
+            
+            mDisplayListener->addTitle(tComms[i].stringParams["NAME"], t);
+            
+            
+        }else if(tComms[i].mCommand == "END_TITLE"){
+        
+            mDisplayListener->endTitle(tComms[i].stringParams["NAME"]);
+        
         }
         
         

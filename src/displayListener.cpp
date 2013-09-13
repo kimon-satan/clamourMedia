@@ -49,15 +49,6 @@ void displayListener::keyPressed(int key, ofxFenster* window){
         ofToggleFullscreen();
     }
     
-    if(key == 't'){
-        title t;
-        t.text = "Clamour";
-        mTitleRenderer.addTitle("c", t);
-    }
-    
-    if(key == 'y'){
-        mTitleRenderer.endTitle("c");
-    }
     
 }
 
@@ -65,5 +56,15 @@ void displayListener::setNodeManager(ofPtr<nodeManager> p){
     
     pNodeManager = p;
     
+}
+
+void displayListener::addTitle(string s, title t){
+    
+    mTitleRenderer.addTitle(s, t);
+}
+
+void displayListener::endTitle(string s){
+
+    mTitleRenderer.endTitle(s);
 }
 

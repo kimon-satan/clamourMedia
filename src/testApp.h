@@ -9,6 +9,9 @@
 #include "game.h"
 
 
+#define NUM_ROWS 10
+#define NUM_SEATS 10
+
 
 class testApp : public ofBaseApp {
     

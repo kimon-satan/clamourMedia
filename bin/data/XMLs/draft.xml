@@ -1,15 +1,72 @@
 <CLAMOUR_MEDIA>
 
+<!---CONSTANT GROUPS NOT RELYING ON ONLINE OR NOT -->
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>allPlayers</NAME>
 		<SELECTOR>all</SELECTOR>
 	</GROUP>
+	
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>oddPlayers</NAME>
+		<SELECTOR>odd</SELECTOR>
+	</GROUP>
+	
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>evenPlayers</NAME>
+		<SELECTOR>even</SELECTOR>
+	</GROUP>
+	
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>leftPlayers</NAME>
+		<SELECTOR>left</SELECTOR>
+	</GROUP>
+	
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>rightPlayers</NAME>
+		<SELECTOR>right</SELECTOR>
+	</GROUP>
+	
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>backPlayers</NAME>
+		<SELECTOR>back</SELECTOR>
+	</GROUP>
+	
+	<GROUP>
+		<ACTION>create</ACTION>
+		<NAME>frontPlayers</NAME>
+		<SELECTOR>front</SELECTOR>
+	</GROUP>
 
+<!--    GAMES DEFINED HERE  -->
 
 	<GAME>
 		<NAME>synchrony</NAME>
-		<STAGE>			
+		<STAGE>
+			<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
+				 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				 <TEXT>Please wait for the playtest to begin ...</TEXT>
+			</COMMAND>  
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>ADD_TITLE</ACTION>
+				<TEXT>Clamour Playtest</TEXT>
+				<NAME>clamour</NAME>
+			</COMMAND> 
+		</STAGE>
+		<STAGE>		
+			<COMMAND>
+				<ACTION>END_TITLE</ACTION>
+				<NAME>clamour</NAME>
+			</COMMAND>	
 			<COMMAND>
 				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
 				 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
@@ -28,11 +85,18 @@
 					<TEXT>Let's begin</TEXT>
 			</COMMAND>
         </STAGE>
+        <STAGE>
+        	<COMMAND>
+				<ACTION>ADD_TITLE</ACTION>
+				<TEXT>1. Synchronicity</TEXT>
+				<NAME>game1</NAME>
+			</COMMAND>
+        </STAGE>
 		<STAGE>	
 			<COMMAND>
 				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
 				 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
-				 <TEXT>This game will test how alert you and your mobile devices are.</TEXT>
+				 <TEXT>Lets test how synchronous you and your mobile devices are.</TEXT>
 			</COMMAND>   
         </STAGE>
         <STAGE>
@@ -71,7 +135,7 @@
         <STAGE>
 			<COMMAND>
 				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>That was great !</TEXT>
+					<TEXT>very good</TEXT>
 			</COMMAND>
         </STAGE>
         <STAGE>
