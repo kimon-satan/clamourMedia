@@ -15,6 +15,11 @@ void displayListener::setup(){
 
 }
 
+void displayListener::update(){
+
+    mTitleRenderer.update();
+}
+
 void displayListener::draw(){
 
    ofSetColor(255);
@@ -30,6 +35,8 @@ void displayListener::draw(){
       
     }
     
+    mTitleRenderer.draw();
+    
 
 }
 
@@ -38,9 +45,19 @@ void displayListener::keyPressed(int key, ofxFenster* window){
     //eventually move this to UI element
     if(key == 'F'){
          mNodeRenderer.setScreen(ofGetScreenWidth(), ofGetScreenHeight());
+        mTitleRenderer.setScreen(ofGetScreenWidth(), ofGetScreenHeight());
         ofToggleFullscreen();
     }
     
+    if(key == 't'){
+        title t;
+        t.text = "Clamour";
+        mTitleRenderer.addTitle("c", t);
+    }
+    
+    if(key == 'y'){
+        mTitleRenderer.endTitle("c");
+    }
     
 }
 
@@ -50,9 +67,3 @@ void displayListener::setNodeManager(ofPtr<nodeManager> p){
     
 }
 
-void displayListener::setWindowDims(float w, float h){
-    
-    width = w;
-    height = h;
-    mNodeRenderer.setScreen((int)w, (int)h);
-}

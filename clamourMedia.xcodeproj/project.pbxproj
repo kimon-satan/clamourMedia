@@ -31,6 +31,7 @@
 		D9926EE517DA30E70090371F /* displayListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE317DA30E70090371F /* displayListener.cpp */; };
 		D9926EEB17DA3DDC0090371F /* nodeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EE917DA3DDC0090371F /* nodeManager.cpp */; };
 		D9926EEE17DA46140090371F /* baseFensterListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9926EEC17DA46130090371F /* baseFensterListener.cpp */; };
+		D9C13D1917E34F6A0082907C /* titleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9C13D1717E34F6A0082907C /* titleRenderer.cpp */; };
 		D9DCB16E17DB33D30057932A /* oscManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9DCB16C17DB33D30057932A /* oscManager.cpp */; };
 		D9DD038C17DDE16000253BE2 /* nodeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */; };
 		D9FD2B9217DF1D7900E77014 /* drawDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9FD2B9017DF1D7900E77014 /* drawDictionary.cpp */; };
@@ -195,6 +196,8 @@
 		D9926EEA17DA3DDC0090371F /* nodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nodeManager.h; sourceTree = "<group>"; };
 		D9926EEC17DA46130090371F /* baseFensterListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = baseFensterListener.cpp; sourceTree = "<group>"; };
 		D9926EED17DA46130090371F /* baseFensterListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = baseFensterListener.h; sourceTree = "<group>"; };
+		D9C13D1717E34F6A0082907C /* titleRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = titleRenderer.cpp; sourceTree = "<group>"; };
+		D9C13D1817E34F6A0082907C /* titleRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = titleRenderer.h; sourceTree = "<group>"; };
 		D9DCB16C17DB33D30057932A /* oscManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oscManager.cpp; sourceTree = "<group>"; };
 		D9DCB16D17DB33D30057932A /* oscManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oscManager.h; sourceTree = "<group>"; };
 		D9DD038A17DDE16000253BE2 /* nodeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodeRenderer.cpp; sourceTree = "<group>"; };
@@ -621,6 +624,8 @@
 				D9FD2B9517DF585300E77014 /* game.h */,
 				D9172F3B17E1B6EE00124E49 /* nodeClasses */,
 				D9172F3A17E1B6BE00124E49 /* parameterClasses */,
+				D9C13D1717E34F6A0082907C /* titleRenderer.cpp */,
+				D9C13D1817E34F6A0082907C /* titleRenderer.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -902,6 +907,7 @@
 				D9FD2B9617DF585400E77014 /* game.cpp in Sources */,
 				D9172F3617E1B64900124E49 /* soundDictionary.cpp in Sources */,
 				D9172F3E17E1B81300124E49 /* parameter.cpp in Sources */,
+				D9C13D1917E34F6A0082907C /* titleRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

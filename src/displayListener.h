@@ -11,22 +11,25 @@
 
 #include "baseFensterListener.h"
 #include "nodeRenderer.h"
+#include "titleRenderer.h"
 
 class displayListener: public baseFensterListener {
 
     public:
     
     void setup();
+    void update();
     void draw();
    
     void setNodeManager(ofPtr<nodeManager> p);
     void keyPressed(int key, ofxFenster* window);
-    void setWindowDims(float width, float height);
+
     
     private:
     
     ofPtr<nodeManager> pNodeManager;
     nodeRenderer mNodeRenderer;
+    titleRenderer mTitleRenderer;
 
 };
 
