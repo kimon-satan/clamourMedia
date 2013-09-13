@@ -152,6 +152,9 @@ void testApp::loadXML(){
         if(XML.pushTag("CLAMOUR_MEDIA")){
             
             
+            //static groups
+            //potentially add subgroups later
+            
             int numGroups = XML.getNumTags("GROUP");
             
             for(int gp = 0; gp < numGroups; gp++){
@@ -180,7 +183,7 @@ void testApp::loadXML(){
                 }
             
             }
-        
+             
             int numGames = XML.getNumTags("GAME");
             
             for(int gm = 0; gm < numGames; gm++){
@@ -190,41 +193,31 @@ void testApp::loadXML(){
                     ofPtr<game> gm = ofPtr<game>(new game());
                     gm->setName(XML.getValue("NAME", "default"));
                     
-                    int numCmds = XML.getNumTags("COMMAND");
+                    int numStages = XML.getNumTags("STAGE");
                     
-                    for(int cmd = 0; cmd < numCmds; cmd++){
+                    for(int stage = 0; stage < numStages; stage ++){
                     
-                        if(XML.pushTag("COMMAND", cmd)){
+                        if(XML.pushTag("STAGE", stage)){
+                        
+                            int numPriority = XML.getNumTags("PRIORITY");
                             
-                            command cmd;
+                            for(int pty = 0; pty < numPriority; pty++){
+                                
+                                if(XML.pushTag("PRIORITY", pty)){
+                                
+                                    loadCommands(gm, XML, stage, pty);
+                                    
+                                    XML.popTag(); //PRIORTY
+                                
+                                }else{
+                                    
+                                    loadCommands(gm, XML, stage); //sometimes we don't need priorities
+                                }
                             
-                            int numTargets = XML.getNumTags("TARGET");
-                            
-                            for(int tgt = 0; tgt < numTargets; tgt++){
-                               cmd.targets.push_back(XML.getValue("TARGET", "",tgt));
                             }
                             
-                            cmd.stage = XML.getValue("STAGE", 0);
-                            cmd.priority = XML.getValue("PRIORITY", 0);
-                            cmd.mCommand = XML.getValue("ACTION", "none");
-                            
-                            
-                            if(XML.tagExists("CONTROL_TYPE"))cmd.intParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE",-1);
-                            if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
-                            if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
-                            if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
-                            if(XML.tagExists("PARAM"))cmd.stringParams["PARAM"] = XML.getValue("PARAM", "");
-                            if(XML.tagExists("MIN_VAL"))cmd.floatParams["MIN_VAL"] = XML.getValue("MIN_VAL", 0.0);
-                            if(XML.tagExists("MAX_VAL"))cmd.floatParams["MAX_VAL"] = XML.getValue("MAX_VAL", 1.0);
-                            if(XML.tagExists("ABS_VAL"))cmd.floatParams["ABS_VAL"] = XML.getValue("ABS_VAL", 0.0);
-                            if(XML.tagExists("MAP_TYPE"))cmd.intParams["MAP_TYPE"] = XML.getValue("MAP_TYPE",0);
-                            
-                            gm->addCommand(cmd);
-                            
-                        
-                            XML.popTag(); // COMMAND
+                            XML.popTag(); //STAGE
                         }
-                    
                     }
                     
                     
@@ -248,6 +241,54 @@ void testApp::loadXML(){
 
 }
 
+
+void testApp::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty){
+
+    int numCmds = XML.getNumTags("COMMAND");
+    
+    for(int cmd = 0; cmd < numCmds; cmd++){
+        
+        if(XML.pushTag("COMMAND", cmd)){
+            
+            command t_cmd;
+            
+            int numTargets = XML.getNumTags("TARGET");
+            
+            for(int tgt = 0; tgt < numTargets; tgt++){
+                t_cmd.targets.push_back(XML.getValue("TARGET", "",tgt));
+            }
+            
+            t_cmd.stage = stage;
+            t_cmd.priority = pty;
+            
+            parseActions(t_cmd, XML);
+            
+            gm->addCommand(t_cmd);
+            
+            
+            XML.popTag(); // COMMAND
+        }
+        
+    }
+
+}
+
+void testApp::parseActions(command &cmd, ofxXmlSettings &XML){
+    
+    cmd.mCommand = XML.getValue("ACTION", "none");
+    
+    
+    if(XML.tagExists("CONTROL_TYPE"))cmd.intParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE",-1);
+    if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
+    if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
+    if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
+    if(XML.tagExists("PARAM"))cmd.stringParams["PARAM"] = XML.getValue("PARAM", "");
+    if(XML.tagExists("MIN_VAL"))cmd.floatParams["MIN_VAL"] = XML.getValue("MIN_VAL", 0.0);
+    if(XML.tagExists("MAX_VAL"))cmd.floatParams["MAX_VAL"] = XML.getValue("MAX_VAL", 1.0);
+    if(XML.tagExists("ABS_VAL"))cmd.floatParams["ABS_VAL"] = XML.getValue("ABS_VAL", 0.0);
+    if(XML.tagExists("MAP_TYPE"))cmd.intParams["MAP_TYPE"] = XML.getValue("MAP_TYPE",0);
+
+}
 
 
 //--------------------------------------------------------------

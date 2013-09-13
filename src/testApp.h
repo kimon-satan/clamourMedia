@@ -37,6 +37,8 @@ private:
     void updateGUIElements();
     
     void loadXML();
+    void loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty = 0);
+    void parseActions(command &cmd, ofxXmlSettings &XML);
     void implementStage();
     
 	void guiEvent(ofxUIEventArgs &e);
