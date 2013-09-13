@@ -209,11 +209,14 @@ void testApp::loadXML(){
                                     
                                     XML.popTag(); //PRIORTY
                                 
-                                }else{
-                                    
-                                    loadCommands(gm, XML, stage); //sometimes we don't need priorities
                                 }
                             
+                            }
+                            
+                            if(numPriority == 0 ){
+                             
+                                loadCommands(gm, XML, stage); //sometimes we don't need priorities
+                                
                             }
                             
                             XML.popTag(); //STAGE
@@ -278,7 +281,7 @@ void testApp::parseActions(command &cmd, ofxXmlSettings &XML){
     cmd.mCommand = XML.getValue("ACTION", "none");
     
     
-    if(XML.tagExists("CONTROL_TYPE"))cmd.intParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE",-1);
+    if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
     if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
     if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
     if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
@@ -428,7 +431,14 @@ void testApp::implementStage(){
         
         if(tComms[i].mCommand == "SET_CONTROL"){
             
-            mOscManager->setControl(clients, tComms[i].intParams["CONTROL_TYPE"]);
+            if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end()){
+                
+                mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"], tComms[i].stringParams["TEXT"]);
+                
+            }else{
+            
+                mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"]); 
+            }
             
         }else if(tComms[i].mCommand == "SET_TEXT"){
             

@@ -35,7 +35,8 @@ class oscManager{
     void setNodeManager(ofPtr<nodeManager> p);
 
     void setAllClients(int control);
-    void setControl(vector<string> clients, int control);
+    void setControl(vector<string> clients, string control);
+    void setControl(vector<string> clients, string control, string text);
     void setText(vector<string> clients, string text);
     
 
@@ -52,17 +53,18 @@ class oscManager{
     private:
     
     void logMessages(ofxOscMessage m, int type);
+    void addToBundle(string index, ofxOscMessage m);
     
     ofxOscReceiver receiver;
     ofxOscSender sender;
     ofxOscSender SCsender;
     
-    ofxOscBundle outBundle;
+    map<string, ofxOscBundle> outBundle;
     
     ofPtr<nodeManager> pNodeManager;
     
     vector<vector<string> > msg_strings;
-    
+    vector<int> msg_string_count;
 
 };
 

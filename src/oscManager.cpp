@@ -18,12 +18,16 @@ oscManager::oscManager(){
     for(int i = 0; i < 3; i ++){
         vector<string> s;
         msg_strings.push_back(s);
+        msg_string_count.push_back(0);
     }
     
 }
 
 void oscManager::update(){
     
+    for(int i = 0; i < 3; i ++){
+        msg_string_count[i] = 0;
+    }
     
 	// check for waiting messages
 	while(receiver.hasWaitingMessages()){
@@ -73,13 +77,20 @@ void oscManager::update(){
         
 	}
     
-    //send the outbundle to Meteor if it has messages waiting
+    //send the client's outbundle to Meteor if it has messages waiting
     
-    if(outBundle.getMessageCount() > 0){
+    map<string, ofxOscBundle>::iterator it;
+    
+    for(it = outBundle.begin(); it != outBundle.end(); it++){
         
-        sender.sendBundle(outBundle);
-        outBundle.clear();
+        if(it->second.getMessageCount() > 0){
+            sender.sendBundle(it->second);
+            it->second.clear();
+        }
+        
     }
+    
+ 
 
 
 }
@@ -87,6 +98,8 @@ void oscManager::update(){
 
 void oscManager::logMessages(ofxOscMessage m, int mt){
 
+    if(msg_string_count[mt] >= NUM_MSG_STRINGS)return; //for when there's loads of messages
+    
     string msg_string;
     msg_string = m.getAddress();
     msg_string += ": ";
@@ -111,7 +124,8 @@ void oscManager::logMessages(ofxOscMessage m, int mt){
     }
     
     // add to the list of strings to the log
-     msg_strings[mt].push_back(msg_string);
+    msg_strings[mt].push_back(msg_string);
+    msg_string_count[mt] += 1;
     
     //make space for new messages
     if(msg_strings[mt].size() > NUM_MSG_STRINGS)msg_strings[mt].erase(msg_strings[mt].begin());
@@ -158,7 +172,7 @@ void oscManager::setAllClients(int control){
 
 }
 
-void oscManager::setControl(vector<string> clients, int control){
+void oscManager::setControl(vector<string> clients, string control){
 
     
     for(int i = 0; i < clients.size(); i++){
@@ -167,14 +181,34 @@ void oscManager::setControl(vector<string> clients, int control){
         
         m.setAddress("/newControl");
         m.addStringArg(clients[i]);
-        m.addIntArg(control);
+        m.addStringArg(control);
         
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
         
-        outBundle.addMessage(m);
+        addToBundle(clients[i], m);
     
     }
 
+}
+
+void oscManager::setControl(vector<string> clients, string control, string text){
+    
+    
+    for(int i = 0; i < clients.size(); i++){
+        
+        ofxOscMessage m;
+        
+        m.setAddress("/newControl");
+        m.addStringArg(clients[i]);
+        m.addStringArg(control);
+        m.addStringArg(text);
+        
+        logMessages(m, CLAMOUR_MSG_METEOR_OUT);
+        
+        addToBundle(clients[i], m);
+        
+    }
+    
 }
 
 void oscManager::setText(vector<string> clients, string text){
@@ -189,13 +223,24 @@ void oscManager::setText(vector<string> clients, string text){
         
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
         
-        outBundle.addMessage(m);
-        
+        addToBundle(clients[i], m);
        
     }
     
   
     
+}
+
+void oscManager::addToBundle(string index, ofxOscMessage m){
+
+    if(outBundle.find(index) != outBundle.end()){
+        outBundle[index].addMessage(m);
+    }else{
+        ofxOscBundle b;
+        outBundle[index] = b;
+        outBundle[index].addMessage(m);
+    }
+
 }
 
 
