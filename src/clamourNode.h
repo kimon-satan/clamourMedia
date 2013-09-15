@@ -25,6 +25,8 @@ public:
     void updateHistory();
     void updateDrawData();
     void updateSoundData();
+    void resetShift(float x, float y);
+    
     
     //getters and setters
     int getSeat();
@@ -35,6 +37,9 @@ public:
     void setPosition(ofVec2f v);
     ofVec2f getMeanPos();
     void setMeanPos(ofVec2f v);
+    ofVec2f getShiftStart();
+    float getShiftAmount();
+    void setShiftAmount(float f);
     bool getIsOn();
     void setIsOn(bool b);
     void setDrawType(int i);
@@ -54,6 +59,8 @@ private:
     string row;
     ofVec2f position;
     ofVec2f meanPos;
+    ofVec2f shiftStart;
+    float shiftAmount;
     bool isOn;
     vector<ofVec2f> history;
     std::tr1::shared_ptr<baseData> drawData;

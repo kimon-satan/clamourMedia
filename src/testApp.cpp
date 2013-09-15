@@ -182,6 +182,7 @@ void testApp::loadXML(){
                         mGroups[grp->name] = grp;
                         
                         
+                        
                     }
                 
                     XML.popTag(); //GROUP
@@ -289,6 +290,7 @@ void testApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
     if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
     if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
+    if(XML.tagExists("SELECTORS"))cmd.stringParams["SELECTORS"] = XML.getValue("SELECTORS","");
     
     if(XML.tagExists("PARAM"))cmd.stringParams["PARAM"] = XML.getValue("PARAM", "");
     if(XML.tagExists("MIN_VAL"))cmd.floatParams["MIN_VAL"] = XML.getValue("MIN_VAL", 0.0);
@@ -304,9 +306,7 @@ void testApp::parseActions(command &cmd, ofxXmlSettings &XML){
 
 void testApp::selectClients(vector<string> selectors, ofPtr<group> grp){
 
-    for(int selector =0; selector > selectors.size(); selector++){
-    
-        
+    for(int selector = 0; selector < selectors.size(); selector++){
         
         vector<string> t_indexes;
         
@@ -581,6 +581,25 @@ void testApp::implementStage(){
         
             mDisplayListener->endTitle(tComms[i].stringParams["NAME"]);
         
+        }else if(tComms[i].mCommand == "NEW_GROUP"){
+            
+            ofPtr<group> grp;
+            
+            grp = ofPtr<group>(new group());
+            grp->indexes = clients;
+            
+            
+            grp->name = tComms[i].stringParams["NAME"];
+            
+            string s_string = tComms[i].stringParams["SELECTORS"];
+            
+            vector<string> selectors = ofSplitString(s_string, ",");
+            
+            selectClients(selectors, grp);
+            
+            
+            mGroups[grp->name] = grp;
+            
         }
         
         

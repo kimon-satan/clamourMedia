@@ -55,17 +55,21 @@ void oscManager::update(){
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
             
-            if(pNodeManager->getNode(t_index)->getIsOn()){
+            /*if(pNodeManager->getNode(t_index)->getIsOn()){
                 pNodeManager->updateNodePosition(t_index, x, y);
                 updateSynth(t_index);
-            }
+            }*/
+            
+            pNodeManager->shiftNodePosition(t_index, x, y);
             
         }else if(m.getAddress() == "/node/on"){
             
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
             
-            pNodeManager->switchOnNode(t_index, x, y);
+            //pNodeManager->switchOnNode(t_index, x, y);
+            pNodeManager->switchOnNode(t_index);
+            pNodeManager->beginShift(t_index, x, y);
             startSynth(t_index);
             
         }else if(m.getAddress() == "/node/off"){

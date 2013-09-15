@@ -13,10 +13,11 @@ clamourNode::clamourNode(int ts, string tr){
     
     seat = ts;
     row = tr;
-    position.set(0,0);
+    position.set(400,400);
     isOn = false;
     smoothFrames = 10;
     drawType = nodeDrawType(1);
+    shiftAmount = 0.2;
     
     
 };
@@ -53,6 +54,14 @@ void clamourNode::updateSoundData(){
     
 }
 
+void clamourNode::resetShift(float x , float y){
+
+    
+    ofVec2f v(ofVec2f(x,y) * shiftAmount);
+    shiftStart.set(meanPos - v);
+
+}
+
 
 //getters and setters
 
@@ -64,6 +73,9 @@ ofVec2f clamourNode::getPosition(){return position;}
 void clamourNode::setPosition(ofVec2f v){position = v;}
 ofVec2f clamourNode::getMeanPos(){return meanPos;}
 void clamourNode::setMeanPos(ofVec2f v){meanPos = v;}
+ofVec2f clamourNode::getShiftStart(){return shiftStart;}
+void clamourNode::setShiftAmount(float f){shiftAmount = f;}
+float clamourNode::getShiftAmount(){return shiftAmount;}
 void clamourNode::clearHistory(){history.clear();}
 bool clamourNode::getIsOn(){return isOn;}
 void clamourNode::setIsOn(bool b){isOn = b;}

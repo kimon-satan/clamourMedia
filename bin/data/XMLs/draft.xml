@@ -144,6 +144,110 @@
 					<TEXT>"Thankyou"</TEXT>
 			</COMMAND>
         </STAGE>
+        <STAGE>
+        	<COMMAND>
+				<ACTION>END_TITLE</ACTION><NAME>game1</NAME>
+			</COMMAND>
+			 <COMMAND>
+				<ACTION>ADD_TITLE</ACTION>
+				<TEXT>Tell me, what is this all about ?</TEXT>
+				<NAME>game2</NAME>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+ 			<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"I am interested ..."</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+ 			<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"in exploring ..."</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+ 			<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"just what can be accomplished ..."</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+ 			<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"with one big screen ..."</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+ 			<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"and many small ones"</TEXT>
+			</COMMAND>
+        </STAGE>
+         <STAGE>
+ 			<COMMAND>
+				 <TARGET>oddPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"can we work together"</TEXT>
+			</COMMAND>
+			<COMMAND>
+				 <TARGET>evenPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"will we fall apart"</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+        	<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"At the moment, I am in control"</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+        	<COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"I can divide you"</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+        	<COMMAND>
+				 <TARGET>leftPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"Into left"</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+        	<COMMAND>
+				 <TARGET>rightPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"and right"</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+        	<COMMAND>
+				 <TARGET>frontPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"front"</TEXT>
+			</COMMAND>
+        </STAGE>
+        <STAGE>
+        	<COMMAND>
+				 <TARGET>backPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"or back"</TEXT>
+			</COMMAND>
+        </STAGE>
+        
+        <STAGE>
+        	<PRIORITY>
+				<COMMAND>
+				<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
+				<SELECTORS>online,pair</SELECTORS>
+				<NAME>aTeam</NAME>
+				</COMMAND>
+        	</PRIORITY>
+        	<PRIORITY>
+        	    <COMMAND>
+				 <TARGET>aTeam</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"I can build teams ..."</TEXT>
+				</COMMAND>
+        	</PRIORITY>
+        </STAGE>
+        
+        <!-- "I can build teams or single you out. Now I'm going to give you some control. At first just a little" -->
         
 	</GAME>
 	

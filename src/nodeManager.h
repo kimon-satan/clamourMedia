@@ -22,9 +22,12 @@ class nodeManager{
     void resetNodes();
     void updateNodes();
     
+    void switchOnNode(string t_index);
     void switchOnNode(string t_index, float x, float y);
     void switchOffNode(string t_index);
+    void beginShift(string t_index, float x, float y);
     void updateNodePosition(string t_index, float x, float y);
+    void shiftNodePosition(string t_index, float x, float y);
     void updateOnlineClients(vector<string> v);
     vector<string> getOnlineClients();
     

@@ -47,6 +47,13 @@ nodeManager::nodeManager(vector<string> indexes){
 }
 
 
+void nodeManager::beginShift(string t_index, float x, float y){
+    
+    mNodes[t_index]->resetShift(x, y);
+    
+}
+
+
 void nodeManager::updateNodes(){
     
     for(int i = 0; i < onNodes.size(); i ++){
@@ -73,6 +80,13 @@ void nodeManager::resetNodes(){
     
     onNodes.clear();
     
+    
+}
+
+void nodeManager::switchOnNode(string t_index){
+
+    mNodes[t_index]->setIsOn(true);
+    onNodes.push_back(t_index);
     
 }
 
@@ -105,6 +119,15 @@ void nodeManager::updateNodePosition(string t_index, float x, float y){
     
     mNodes[t_index]->setPosition(ofVec2f(x,y));
     
+}
+
+void nodeManager::shiftNodePosition(string t_index, float x, float y){
+
+    ofVec2f s(x,y);
+    ofVec2f p = mNodes[t_index]->getShiftStart() + s * mNodes[t_index]->getShiftAmount();
+    
+    mNodes[t_index]->setPosition(p);
+
 }
 
 void nodeManager::updateOnlineClients(vector<string> v){mOnlineClients = v;}
