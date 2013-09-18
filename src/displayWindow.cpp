@@ -70,9 +70,13 @@ void displayWindow::endTitle(string s){
 }
 
 void displayWindow::mouseMoved(int x, int y ){
-    cout << x << ":" << y << endl;
+  //  cout << x << ":" << y << endl;
 
 }
 
+void displayWindow::reset(){
+
+    mTitleRenderer.reset();
+}
 
 

@@ -22,6 +22,7 @@ class displayWindow : public ofxFenster{
         void addTitle(string s, title t);
         void endTitle(string s);
 
+        void reset();
 
 
 
@@ -30,7 +31,7 @@ class displayWindow : public ofxFenster{
      ofPtr<nodeManager> pNodeManager;
      nodeRenderer mNodeRenderer;
      titleRenderer mTitleRenderer;
-     ofTrueTypeFont largeTitle;
+     ofTrueTypeFont smallFont;
 
 
 

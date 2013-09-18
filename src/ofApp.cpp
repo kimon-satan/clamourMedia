@@ -387,8 +387,6 @@ void ofApp::selectClients(vector<string> selectors, ofPtr<group> grp){
 
 
 }
-
-//--------------------------------------------------------------
 void ofApp::update(){
 
     ofBackground(100);
@@ -416,6 +414,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 
     //only trigger buttons once
+    //only trigger buttons once
     if((e.widget->getKind() == OFX_UI_WIDGET_BUTTON || e.widget->getKind() == OFX_UI_WIDGET_LABELBUTTON)
        && ! isMouseDown)return;
 
@@ -440,6 +439,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 
     }else if(name == "GAME_SELECT"){
 
+        mDisplay.reset();
         mCurrentGame.reset(); //reset the pointer
         mCurrentGame = mGames[mGameBrowseIndex];
         if(!mCurrentGame)return;
@@ -451,6 +451,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 
         if(!mCurrentGame)return;
         mCurrentGame->reset();
+        mDisplay.reset();
         implementStage();
         updateGUIElements();
 
@@ -459,6 +460,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 
 
     }
+
 
 
 }
@@ -479,7 +481,7 @@ void ofApp::updateGUIElements(){
 
 void ofApp::implementStage(){
 
-    vector<command> tComms = mCurrentGame->getStageCommands();
+     vector<command> tComms = mCurrentGame->getStageCommands();
     //now apply the commands
 
     for(int i = 0; i < tComms.size(); i++){
@@ -528,6 +530,7 @@ void ofApp::implementStage(){
             }else{
 
                 mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"]);
+
             }
 
         }else if(tComms[i].mCommand == "SET_TEXT"){
@@ -549,6 +552,7 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
 
+
             parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
 
 
@@ -562,7 +566,7 @@ void ofApp::implementStage(){
             if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["ATTACK_SECS"];
             if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["DECAY_SECS"];
 
-             mDisplay.addTitle(tComms[i].stringParams["NAME"], t);
+            mDisplay.addTitle(tComms[i].stringParams["NAME"], t);
 
 
         }else if(tComms[i].mCommand == "END_TITLE"){
@@ -593,7 +597,6 @@ void ofApp::implementStage(){
 
 
     }
-
 
 
 }

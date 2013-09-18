@@ -90,12 +90,11 @@ void titleRenderer::endTitle(string s){
     mTitles[s].isFadeOut = true;
 
 }
-<<<<<<< HEAD
-=======
+
 
 void titleRenderer::reset(){
-    
+
     mTitles.clear();
 
 }
->>>>>>> 4c692b6d8d2a69fff9dcf0c08c296b92ae773e6a
+
