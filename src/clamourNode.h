@@ -42,6 +42,8 @@ public:
     void setShiftAmount(float f);
     bool getIsOn();
     void setIsOn(bool b);
+    bool getIsDragOn();
+    void setIsDragOn(bool b);
     void setDrawType(int i);
     nodeDrawType getDrawType();
     std::tr1::shared_ptr<baseData> getDrawData();
@@ -61,7 +63,7 @@ private:
     ofVec2f meanPos;
     ofVec2f shiftStart;
     float shiftAmount;
-    bool isOn;
+    bool isOn, isDragOn;
     vector<ofVec2f> history;
     std::tr1::shared_ptr<baseData> drawData;
     ofPtr<baseData> soundData;

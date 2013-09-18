@@ -15,6 +15,7 @@ clamourNode::clamourNode(int ts, string tr){
     row = tr;
     position.set(400,400);
     isOn = false;
+    isDragOn = false;
     smoothFrames = 10;
     drawType = nodeDrawType(1);
     shiftAmount = 0.2;
@@ -59,6 +60,7 @@ void clamourNode::resetShift(float x , float y){
     
     ofVec2f v(ofVec2f(x,y) * shiftAmount);
     shiftStart.set(meanPos - v);
+    isDragOn = true;
 
 }
 
@@ -79,6 +81,8 @@ float clamourNode::getShiftAmount(){return shiftAmount;}
 void clamourNode::clearHistory(){history.clear();}
 bool clamourNode::getIsOn(){return isOn;}
 void clamourNode::setIsOn(bool b){isOn = b;}
+bool clamourNode::getIsDragOn(){return isDragOn;}
+void clamourNode::setIsDragOn(bool b){isDragOn = b;}
 
 void clamourNode::setDrawType(int i){
     

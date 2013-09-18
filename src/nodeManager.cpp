@@ -123,6 +123,7 @@ void nodeManager::updateNodePosition(string t_index, float x, float y){
 
 void nodeManager::shiftNodePosition(string t_index, float x, float y){
 
+    if(!mNodes[t_index]->getIsDragOn())return;
     ofVec2f s(x,y);
     ofVec2f p = mNodes[t_index]->getShiftStart() + s * mNodes[t_index]->getShiftAmount();
     
@@ -132,6 +133,9 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y){
 
 void nodeManager::updateOnlineClients(vector<string> v){mOnlineClients = v;}
 vector<string> nodeManager::getOnlineClients(){return mOnlineClients;}
+bool nodeManager::getIsClientOnline(string t_index){
+    return (find(mOnlineClients.begin(), mOnlineClients.end(), t_index) != mOnlineClients.end());
+}
 
 vector<string> nodeManager::getOnNodes(){
     return onNodes;

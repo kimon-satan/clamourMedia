@@ -9,8 +9,8 @@
 #include "game.h"
 
 
-#define NUM_ROWS 10
-#define NUM_SEATS 10
+#define NUM_ROWS 2
+#define NUM_SEATS 5
 
 
 class testApp : public ofBaseApp {
@@ -68,6 +68,8 @@ private:
     bool isMouseDown;
     
     int currentControl;
+    
+    soundDictionary mSoundDictionary;
     
     
     

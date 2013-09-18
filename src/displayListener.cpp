@@ -68,3 +68,8 @@ void displayListener::endTitle(string s){
     mTitleRenderer.endTitle(s);
 }
 
+void displayListener::reset(){
+    
+    mTitleRenderer.reset();
+}
+

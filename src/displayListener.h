@@ -27,6 +27,8 @@ class displayListener: public baseFensterListener {
     void addTitle(string s, title t);
     void endTitle(string s);
     
+    void reset();
+    
     
     private:
     

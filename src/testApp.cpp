@@ -10,8 +10,8 @@ void testApp::setup(){
     
     //populate indexes
     //eventually find this out by message to meteor
-    for(int i = 0; i < NUM_ROWS; i++){
-        for(int j = 0; j < NUM_SEATS; j++){
+    for(int i = 0; i < NUM_SEATS; i++){
+        for(int j = 0; j < NUM_ROWS; j++){
             
             string t_index = ofToString(char(65 + j)) + "_" + ofToString(i + 1);
             mPlayerIndexes.push_back(t_index);
@@ -452,6 +452,7 @@ void testApp::guiEvent(ofxUIEventArgs &e){
         
     }else if(name == "GAME_SELECT"){
         
+        mDisplayListener->reset();
         mCurrentGame.reset(); //reset the pointer
         mCurrentGame = mGames[mGameBrowseIndex];
         if(!mCurrentGame)return;
@@ -463,6 +464,7 @@ void testApp::guiEvent(ofxUIEventArgs &e){
         
         if(!mCurrentGame)return;
         mCurrentGame->reset();
+        mDisplayListener->reset();
         implementStage();
         updateGUIElements();
         
@@ -536,10 +538,11 @@ void testApp::implementStage(){
             if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end()){
                 
                 mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"], tComms[i].stringParams["TEXT"]);
-                
+            
             }else{
             
-                mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"]); 
+                mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"]);
+            
             }
             
         }else if(tComms[i].mCommand == "SET_TEXT"){
@@ -560,6 +563,7 @@ void testApp::implementStage(){
             mNodeManager->setNodeSoundType(clients, tComms[i].stringParams["SOUND_TYPE"]);
             
         }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
+            
             
             parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
             

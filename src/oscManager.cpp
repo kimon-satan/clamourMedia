@@ -54,23 +54,57 @@ void oscManager::update(){
             
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
+            string movType = m.getArgAsString(4);
             
-            /*if(pNodeManager->getNode(t_index)->getIsOn()){
+            if(!pNodeManager->getNode(t_index)->getIsOn())return;
+            
+            if(movType == "drag" || movType == "drag_c"){
+                pNodeManager->shiftNodePosition(t_index, x, y);
+            }else{
                 pNodeManager->updateNodePosition(t_index, x, y);
-                updateSynth(t_index);
-            }*/
+                
+            }
             
-            pNodeManager->shiftNodePosition(t_index, x, y);
+            updateSynth(t_index);
+            
+            
             
         }else if(m.getAddress() == "/node/on"){
             
             float x = m.getArgAsFloat(2);
             float y = m.getArgAsFloat(3);
+            string movType = m.getArgAsString(4);
             
-            //pNodeManager->switchOnNode(t_index, x, y);
-            pNodeManager->switchOnNode(t_index);
-            pNodeManager->beginShift(t_index, x, y);
+            if(movType == "drag"){
+                
+                pNodeManager->switchOnNode(t_index);
+                pNodeManager->beginShift(t_index, x, y);
+                
+            }else if(movType == "drag_c_init"){
+                
+                pNodeManager->switchOnNode(t_index, x, y);
+                
+                
+            }else{
+                
+                pNodeManager->switchOnNode(t_index, x, y);
+            }
+            
+           
+         
             startSynth(t_index);
+            
+        }else if(m.getAddress() == "/node/startDrag"){
+            
+            float x = m.getArgAsFloat(2);
+            float y = m.getArgAsFloat(3);
+            string movType = m.getArgAsString(4);
+            
+            pNodeManager->beginShift(t_index, x, y);
+        
+        }else if(m.getAddress() == "/node/endDrag"){
+   
+            pNodeManager->getNode(t_index)->setIsDragOn(false);
             
         }else if(m.getAddress() == "/node/off"){
             
@@ -191,7 +225,14 @@ void oscManager::setAllClients(int control){
 void oscManager::setControl(vector<string> clients, string control){
 
     
+    
     for(int i = 0; i < clients.size(); i++){
+        
+        if(pNodeManager->getNode(clients[i])->getIsOn()){
+            pNodeManager->switchOffNode(clients[i]);
+            stopSynth(clients[i]);
+        }
+        
         
         ofxOscMessage m;
         
@@ -226,6 +267,7 @@ void oscManager::setControl(vector<string> clients, string control, string text)
     }
     
 }
+
 
 void oscManager::setText(vector<string> clients, string text){
     

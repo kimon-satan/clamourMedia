@@ -89,3 +89,9 @@ void titleRenderer::endTitle(string s){
     mTitles[s].isFadeOut = true;
 
 }
+
+void titleRenderer::reset(){
+    
+    mTitles.clear();
+
+}
