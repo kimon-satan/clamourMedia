@@ -6,7 +6,7 @@
 		<Option makefile_is_custom="1" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/addons/;src/addons/ofxOsc/;src/;src/addons/ofxFenster/src/;src/addons/ofxFenster/libs/ofGLFWWindow/;src/addons/ofxOsc/libs/oscpack/src/osc/;src/addons/ofxOsc/libs/oscpack/src/ip/;src/addons/ofxOsc/src/;src/addons/ofxOsc/libs/oscpack/src/ip/posix/;src/addons/ofxOsc/libs/oscpack/src/ip/win32/;src/addons/ofxUI/;src/addons/ofxXml/;build config/;" />
+		<Option virtualFolders="src/addons/;src/addons/ofxOsc/;src/;src/addons/ofxFenster/src/;src/addons/ofxFenster/libs/ofGLFWWindow/;src/addons/ofxOsc/libs/oscpack/src/osc/;src/addons/ofxOsc/libs/oscpack/src/ip/;src/addons/ofxOsc/src/;src/addons/ofxOsc/libs/oscpack/src/ip/posix/;src/addons/ofxOsc/libs/oscpack/src/ip/win32/;src/addons/ofxUI/;src/addons/ofxXml/;build config/;src/nodeClasses/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/$(PROJECT_NAME)_debug" prefix_auto="1" extension_auto="1" />
@@ -333,35 +333,23 @@
 		<Unit filename="config.make">
 			<Option virtualFolder="build config" />
 		</Unit>
-		<Unit filename="src/baseFensterListener.cpp">
-			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/baseFensterListener.h">
-			<Option virtualFolder="src/" />
-		</Unit>
 		<Unit filename="src/clamourNode.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/clamourNode.h">
+			<Option virtualFolder="src/nodeClasses/" />
+		</Unit>
+		<Unit filename="src/displayWindow.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>
-		<Unit filename="src/controlListener.cpp">
-			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/controlListener.h">
-			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/displayListener.cpp">
-			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/displayListener.h">
+		<Unit filename="src/displayWindow.h">
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/drawDictionary.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/drawDictionary.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/game.cpp">
 			<Option virtualFolder="src/" />
@@ -373,15 +361,21 @@
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/nodeManager.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/nodeManager.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/nodeRenderer.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/nodeRenderer.h">
+			<Option virtualFolder="src/nodeClasses/" />
+		</Unit>
+		<Unit filename="src/ofApp.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/ofApp.h">
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/oscManager.cpp">
@@ -391,22 +385,16 @@
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/parameter.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/parameter.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/soundDictionary.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/soundDictionary.h">
-			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/testApp.cpp">
-			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/testApp.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/titleRenderer.cpp">
 			<Option virtualFolder="src/" />
@@ -418,6 +406,15 @@
 			<code_completion />
 			<envvars />
 			<debugger />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
