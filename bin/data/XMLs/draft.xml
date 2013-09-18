@@ -47,7 +47,20 @@
 <!--    GAMES DEFINED HERE  -->
 
 	<GAME>
-		<NAME>synchrony</NAME>
+		<NAME>login</NAME>
+		<STAGE>
+			<COMMAND>
+				<ACTION>ADD_TITLE</ACTION>
+				<NAME>logon</NAME>
+				<TEXT>Logon at :- 192.168.2.2:3000</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>END_TITLE</ACTION>
+				<NAME>logon</NAME>
+			</COMMAND>
+		</STAGE>
 		<STAGE>
 			<COMMAND>
 				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
@@ -55,6 +68,11 @@
 				 <TEXT>Please wait for the playtest to begin ...</TEXT>
 			</COMMAND>  
 		</STAGE>
+	</GAME>
+
+	<GAME>
+		<NAME>synchrony</NAME>
+	
 		<STAGE>
 			<COMMAND>
 				<ACTION>ADD_TITLE</ACTION>
@@ -234,9 +252,16 @@
         <STAGE>
         	<PRIORITY>
 				<COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
+				<TARGET>frontPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
 				<SELECTORS>online,pair</SELECTORS>
 				<NAME>aTeam</NAME>
+				</COMMAND>
+        	</PRIORITY>
+        	<PRIORITY>
+				<COMMAND>
+				<TARGET>backPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
+				<SELECTORS>online,single</SELECTORS>
+				<NAME>aSingle</NAME>
 				</COMMAND>
         	</PRIORITY>
         	<PRIORITY>
@@ -247,17 +272,45 @@
         	</PRIORITY>
         </STAGE>
         
-        <!-- "I can build teams or single you out. Now I'm going to give you some control. At first just a little" -->
+        <STAGE>
+        	<PRIORITY>
+        	    <COMMAND>
+				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"or single you"</TEXT>
+				</COMMAND>
+        	</PRIORITY>
+        </STAGE>
+        <STAGE>
+        	 <PRIORITY>
+        	    <COMMAND>
+				 <TARGET>aSingle</TARGET><ACTION>SET_TEXT</ACTION>
+					<TEXT>"out"</TEXT>
+				</COMMAND>
+				<COMMAND>
+				<ACTION>END_TITLE</ACTION>
+				<NAME>game2</NAME>
+				</COMMAND>
+        	</PRIORITY>
+        </STAGE>
         
 	</GAME>
 	
 	<GAME>
-		<NAME>XY free play</NAME>
+		<NAME>play</NAME>
 		<STAGE>
+			<COMMAND>
+				<ACTION>ADD_TITLE</ACTION>
+				<NAME>Play</NAME>
+				<TEXT>2. Control</TEXT>
+			</COMMAND>
+		</STAGE> 
+		
+	<STAGE>
 			<PRIORITY>
 				<COMMAND>
 					 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>XY</CONTROL_TYPE>
+					 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+					 <TEXT>Now I'm going to give you some control ...</TEXT>
 				</COMMAND> 
 			 </PRIORITY>
 			 <PRIORITY>
@@ -274,12 +327,140 @@
 				<COMMAND>
 					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
 					<PARAM>pulseRate</PARAM>
-					<MIN_VAL>4</MIN_VAL><MAX_VAL>20</MAX_VAL>
-					<ABS_VAL>4</ABS_VAL><MAP_TYPE>1</MAP_TYPE>
+					<MIN_VAL>4</MIN_VAL><MAX_VAL>20</MAX_VAL><ABS_VAL>4</ABS_VAL>
+					<MAP_TYPE>1</MAP_TYPE>
+				</COMMAND>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
+					<PARAM>pan</PARAM>
+					<MIN_VAL>-0.75</MIN_VAL><MAX_VAL>0.75</MAX_VAL><ABS_VAL>0</ABS_VAL>
+					<MAP_TYPE>1</MAP_TYPE>
+				</COMMAND>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
+					<PARAM>resFilFreq</PARAM>
+					<MIN_VAL>300</MIN_VAL><MAX_VAL>2000</MAX_VAL><ABS_VAL>500</ABS_VAL>
+					<MAP_TYPE>2</MAP_TYPE>
 				</COMMAND>
 			</PRIORITY>
 		</STAGE>
-	</GAME>
+		
+		<STAGE>
+				<COMMAND>
+					 <TARGET>A_1</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
+				</COMMAND> 
+		</STAGE>
+		
+		<STAGE>
+			<COMMAND>
+				 <TARGET>A_2</TARGET><ACTION>SET_CONTROL</ACTION>
+				 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
+			</COMMAND> 
+			<COMMAND>
+				<ACTION>END_TITLE</ACTION>
+				<NAME>Play</NAME>
+				<TEXT>2. Control</TEXT>
+			</COMMAND>
+		</STAGE>
+		
+		<STAGE>
+			<COMMAND>
+				 <TARGET>A_3</TARGET><ACTION>SET_CONTROL</ACTION>
+				 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
+			</COMMAND> 
+		</STAGE>
+		
+		<STAGE>
+				<COMMAND>
+					 <TARGET>A_4</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
+				</COMMAND> 
+		</STAGE>
+		
+		<STAGE>
+				<COMMAND>
+					 <TARGET>A_5</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
+				</COMMAND> 
+		</STAGE>
+		
+		<STAGE>
+				<COMMAND>
+					 <TARGET>backPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
+				</COMMAND> 
+		</STAGE>
+		
+		<STAGE>
+			<COMMAND>
+				 <TARGET>oddPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
+				 <CONTROL_TYPE>DRAG_ON_OFF</CONTROL_TYPE>
+			</COMMAND> 
+		</STAGE> 
+		
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					 <TARGET>evenPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>DRAG_CONT</CONTROL_TYPE>
+				</COMMAND> 
+			 </PRIORITY>
+		</STAGE>
+		
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					 <TARGET>oddPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+					 <TEXT>Thanks for helping me</TEXT>
+				</COMMAND> 
+			 </PRIORITY>
+		</STAGE>
+		
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					 <TARGET>A_2</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+					 <TEXT>Thanks for helping me</TEXT>
+				</COMMAND> 
+			 </PRIORITY>
+		</STAGE>
+		
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					 <TARGET>A_4</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+					 <TEXT>Thanks for helping me</TEXT>
+				</COMMAND> 
+			 </PRIORITY>
+		</STAGE>
+		
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					 <TARGET>B_4</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+					 <TEXT>Thanks for helping me</TEXT>
+				</COMMAND> 
+			 </PRIORITY>
+		</STAGE>
+		
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					 <TARGET>B_2</TARGET><ACTION>SET_CONTROL</ACTION>
+					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+					 <TEXT>Thanks for helping me</TEXT>
+				</COMMAND> 
+			 </PRIORITY>
+		</STAGE>
+		
+
+		
+	</GAME> 
 
 
 </CLAMOUR_MEDIA>

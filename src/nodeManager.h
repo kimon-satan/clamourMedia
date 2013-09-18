@@ -30,6 +30,7 @@ class nodeManager{
     void shiftNodePosition(string t_index, float x, float y);
     void updateOnlineClients(vector<string> v);
     vector<string> getOnlineClients();
+    bool getIsClientOnline(string t_index);
     
     vector<string> getOnNodes();
     ofVec2f getNodePosition(string index);

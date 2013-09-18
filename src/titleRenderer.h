@@ -43,6 +43,7 @@ class titleRenderer{
     void setScreen(int w, int h);
     void addTitle(string s, title t);
     void endTitle(string s);
+    void reset();
     
     private:
     

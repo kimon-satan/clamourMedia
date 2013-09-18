@@ -37,6 +37,7 @@ class oscManager{
     void setAllClients(int control);
     void setControl(vector<string> clients, string control);
     void setControl(vector<string> clients, string control, string text);
+
     void setText(vector<string> clients, string text);
     
 
