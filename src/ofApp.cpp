@@ -296,6 +296,11 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
     if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
 
+    if(XML.tagExists("PATTERN"))cmd.stringParams["PATTERN"] = XML.getValue("PATTERN", "default");
+    if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.5);
+    if(XML.tagExists("Y"))cmd.floatParams["Y"] = XML.getValue("Y", 0.5);
+    if(XML.tagExists("RADIUS"))cmd.floatParams["RADIUS"] = XML.getValue("RADIUS", 0.25);
+
 }
 
 void ofApp::selectClients(vector<string> selectors, ofPtr<group> grp){
@@ -550,6 +555,10 @@ void ofApp::implementStage(){
 
             parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
             mNodeManager->setNodeDrawParam(clients, p);
+
+        }else if(tComms[i].mCommand == "DISTRIBUTE_NODES"){
+
+            mNodeManager->distributeNodes(clients, tComms[i].stringParams["PATTERN"], tComms[i].floatParams);
 
         }else if(tComms[i].mCommand == "SET_SOUND_TYPE"){
 

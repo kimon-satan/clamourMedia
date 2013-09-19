@@ -20,6 +20,7 @@ clamourNode::clamourNode(int ts, string tr){
     drawType = nodeDrawType(1);
     shiftAmount = 0.2;
     setCtrlIndex(5);
+    isReturnToOn = false;
 
 
 };

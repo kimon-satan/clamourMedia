@@ -69,23 +69,25 @@ void nodeManager::updateNodes(){
 
     //purge old nodes
     for(int i = 0; i < offNodes.size(); i++){
-        vector<string>::iterator it = remove(onNodes.begin(), onNodes.end(), offNodes[i]);
-        if(it != onNodes.end()){
 
-            mNodes[*it]->setIsOn(false);
+        mNodes[offNodes[i]]->setIsOn(false);
 
+        if(!mNodes[offNodes[i]]->getIsReturnToOn()){ // if the this is flagged then the node will be swtiched straight back on with a new synth
+            vector<string>::iterator it = remove(onNodes.begin(), onNodes.end(), offNodes[i]);
+            if(it != onNodes.end())onNodes.erase(it);
+        }else{
 
-            if(!mNodes[*it]->getIsReturnToOn()){ // if the this is flagged then the node will be swtiched straight back on with a new synth
-                onNodes.erase(it);
-            }else{
-                mNodes[*it]->setIsReturnToOn(false);
-            }
-
+            mNodes[offNodes[i]]->setIsReturnToOn(false);
         }
+
     }
 
 
     offNodes.clear(); //oscManager already used them so no need to retain
+
+    //turn on any flagged nodes
+
+
 
 
     // any nodes turned off after here will be switched off in the subsequent frame
@@ -97,6 +99,24 @@ void nodeManager::updateNodes(){
 
 }
 
+void nodeManager::distributeNodes(vector<string> clients, string pattern, map<string, float> params){
+
+    if(pattern == "RANDOM_CIRCLE"){
+
+        ofVec2f c(params["X"], params["Y"]);
+        float r = params["RADIUS"];
+
+        for(int i = 0; i < clients.size(); i++){
+
+            ofVec2f p(0,ofRandom(0,r));
+            p = p.getRotated(ofRandom(-180,180));
+            mNodes[clients[i]]->setPosition(p+c);
+
+        }
+
+    }
+}
+
 
 void nodeManager::switchOffAllNodes(){
 
@@ -104,9 +124,10 @@ void nodeManager::switchOffAllNodes(){
     for(int i = 0; i < onNodes.size(); i ++){
 
         mNodes[onNodes[i]]->clearHistory();
-        offNodes.push_back(onNodes[i]);
 
     }
+
+    offNodes = onNodes;
 
 
 }
@@ -135,14 +156,14 @@ void nodeManager::switchOffNode(string t_index){
 
 void nodeManager::switchOnNode(string t_index){
 
-    onNodes.push_back(t_index);
+    if(find(onNodes.begin(), onNodes.end(), t_index) ==onNodes.end())onNodes.push_back(t_index);
 
 }
 
 void nodeManager::switchOnNode(string t_index, float x, float y){
 
     mNodes[t_index]->setPosition(ofVec2f(x, y));
-    onNodes.push_back(t_index);
+    if(find(onNodes.begin(), onNodes.end(), t_index) ==onNodes.end())onNodes.push_back(t_index);
 
 }
 
@@ -260,4 +281,9 @@ void nodeManager::flagNodesReturn(vector<string> clients){
 
         mNodes[clients[i]]->setIsReturnToOn(true);
     }
+}
+
+void nodeManager::flagNodeReturn(string client){
+
+    mNodes[client]->setIsReturnToOn(true);
 }

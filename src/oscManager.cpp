@@ -230,15 +230,27 @@ void oscManager::setControl(vector<string> clients, string control){
 
     pNodeManager->setCtrlIndexes(clients, 5);
 
-    if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT"){
-
-        //flag the node to be switched back on
-        pNodeManager->flagNodesReturn(clients);
-    }
-
-    pNodeManager->switchOffNodes(clients);
 
     for(int i = 0; i < clients.size(); i++){
+
+        ofPtr<clamourNode> n = pNodeManager->getNode(clients[i]);
+
+        if(n->getIsOn()){
+
+
+            pNodeManager->switchOffNode(clients[i]);
+            if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT"){
+                //flag the node to be switched back on
+                pNodeManager->flagNodeReturn(clients[i]);
+            }
+
+        }else{
+
+            if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT"){
+                pNodeManager->switchOnNode(clients[i]);
+            }
+
+        }
 
         ofxOscMessage m;
 
@@ -246,7 +258,7 @@ void oscManager::setControl(vector<string> clients, string control){
         m.addStringArg(clients[i]);
         m.addStringArg(control);
         m.addStringArg("_");
-        m.addStringArg(pNodeManager->getNode(clients[i])->getCtrlIndex());
+        m.addStringArg(n->getCtrlIndex());
 
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
 
