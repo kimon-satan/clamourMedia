@@ -18,6 +18,7 @@ void displayWindow::update(){
     //could do with a flag but leave for now
     mNodeRenderer.setScreen(getWidth(), getHeight());
     mTitleRenderer.setScreen(getWidth(), getHeight());
+    pNodeManager->setScreenProp((float)getHeight()/getWidth());
 
     mTitleRenderer.update();
     ofBackground(0);
@@ -70,7 +71,7 @@ void displayWindow::endTitle(string s){
 }
 
 void displayWindow::mouseMoved(int x, int y ){
-  //  cout << x << ":" << y << endl;
+
 
 }
 

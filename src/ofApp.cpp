@@ -299,6 +299,8 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("PATTERN"))cmd.stringParams["PATTERN"] = XML.getValue("PATTERN", "default");
     if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.5);
     if(XML.tagExists("Y"))cmd.floatParams["Y"] = XML.getValue("Y", 0.5);
+    if(XML.tagExists("DIM_P"))cmd.intParams["DIM_P"] = XML.getValue("DIM_P", 0);
+    if(XML.tagExists("POS_P"))cmd.intParams["POS_P"] = XML.getValue("POS_P", 0);
     if(XML.tagExists("RADIUS"))cmd.floatParams["RADIUS"] = XML.getValue("RADIUS", 0.25);
 
 }
@@ -558,7 +560,12 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "DISTRIBUTE_NODES"){
 
-            mNodeManager->distributeNodes(clients, tComms[i].stringParams["PATTERN"], tComms[i].floatParams);
+            bool dimp, posp;
+
+            dimp = (tComms[i].intParams.find("DIM_P") != tComms[i].intParams.end());
+            posp = (tComms[i].intParams.find("POS_P") != tComms[i].intParams.end());
+
+            mNodeManager->distributeNodes(clients, tComms[i].stringParams["PATTERN"], tComms[i].floatParams, dimp, posp);
 
         }else if(tComms[i].mCommand == "SET_SOUND_TYPE"){
 

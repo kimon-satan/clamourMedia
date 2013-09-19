@@ -99,17 +99,20 @@ void nodeManager::updateNodes(){
 
 }
 
-void nodeManager::distributeNodes(vector<string> clients, string pattern, map<string, float> params){
+void nodeManager::distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp){
+
 
     if(pattern == "RANDOM_CIRCLE"){
 
         ofVec2f c(params["X"], params["Y"]);
+        if(posp)c *= ofVec2f(screenProp,1.0);
         float r = params["RADIUS"];
 
         for(int i = 0; i < clients.size(); i++){
 
             ofVec2f p(0,ofRandom(0,r));
             p = p.getRotated(ofRandom(-180,180));
+            if(dimp)p *= ofVec2f(screenProp,1.0);
             mNodes[clients[i]]->setPosition(p+c);
 
         }
@@ -287,3 +290,5 @@ void nodeManager::flagNodeReturn(string client){
 
     mNodes[client]->setIsReturnToOn(true);
 }
+
+void nodeManager::setScreenProp(float p){screenProp = p;}

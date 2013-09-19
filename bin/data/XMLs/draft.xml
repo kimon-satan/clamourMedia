@@ -103,6 +103,7 @@
 					<PATTERN>RANDOM_CIRCLE</PATTERN>
 					<X>0.5</X>
 					<Y>0.5</Y>
+					<DIM_P>1</DIM_P>
 					<RADIUS>0.25</RADIUS>
 				</COMMAND>
 			</PRIORITY>

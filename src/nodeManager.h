@@ -42,7 +42,7 @@ class nodeManager{
     ofVec2f getNodePosition(string index);
     ofPtr<clamourNode> getNode(string index);
 
-    void distributeNodes(vector<string> clients, string pattern, map<string, float> params);
+    void distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp);
 
     void setNodeDrawType(vector<string> indexes, int dt);
     void setNodeDrawParam(vector<string> indexes, parameter p);
@@ -52,6 +52,7 @@ class nodeManager{
     void setCtrlIndexes(vector<string> clients, int len);
     void flagNodesReturn(vector<string> clients);
     void flagNodeReturn(string client);
+    void setScreenProp(float p);
 
 
 
@@ -63,7 +64,7 @@ class nodeManager{
     vector<string> mOnlineClients;
 
     soundDictionary mSoundDictionary;
-
+    float screenProp;
 
 };
 
