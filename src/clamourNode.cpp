@@ -10,7 +10,7 @@
 
 
 clamourNode::clamourNode(int ts, string tr){
-    
+
     seat = ts;
     row = tr;
     position.set(400,400);
@@ -19,8 +19,9 @@ clamourNode::clamourNode(int ts, string tr){
     smoothFrames = 10;
     drawType = nodeDrawType(1);
     shiftAmount = 0.2;
-    
-    
+    setCtrlIndex(5);
+
+
 };
 
 void clamourNode::updateHistory(){
@@ -28,36 +29,36 @@ void clamourNode::updateHistory(){
     if(history.size() > smoothFrames){
         history.erase(history.begin());
     }
-    
+
     history.push_back(position);
-    
+
     ofVec2f p(0,0);
-    
+
     for(int i = 0; i < history.size(); i ++){
         p = p + history[i];
     }
-    
+
     p /= (float)history.size();
-    
+
     meanPos.set(p);
-    
+
 }
 
 void clamourNode::updateDrawData(){
 
     drawData->update(meanPos);
-    
+
 }
 
 void clamourNode::updateSoundData(){
-    
+
     soundData->update(meanPos);
-    
+
 }
 
 void clamourNode::resetShift(float x , float y){
 
-    
+
     ofVec2f v(ofVec2f(x,y) * shiftAmount);
     shiftStart.set(meanPos - v);
     isDragOn = true;
@@ -85,7 +86,7 @@ bool clamourNode::getIsDragOn(){return isDragOn;}
 void clamourNode::setIsDragOn(bool b){isDragOn = b;}
 
 void clamourNode::setDrawType(int i){
-    
+
     drawType = nodeDrawType(i);
     drawData = drawDictionary::createDrawData(drawType);
     drawData->init(meanPos);
@@ -97,7 +98,38 @@ std::tr1::shared_ptr<baseData> clamourNode::getDrawData(){return drawData;}
 
 ofPtr<baseData> clamourNode::getSoundData(){return soundData;}
 void clamourNode::setSoundData(baseData sd){
-    
+
     soundData = ofPtr<baseData>(new baseData(sd));
     soundData->init(meanPos);
+}
+
+void clamourNode::setCtrlIndex(int len){
+
+    string s = "";
+
+    static const char alphanum[] =
+    "0123456789"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz";
+
+    for(int i = 0; i < len; i++){
+
+        s = s + alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+
+    ctrlIndex = s;
+
+}
+
+string clamourNode::getCtrlIndex(){
+
+    return ctrlIndex;
+
+}
+
+bool clamourNode::getIsReturnToOn(){
+    return isReturnToOn;
+}
+void clamourNode::setIsReturnToOn(bool b){
+    isReturnToOn = b;
 }

@@ -20,125 +20,142 @@ oscManager::oscManager(){
         msg_strings.push_back(s);
         msg_string_count.push_back(0);
     }
-    
+
 }
 
 void oscManager::update(){
-    
+
     for(int i = 0; i < 3; i ++){
         msg_string_count[i] = 0;
     }
-    
+
 	// check for waiting messages
 	while(receiver.hasWaitingMessages()){
-        
+
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
-        
+
         logMessages(m, CLAMOUR_MSG_METEOR_IN);
-        
+
         vector<string> s;
         s = ofSplitString(m.getAddress(), "/");
         string t_index;
 
-        
+
         if(s[1] == "node"){
-            
+
             string row = m.getArgAsString(0);
             int seat = (int)m.getArgAsFloat(1);
             t_index = row + "_" + ofToString(seat);
-            
+            if(m.getArgAsString(2) != pNodeManager->getNode(t_index)->getCtrlIndex())continue; //ignore message if not from the current control
+
         }
-        
+
+
 		if(m.getAddress() == "/node/position"){
-            
-            float x = m.getArgAsFloat(2);
-            float y = m.getArgAsFloat(3);
-            string movType = m.getArgAsString(4);
-            
-            if(!pNodeManager->getNode(t_index)->getIsOn())return;
-            
-            if(movType == "drag" || movType == "drag_c"){
-                pNodeManager->shiftNodePosition(t_index, x, y);
-            }else{
-                pNodeManager->updateNodePosition(t_index, x, y);
-                
+
+            float x = m.getArgAsFloat(3);
+            float y = m.getArgAsFloat(4);
+            string movType = m.getArgAsString(5);
+
+            if(pNodeManager->getNode(t_index)->getIsOn()){
+
+                if(movType == "drag" || movType == "drag_c"){
+                    pNodeManager->shiftNodePosition(t_index, x, y);
+                }else{
+                    pNodeManager->updateNodePosition(t_index, x, y);
+
+                }
+
+                updateSynth(t_index);
+
             }
-            
-            updateSynth(t_index);
-            
-            
-            
+
+
+
         }else if(m.getAddress() == "/node/on"){
-            
-            float x = m.getArgAsFloat(2);
-            float y = m.getArgAsFloat(3);
-            string movType = m.getArgAsString(4);
-            
+
+            //exclude messages from
+
+            float x = m.getArgAsFloat(3);
+            float y = m.getArgAsFloat(4);
+            string movType = m.getArgAsString(5);
+
             if(movType == "drag"){
-                
+
                 pNodeManager->switchOnNode(t_index);
                 pNodeManager->beginShift(t_index, x, y);
-                
-            }else if(movType == "drag_c_init"){
-                
-                pNodeManager->switchOnNode(t_index, x, y);
-                
-                
-            }else{
-                
+
+           }else{
+
+                //normal xy stuff
                 pNodeManager->switchOnNode(t_index, x, y);
             }
-            
-           
-         
-            startSynth(t_index);
-            
+
+
         }else if(m.getAddress() == "/node/startDrag"){
-            
-            float x = m.getArgAsFloat(2);
-            float y = m.getArgAsFloat(3);
-            string movType = m.getArgAsString(4);
-            
+
+            //for when node is permanently on
+            float x = m.getArgAsFloat(3);
+            float y = m.getArgAsFloat(4);
+            string movType = m.getArgAsString(5);
+
             pNodeManager->beginShift(t_index, x, y);
-        
+
         }else if(m.getAddress() == "/node/endDrag"){
-   
+
+            //when node is permanently on
             pNodeManager->getNode(t_index)->setIsDragOn(false);
-            
+
         }else if(m.getAddress() == "/node/off"){
-            
+
             pNodeManager->switchOffNode(t_index);
-            stopSynth(t_index);
-            
+
 		}else if(m.getAddress() == "/update/onlineUsers"){
-            
+
             vector<string> v;
-            
+
             for(int i = 0; i < m.getNumArgs(); i++){
                 v.push_back(m.getArgAsString(i));
             }
-            
+
             pNodeManager->updateOnlineClients(v);
-        
+
         }
-        
+
 	}
-    
+
+    //sorry this is confusing and shit
+    //I'll fix it one day ...
+    //stop the synths for recently turned off nodes
+	vector<string> v = pNodeManager->getOffNodes();
+
+	for(int i = 0; i < v.size(); i++){
+            stopSynth(v[i]);
+	}
+
+    v = pNodeManager->getOnNodes();
+    for(int i = 0; i < v.size(); i++){
+        if(!pNodeManager->getNode(v[i])->getIsOn()){
+                startSynth(v[i]);
+                pNodeManager->getNode(v[i])->setIsOn(true);
+        }
+    }
+
     //send the client's outbundle to Meteor if it has messages waiting
-    
+
     map<string, ofxOscBundle>::iterator it;
-    
+
     for(it = outBundle.begin(); it != outBundle.end(); it++){
-        
+
         if(it->second.getMessageCount() > 0){
             sender.sendBundle(it->second);
             it->second.clear();
         }
-        
+
     }
-    
- 
+
+
 
 
 }
@@ -147,14 +164,14 @@ void oscManager::update(){
 void oscManager::logMessages(ofxOscMessage m, int mt){
 
     if(msg_string_count[mt] >= NUM_MSG_STRINGS)return; //for when there's loads of messages
-    
+
     string msg_string;
     msg_string = m.getAddress();
     msg_string += ": ";
-    
+
     for(int i = 0; i < m.getNumArgs(); i++){
-        
-        
+
+
         // display the argument - make sure we get the right type
         if(m.getArgType(i) == OFXOSC_TYPE_INT32){
             msg_string += ofToString(m.getArgAsInt32(i));
@@ -168,15 +185,15 @@ void oscManager::logMessages(ofxOscMessage m, int mt){
         else{
             msg_string += "unknown";
         }
-        
+
         msg_string += ", ";
     }
-    
+
     // add to the list of strings to the log
     msg_strings[mt].push_back( msg_string.substr(0,50)); //maximum 50 chars
     msg_string_count[mt] += 1;
-   
-    
+
+
     //make space for new messages
     if(msg_strings[mt].size() > NUM_MSG_STRINGS)msg_strings[mt].erase(msg_strings[mt].begin());
 
@@ -189,16 +206,16 @@ void oscManager::logMessages(ofxOscMessage m, int mt){
 void oscManager::setNodeManager(ofPtr<nodeManager> p){pNodeManager = p;}
 
 string oscManager::getMsgString(int mt){
-    
+
     string s;
-    
+
     for(int i = 0; i < msg_strings[mt].size(); i++){
-        
+
         s += msg_strings[mt][i];
         s += "\n\n";
-        
+
     }
-    
+
     return s;
 
 }
@@ -207,86 +224,81 @@ string oscManager::getMsgString(int mt){
 
 //messages to Meteor need to bundled because of concurrency
 
-void oscManager::setAllClients(int control){
-    
-    
-    ofxOscMessage m;
-    m.setAddress("/allClients/newControl");
-    m.addIntArg(control);
-    
-    if(control == 0)m.addStringArg("default text");
-    
-    logMessages(m, CLAMOUR_MSG_METEOR_OUT);
-    
-    sender.sendMessage(m);
-
-}
 
 void oscManager::setControl(vector<string> clients, string control){
 
-    
-    
+
+    pNodeManager->setCtrlIndexes(clients, 5);
+
+    if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT"){
+
+        //flag the node to be switched back on
+        pNodeManager->flagNodesReturn(clients);
+    }
+
+    pNodeManager->switchOffNodes(clients);
+
     for(int i = 0; i < clients.size(); i++){
-        
-        if(pNodeManager->getNode(clients[i])->getIsOn()){
-            pNodeManager->switchOffNode(clients[i]);
-            stopSynth(clients[i]);
-        }
-        
-        
+
         ofxOscMessage m;
-        
+
         m.setAddress("/newControl");
         m.addStringArg(clients[i]);
         m.addStringArg(control);
-        
+        m.addStringArg("_");
+        m.addStringArg(pNodeManager->getNode(clients[i])->getCtrlIndex());
+
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
-        
+
         addToBundle(clients[i], m);
-    
+
     }
 
 }
 
 void oscManager::setControl(vector<string> clients, string control, string text){
-    
-    
+
+    pNodeManager->setCtrlIndexes(clients, 5);
+    pNodeManager->switchOffNodes(clients);
+
+
     for(int i = 0; i < clients.size(); i++){
-        
+
         ofxOscMessage m;
-        
+
         m.setAddress("/newControl");
         m.addStringArg(clients[i]);
         m.addStringArg(control);
         m.addStringArg(text);
-        
+        m.addStringArg(pNodeManager->getNode(clients[i])->getCtrlIndex());
+
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
-        
+
         addToBundle(clients[i], m);
-        
+
     }
-    
+
 }
 
 
 void oscManager::setText(vector<string> clients, string text){
-    
-    
+
+
     for(int i = 0; i < clients.size(); i++){
         ofxOscMessage m;
-        
+
         m.setAddress("/newText");
         m.addStringArg(clients[i]);
         m.addStringArg(text);
-        
+
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
-        
+
         addToBundle(clients[i], m);
-       
+
     }
-    
-  
-    
+
+
+
 }
 
 void oscManager::addToBundle(string index, ofxOscMessage m){
@@ -312,64 +324,64 @@ void oscManager::sendInit(){
     ofxOscMessage m;
     m.setAddress("/init");
     SCsender.sendMessage(m);
-    
+
     logMessages(m, CLAMOUR_MSG_SC_OUT);
 
 }
 
 void oscManager::startSynth(string index){
-    
+
     ofPtr<baseData> sd = pNodeManager->getNode(index)->getSoundData();
-    
+
     ofxOscMessage m;
     m.setAddress("/startSynth");
     m.addStringArg(index);
-    
+
     m.addStringArg(sd->getName());
-    
+
     vector<float> vals = sd->getAbsVals();
-    
+
     for(int i = 0; i < vals.size(); i++){
         m.addFloatArg(vals[i]);
     }
-    
+
     SCsender.sendMessage(m);
     logMessages(m, CLAMOUR_MSG_SC_OUT);
-    
+
 }
 
 void oscManager::updateSynth(string index){
-    
+
    ofVec2f pos(pNodeManager->getNodePosition(index));
-    
+
     ofxOscMessage m;
     m.setAddress("/updateSynth");
     m.addStringArg(index);
-    
+
     ofPtr<baseData> sd = pNodeManager->getNode(index)->getSoundData();
-    
+
     m.addStringArg(sd->getName()); //add the name to keep the indexing th same for update and start at the SC end
-    
+
     vector<float> vals = sd->getAbsVals();
-    
+
     for(int i = 0; i < vals.size(); i++){
         m.addFloatArg(vals[i]);
     }
-    
+
     SCsender.sendMessage(m);
-    
+
     logMessages(m, CLAMOUR_MSG_SC_OUT);
-    
-    
+
+
 }
 
 void oscManager::stopSynth(string index){
-    
+
     ofxOscMessage m;
     m.setAddress("/stopSynth");
     m.addStringArg(index);
     SCsender.sendMessage(m);
-    
+
     logMessages(m, CLAMOUR_MSG_SC_OUT);
 
 }

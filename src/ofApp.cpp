@@ -7,6 +7,7 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 	ofSetWindowPosition(800, 800);
 	ofSetWindowTitle("CLAMOUR CONTROL");
+	ofSetVerticalSync(false);
 
 	ofxFensterManager::get()->setupWindow(&mDisplay);
 
@@ -411,6 +412,8 @@ void ofApp::draw(){
 
 void ofApp::guiEvent(ofxUIEventArgs &e){
 
+    //this could also be made into OSC for remote control
+
     string name = e.widget->getName();
 
     //only trigger buttons once
@@ -503,8 +506,9 @@ void ofApp::implementStage(){
             }else{
 
                 //it must be an individual client
+                //TODO need to check that the client is online
                 clients.push_back(tComms[i].targets[j]);
-                cout << "individual client" << endl;
+
             }
 
         }
@@ -522,6 +526,7 @@ void ofApp::implementStage(){
         //now carry out the command
 
         if(tComms[i].mCommand == "SET_CONTROL"){
+
 
             if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end()){
 
@@ -548,14 +553,15 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "SET_SOUND_TYPE"){
 
+            //turn off nodes -- not clear that responsibility should rest here
+            mNodeManager->switchOffNodes(clients);
             mNodeManager->setNodeSoundType(clients, tComms[i].stringParams["SOUND_TYPE"]);
 
         }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
 
+            //does this require the reset of the node as well ?
 
             parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
-
-
             mNodeManager->setNodeSoundParam(clients, p);
 
         }else if(tComms[i].mCommand == "ADD_TITLE"){
@@ -604,7 +610,6 @@ void ofApp::implementStage(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
-    cout << key << endl;
 
 
 
