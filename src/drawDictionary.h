@@ -11,37 +11,38 @@
 #include "ofMain.h"
 #include "parameter.h"
 
-enum nodeDrawType{
-    
-    CLAMOUR_DRAW_DEBUG,
-    CLAMOUR_DRAW_FLICKER,
-    CLAMOUR_DRAW_COUNT
-    
-};
-
-
 
 class debugDrawData: public baseData{
-    
+
     public:
-    
+
     private:
     //internal variables
-    
+
 };
 
 class flickerDrawData: public baseData{
-    
+
     public:
-    
+
     flickerDrawData();
     virtual ~flickerDrawData(){};
-    
-    
+
     private:
     //internal variables
-    
-    
+
+
+};
+
+class roundDrawData: public baseData{
+
+    public:
+
+    roundDrawData();
+    virtual ~roundDrawData(){};
+
+    private:
+    //internal variables
 
 
 };
@@ -50,10 +51,10 @@ class drawDictionary{
 
 
     public:
-    
-    static std::tr1::shared_ptr<baseData> createDrawData(nodeDrawType d);
-    
-    
+
+    static std::tr1::shared_ptr<baseData> createDrawData(string dt);
+
+
 };
 
 

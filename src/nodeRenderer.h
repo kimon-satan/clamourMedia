@@ -13,22 +13,25 @@
 
 class nodeRenderer{
 
-    
+
     public:
-    
+
     nodeRenderer();
-    
+
     void renderNode(ofPtr<clamourNode> n);
     void setScreen(int w, int h);
-    
+
     //drawing types
     void drawFlicker(ofPtr<clamourNode> n);
-    
+    void drawRound(ofPtr<clamourNode> n);
+
     private:
-    
+
     int screenWidth, screenHeight;
- 
-    
+
+    ofTrueTypeFont debugFont;
+
+
 
 
 };

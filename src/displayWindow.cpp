@@ -2,7 +2,8 @@
 
 
 
-void displayWindow::setup(){
+void displayWindow::setup()
+{
 
     setWindowShape(200,200);
     setWindowPosition(0, 0);
@@ -12,12 +13,15 @@ void displayWindow::setup(){
 
 }
 
-void displayWindow::update(){
+void displayWindow::update()
+{
 
 
     //could do with a flag but leave for now
     mNodeRenderer.setScreen(getWidth(), getHeight());
     mTitleRenderer.setScreen(getWidth(), getHeight());
+
+    //for sanity's sake this could go back to testApp
     pNodeManager->setScreenProp((float)getHeight()/getWidth());
 
     mTitleRenderer.update();
@@ -25,28 +29,38 @@ void displayWindow::update(){
 }
 
 
-void displayWindow::draw(){
+void displayWindow::draw()
+{
 
     ofSetColor(255);
     smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
 
+    //draw the zones first
+   // pZoneManager->
+    //pZoneRenderer->draw();
+
     vector<string> onNodes(pNodeManager->getOnNodes());
 
-    for(int i = 0; i < onNodes.size(); i ++){
+    for(int i = 0; i < onNodes.size(); i ++)
+    {
 
         mNodeRenderer.renderNode(pNodeManager->getNode(onNodes[i]));
 
     }
+
+
 
     mTitleRenderer.draw();
 
 }
 
 
-void displayWindow::keyPressed(int key){
+void displayWindow::keyPressed(int key)
+{
 
     //eventually move this to UI element
-    if(key == 102){
+    if(key == 102)
+    {
 
         toggleFullscreen();
     }
@@ -54,28 +68,44 @@ void displayWindow::keyPressed(int key){
 
 }
 
-void displayWindow::setNodeManager(ofPtr<nodeManager> p){
+void displayWindow::setNodeManager(ofPtr<nodeManager> p)
+{
 
     pNodeManager = p;
 
 }
 
-void displayWindow::addTitle(string s, title t){
+void displayWindow::setZoneRenderer(ofPtr<zoneRenderer> p)
+{
+
+    pZoneRenderer = p;
+}
+
+void displayWindow:: setZoneManager(ofPtr<zoneManager> p)
+{
+    pZoneManager = p;
+}
+
+void displayWindow::addTitle(string s, title t)
+{
 
     mTitleRenderer.addTitle(s, t);
 }
 
-void displayWindow::endTitle(string s){
+void displayWindow::endTitle(string s)
+{
 
     mTitleRenderer.endTitle(s);
 }
 
-void displayWindow::mouseMoved(int x, int y ){
+void displayWindow::mouseMoved(int x, int y )
+{
 
 
 }
 
-void displayWindow::reset(){
+void displayWindow::reset()
+{
 
     mTitleRenderer.reset();
 }

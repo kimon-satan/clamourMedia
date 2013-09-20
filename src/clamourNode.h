@@ -46,8 +46,8 @@ public:
     void setIsDragOn(bool b);
     bool getIsReturnToOn();
     void setIsReturnToOn(bool b);
-    void setDrawType(int i);
-    nodeDrawType getDrawType();
+    void setDrawType(string dt);
+    string getDrawType();
     std::tr1::shared_ptr<baseData> getDrawData();
 
     void setSoundData(baseData sd);
@@ -62,7 +62,7 @@ private:
     int smoothFrames;
     int seat;
     string ctrlIndex;
-    nodeDrawType drawType;
+    string drawType;
     string row;
     ofVec2f position;
     ofVec2f meanPos;

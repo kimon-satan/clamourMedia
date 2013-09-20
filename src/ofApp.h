@@ -8,32 +8,35 @@
 
 #include "oscManager.h"
 #include "game.h"
+#include "zoneManager.h"
+#include "zoneRenderer.h"
 
 
 #define NUM_ROWS 10
 #define NUM_SEATS 10
 
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp
+{
 
-	public:
-		void setup();
-		void update();
-		void draw();
+public:
+    void setup();
+    void update();
+    void draw();
 
-		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
+    void keyPressed(int key);
+    void keyReleased(int key);
+    void mouseMoved(int x, int y );
+    void mouseDragged(int x, int y, int button);
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
+    void windowResized(int w, int h);
+    void dragEvent(ofDragInfo dragInfo);
+    void gotMessage(ofMessage msg);
 
-    private:
+private:
 
-       void setupGUI();
+    void setupGUI();
     void setupTextArea(ofxUIWidget * w);
     void updateGUIElements();
 
@@ -43,7 +46,7 @@ class ofApp : public ofBaseApp{
     void selectClients(vector<string> selectors, ofPtr<group> grp);
     void implementStage();
 
-	void guiEvent(ofxUIEventArgs &e);
+    void guiEvent(ofxUIEventArgs &e);
 
     displayWindow mDisplay;
 
@@ -51,6 +54,9 @@ class ofApp : public ofBaseApp{
 
     ofPtr<oscManager> mOscManager;
     ofPtr<nodeManager> mNodeManager;
+
+    ofPtr<zoneRenderer> mZoneRenderer;
+    ofPtr<zoneManager> mZoneManager;
 
     vector<string> mPlayerIndexes;
     map<string, ofPtr<group> > mGroups;

@@ -13,11 +13,11 @@ clamourNode::clamourNode(int ts, string tr){
 
     seat = ts;
     row = tr;
-    position.set(400,400);
+    position.set(0.5,0.5);
     isOn = false;
     isDragOn = false;
     smoothFrames = 10;
-    drawType = nodeDrawType(1);
+    drawType = "DEBUG";
     shiftAmount = 0.2;
     setCtrlIndex(5);
     isReturnToOn = false;
@@ -86,14 +86,14 @@ void clamourNode::setIsOn(bool b){isOn = b;}
 bool clamourNode::getIsDragOn(){return isDragOn;}
 void clamourNode::setIsDragOn(bool b){isDragOn = b;}
 
-void clamourNode::setDrawType(int i){
+void clamourNode::setDrawType(string dt){
 
-    drawType = nodeDrawType(i);
+    drawType = dt;
     drawData = drawDictionary::createDrawData(drawType);
     drawData->init(meanPos);
 
 }
-nodeDrawType clamourNode::getDrawType(){return drawType;}
+string clamourNode::getDrawType(){return drawType;}
 
 std::tr1::shared_ptr<baseData> clamourNode::getDrawData(){return drawData;}
 

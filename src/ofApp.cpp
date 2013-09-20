@@ -26,9 +26,15 @@ void ofApp::setup(){
 
     mDisplay.setNodeManager(mNodeManager);
 
+    mZoneManager = ofPtr<zoneManager>(new zoneManager());
+    mZoneRenderer = ofPtr<zoneRenderer>(new zoneRenderer());
+
+    mDisplay.setZoneManager(mZoneManager);
+    mDisplay.setZoneRenderer(mZoneRenderer);
+
+    mZoneManager->createZone("debug");
 
     isMouseDown = false;
-
 
     mOscManager->sendInit();
 
@@ -282,7 +288,7 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
 
     if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
     if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
-    if(XML.tagExists("DRAW_TYPE"))cmd.intParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE",0);
+    if(XML.tagExists("DRAW_TYPE"))cmd.stringParams["DRAW_TYPE"] = XML.getValue("DRAW_TYPE","DEBUG");
     if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
     if(XML.tagExists("SELECTORS"))cmd.stringParams["SELECTORS"] = XML.getValue("SELECTORS","");
 
@@ -551,7 +557,7 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "SET_DRAW_TYPE"){
 
-            mNodeManager->setNodeDrawType(clients, tComms[i].intParams["DRAW_TYPE"]);
+            mNodeManager->setNodeDrawType(clients, tComms[i].stringParams["DRAW_TYPE"]);
 
         }else if(tComms[i].mCommand == "SET_DRAW_PARAM"){
 

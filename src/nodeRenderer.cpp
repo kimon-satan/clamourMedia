@@ -13,7 +13,7 @@ nodeRenderer::nodeRenderer(){
 
     screenWidth = 1280;
     screenHeight = 800;
-
+    debugFont.loadFont("fonts/Goulong/Goulong.ttf", 15);
 
 }
 
@@ -26,21 +26,19 @@ void nodeRenderer::setScreen(int w, int h){
 
 void nodeRenderer::renderNode(ofPtr<clamourNode> n){
 
-    ofVec2f pos = n->getMeanPos();
-    pos *= ofVec2f(screenWidth, screenHeight);
 
 
-    switch(n->getDrawType()){
+    string dt = n->getDrawType();
 
-        case CLAMOUR_DRAW_DEBUG:
-            ofDrawBitmapString(n->getRow() + "_" + ofToString(n->getSeat()), pos);
-            break;
 
-        case CLAMOUR_DRAW_FLICKER:
-            drawFlicker(n);
-            break;
-
+    if(dt == "DEBUG"){
+            ofVec2f pos = n->getMeanPos();
+            pos *= screenHeight;
+            debugFont.drawString(n->getRow() + "_" + ofToString(n->getSeat()), pos.x, pos.y);
     }
+    if(dt == "FLICKER")drawFlicker(n);
+    if(dt == "ROUND")drawRound(n);
+
 
 
 }
@@ -49,7 +47,7 @@ void nodeRenderer::renderNode(ofPtr<clamourNode> n){
 void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
 
     ofVec2f pos = n->getMeanPos();
-    pos *= ofVec2f(screenWidth, screenHeight);
+    pos *= screenHeight;
 
     std::tr1::shared_ptr<flickerDrawData> fdd(dynamic_pointer_cast <flickerDrawData> (n->getDrawData()));
 
@@ -67,5 +65,23 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
         }
         glEnd();
     }
+
+}
+
+
+void nodeRenderer::drawRound(ofPtr<clamourNode> n){
+
+    ofVec2f pos = n->getMeanPos();
+    pos *= screenHeight;
+
+    std::tr1::shared_ptr<roundDrawData> rdd(dynamic_pointer_cast <roundDrawData> (n->getDrawData()));
+
+
+    ofSetColor(255);
+    float size = rdd->getParameter("size").abs_val;
+    ofNoFill();
+    ofCircle( pos.x, pos.y, size );
+
+
 
 }
