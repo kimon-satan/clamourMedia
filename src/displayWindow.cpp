@@ -39,17 +39,9 @@ void displayWindow::draw()
    // pZoneManager->
     //pZoneRenderer->draw();
 
-    vector<string> onNodes(pNodeManager->getOnNodes());
-
-    for(int i = 0; i < onNodes.size(); i ++)
-    {
-
-        mNodeRenderer.renderNode(pNodeManager->getNode(onNodes[i]));
-
-    }
 
 
-
+    mNodeRenderer.renderNodes(pNodeManager->getActiveNodes());
     mTitleRenderer.draw();
 
 }

@@ -33,12 +33,14 @@ class nodeManager{
     void beginShift(string t_index, float x, float y);
     void updateNodePosition(string t_index, float x, float y);
     void shiftNodePosition(string t_index, float x, float y);
-    void updateOnlineClients(vector<string> v);
+
+    void updateOnlineClients(vector<string> v); //needs shifting
+
     vector<string> getOnlineClients();
     bool getIsClientOnline(string t_index);
 
-    vector<string> getOffNodes();
-    vector<string> getOnNodes();
+    vector<ofPtr<clamourNode> > getOffNodes();
+    vector<ofPtr<clamourNode> > getActiveNodes();
     ofVec2f getNodePosition(string index);
     ofPtr<clamourNode> getNode(string index);
 
@@ -59,8 +61,8 @@ class nodeManager{
     private:
 
     map< string, ofPtr<clamourNode> > mNodes;
-    vector<string> onNodes;
-    vector<string> offNodes;
+    vector<ofPtr<clamourNode> > mActiveNodes;
+    vector<ofPtr<clamourNode> > mOffNodes;
     vector<string> mOnlineClients;
 
     soundDictionary mSoundDictionary;

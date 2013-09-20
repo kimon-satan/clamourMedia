@@ -67,7 +67,7 @@ void oscManager::update(){
 
                 }
 
-                updateSynth(t_index);
+                updateSynth(pNodeManager->getNode(t_index));
 
             }
 
@@ -125,20 +125,20 @@ void oscManager::update(){
 
 	}
 
-    //sorry this is confusing and shit
-    //I'll fix it one day ...
+
     //stop the synths for recently turned off nodes
-	vector<string> v = pNodeManager->getOffNodes();
+	vector<ofPtr<clamourNode> > v = pNodeManager->getOffNodes();
 
 	for(int i = 0; i < v.size(); i++){
             stopSynth(v[i]);
 	}
 
-    v = pNodeManager->getOnNodes();
+    //start the synths for the recently turned on nodes
+    v = pNodeManager->getActiveNodes();
     for(int i = 0; i < v.size(); i++){
-        if(!pNodeManager->getNode(v[i])->getIsOn()){
+        if(!v[i]->getIsOn()){
                 startSynth(v[i]);
-                pNodeManager->getNode(v[i])->setIsOn(true);
+                v[i]->setIsOn(true);
         }
     }
 
@@ -341,13 +341,13 @@ void oscManager::sendInit(){
 
 }
 
-void oscManager::startSynth(string index){
+void oscManager::startSynth(ofPtr<clamourNode> n){
 
-    ofPtr<baseData> sd = pNodeManager->getNode(index)->getSoundData();
+    ofPtr<baseData> sd = n->getSoundData();
 
     ofxOscMessage m;
     m.setAddress("/startSynth");
-    m.addStringArg(index);
+    m.addStringArg(n->getName());
 
     m.addStringArg(sd->getName());
 
@@ -362,15 +362,13 @@ void oscManager::startSynth(string index){
 
 }
 
-void oscManager::updateSynth(string index){
-
-   ofVec2f pos(pNodeManager->getNodePosition(index));
+void oscManager::updateSynth(ofPtr<clamourNode> n){
 
     ofxOscMessage m;
     m.setAddress("/updateSynth");
-    m.addStringArg(index);
+    m.addStringArg(n->getName());
 
-    ofPtr<baseData> sd = pNodeManager->getNode(index)->getSoundData();
+    ofPtr<baseData> sd = n->getSoundData();
 
     m.addStringArg(sd->getName()); //add the name to keep the indexing th same for update and start at the SC end
 
@@ -387,11 +385,11 @@ void oscManager::updateSynth(string index){
 
 }
 
-void oscManager::stopSynth(string index){
+void oscManager::stopSynth(ofPtr<clamourNode> n){
 
     ofxOscMessage m;
     m.setAddress("/stopSynth");
-    m.addStringArg(index);
+    m.addStringArg(n->getName());
     SCsender.sendMessage(m);
 
     logMessages(m, CLAMOUR_MSG_SC_OUT);

@@ -18,7 +18,7 @@
 #define NUM_MSG_STRINGS 6
 
 enum msgType{
-    
+
     CLAMOUR_MSG_METEOR_IN,
     CLAMOUR_MSG_METEOR_OUT,
     CLAMOUR_MSG_SC_OUT
@@ -29,41 +29,40 @@ enum msgType{
 class oscManager{
 
     public:
-    
+
     oscManager();
     void update();
     void setNodeManager(ofPtr<nodeManager> p);
 
-    void setAllClients(int control);
     void setControl(vector<string> clients, string control);
     void setControl(vector<string> clients, string control, string text);
 
     void setText(vector<string> clients, string text);
-    
+
 
     //to SC
-    
+
     void sendInit();
-    void startSynth(string index);
-    void stopSynth(string index);
-    void updateSynth(string index);
-    
+    void startSynth(ofPtr<clamourNode> n);
+    void stopSynth(ofPtr<clamourNode> n);
+    void updateSynth(ofPtr<clamourNode> n);
+
     //getters and setters (internal)
     string getMsgString(int mt);
-    
+
     private:
-    
+
     void logMessages(ofxOscMessage m, int type);
     void addToBundle(string index, ofxOscMessage m);
-    
+
     ofxOscReceiver receiver;
     ofxOscSender sender;
     ofxOscSender SCsender;
-    
+
     map<string, ofxOscBundle> outBundle;
-    
+
     ofPtr<nodeManager> pNodeManager;
-    
+
     vector<vector<string> > msg_strings;
     vector<int> msg_string_count;
 

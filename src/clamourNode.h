@@ -56,9 +56,11 @@ public:
     void clearHistory();
     void setCtrlIndex(int len);
     string getCtrlIndex();
+    string getName();
 
 private:
 
+    string name;
     int smoothFrames;
     int seat;
     string ctrlIndex;

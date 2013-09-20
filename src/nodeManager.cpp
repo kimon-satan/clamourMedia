@@ -65,37 +65,35 @@ void nodeManager::updateNodes()
 
     //do not turn nodes off before here !
 
-    for(int i = 0; i < onNodes.size(); i ++)
+    for(int i = 0; i < mActiveNodes.size(); i ++)
     {
 
-        string t_index = onNodes[i];
-        mNodes[t_index]->updateHistory();
-        mNodes[t_index]->updateDrawData();
-        mNodes[t_index]->updateSoundData();
+        mActiveNodes[i]->updateHistory();
+        mActiveNodes[i]->updateDrawData();
+        mActiveNodes[i]->updateSoundData();
 
     }
 
     //purge old nodes
-    for(int i = 0; i < offNodes.size(); i++)
+    for(int i = 0; i < mOffNodes.size(); i++)
     {
 
-        mNodes[offNodes[i]]->setIsOn(false);
+        mOffNodes[i]->setIsOn(false);
 
-        if(!mNodes[offNodes[i]]->getIsReturnToOn())  // if the this is flagged then the node will be swtiched straight back on with a new synth
+        if(!mOffNodes[i]->getIsReturnToOn())  // if the this is flagged then the node will be swtiched straight back on with a new synth
         {
-            vector<string>::iterator it = remove(onNodes.begin(), onNodes.end(), offNodes[i]);
-            if(it != onNodes.end())onNodes.erase(it);
+            vector<ofPtr<clamourNode> >::iterator it = remove(mActiveNodes.begin(), mActiveNodes.end(), mOffNodes[i]);
+            if(it != mActiveNodes.end())mActiveNodes.erase(it);
         }
         else
         {
-
-            mNodes[offNodes[i]]->setIsReturnToOn(false);
+            mOffNodes[i]->setIsReturnToOn(false);
         }
 
     }
 
 
-    offNodes.clear(); //oscManager already used them so no need to retain
+    mOffNodes.clear(); //oscManager already used them so no need to retain
 
     //turn on any flagged nodes
 
@@ -162,14 +160,14 @@ void nodeManager::switchOffAllNodes()
 {
 
     //turn off all current nodes
-    for(int i = 0; i < onNodes.size(); i ++)
+    for(int i = 0; i < mActiveNodes.size(); i ++)
     {
 
-        mNodes[onNodes[i]]->clearHistory();
+        mActiveNodes[i]->clearHistory();
 
     }
 
-    offNodes = onNodes;
+    mOffNodes = mActiveNodes;
 
 
 }
@@ -182,7 +180,7 @@ void nodeManager::switchOffNodes(vector<string> v)
     {
 
         mNodes[v[i]]->clearHistory();
-        if(find(onNodes.begin(), onNodes.end(), v[i]) != onNodes.end())offNodes.push_back(v[i]);
+        if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[v[i]]) != mActiveNodes.end())mOffNodes.push_back(mNodes[v[i]]);
 
     }
 
@@ -192,17 +190,15 @@ void nodeManager::switchOffNodes(vector<string> v)
 void nodeManager::switchOffNode(string t_index)
 {
 
-//duplicate methods
-
     mNodes[t_index]->clearHistory();
-    if(find(onNodes.begin(), onNodes.end(), t_index) != onNodes.end())offNodes.push_back(t_index);
+    if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) != mActiveNodes.end())mOffNodes.push_back(mNodes[t_index]);
 
 }
 
 void nodeManager::switchOnNode(string t_index)
 {
 
-    if(find(onNodes.begin(), onNodes.end(), t_index) ==onNodes.end())onNodes.push_back(t_index);
+    if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) ==mActiveNodes.end())mActiveNodes.push_back(mNodes[t_index]);
 
 }
 
@@ -212,7 +208,7 @@ void nodeManager::switchOnNode(string t_index, float x, float y)
     // scale props to screen
     x *= 1.0/screenProp;
     mNodes[t_index]->setPosition(ofVec2f(x, y));
-    if(find(onNodes.begin(), onNodes.end(), t_index) ==onNodes.end())onNodes.push_back(t_index);
+    switchOnNode(t_index);
 
 }
 
@@ -256,14 +252,14 @@ bool nodeManager::getIsClientOnline(string t_index)
     return (find(mOnlineClients.begin(), mOnlineClients.end(), t_index) != mOnlineClients.end());
 }
 
-vector<string> nodeManager::getOnNodes()
+vector<ofPtr<clamourNode> > nodeManager::getActiveNodes()
 {
-    return onNodes;
+    return mActiveNodes;
 }
 
-vector<string> nodeManager::getOffNodes()
+vector<ofPtr<clamourNode> > nodeManager::getOffNodes()
 {
-    return offNodes; //recently turned off Nodes
+    return mOffNodes; //recently turned off Nodes
 }
 
 ofVec2f nodeManager::getNodePosition(string index)
@@ -368,7 +364,6 @@ void nodeManager::flagNodeReturn(string client)
     mNodes[client]->setIsReturnToOn(true);
 }
 
-void nodeManager::setScreenProp(float p)
-{
+void nodeManager::setScreenProp(float p){ //replace with width & height for better transparency
     screenProp = p;
 }

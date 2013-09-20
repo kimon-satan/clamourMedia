@@ -24,20 +24,23 @@ void nodeRenderer::setScreen(int w, int h){
 
 }
 
-void nodeRenderer::renderNode(ofPtr<clamourNode> n){
+void nodeRenderer::renderNodes(vector< ofPtr<clamourNode> > nodes){
 
 
+    for(vector<ofPtr<clamourNode> >::iterator it = nodes.begin(); it != nodes.end(); it ++){
 
-    string dt = n->getDrawType();
+    string dt = (*it)->getDrawType();
 
 
     if(dt == "DEBUG"){
-            ofVec2f pos = n->getMeanPos();
+            ofVec2f pos = (*it)->getMeanPos();
             pos *= screenHeight;
-            debugFont.drawString(n->getRow() + "_" + ofToString(n->getSeat()), pos.x, pos.y);
+            debugFont.drawString((*it)->getRow() + "_" + ofToString((*it)->getSeat()), pos.x, pos.y);
     }
-    if(dt == "FLICKER")drawFlicker(n);
-    if(dt == "ROUND")drawRound(n);
+    if(dt == "FLICKER")drawFlicker(*it);
+    if(dt == "ROUND")drawRound(*it);
+
+    }
 
 
 

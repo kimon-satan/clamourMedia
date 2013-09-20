@@ -13,6 +13,7 @@ clamourNode::clamourNode(int ts, string tr){
 
     seat = ts;
     row = tr;
+    name = tr + "_" + ofToString(ts,0);
     position.set(0.5,0.5);
     isOn = false;
     isDragOn = false;
@@ -70,9 +71,9 @@ void clamourNode::resetShift(float x , float y){
 //getters and setters
 
 int clamourNode::getSeat(){ return seat;}
-void clamourNode::setSeat(int i){seat = i;}
+void clamourNode::setSeat(int i){seat = i;name = row + "_" + ofToString(seat,0);}
 string clamourNode::getRow(){return row;}
-void clamourNode::setRow(string s){row = s;}
+void clamourNode::setRow(string s){row = s;name = row + "_" + ofToString(seat,0);}
 ofVec2f clamourNode::getPosition(){return position;}
 void clamourNode::setPosition(ofVec2f v){position = v;}
 ofVec2f clamourNode::getMeanPos(){return meanPos;}
@@ -134,3 +135,5 @@ bool clamourNode::getIsReturnToOn(){
 void clamourNode::setIsReturnToOn(bool b){
     isReturnToOn = b;
 }
+
+string clamourNode::getName(){return name;}

@@ -55,7 +55,7 @@ private:
     ofPtr<oscManager> mOscManager;
     ofPtr<nodeManager> mNodeManager;
 
-    ofPtr<zoneRenderer> mZoneRenderer;
+    ofPtr<zoneRenderer> mZoneRenderer; //this should be with displayWindow
     ofPtr<zoneManager> mZoneManager;
 
     vector<string> mPlayerIndexes;
