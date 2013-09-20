@@ -13,7 +13,7 @@ clamourNode::clamourNode(int ts, string tr){
 
     seat = ts;
     row = tr;
-    name = tr + "_" + ofToString(ts,0);
+    name = tr + "_" + ofToString(ts);
     rawPos_rel.set(0.5,0.5);
     isOn = false;
     isDragOn = false;
@@ -74,9 +74,13 @@ void clamourNode::resetShift(float x , float y){
 //getters and setters
 
 int clamourNode::getSeat(){ return seat;}
-void clamourNode::setSeat(int i){seat = i;name = row + "_" + ofToString(seat,0);}
+void clamourNode::setSeat(int i){
+    seat = i;
+    name = row + "_" + ofToString(seat);
+    cout << name << endl;
+}
 string clamourNode::getRow(){return row;}
-void clamourNode::setRow(string s){row = s;name = row + "_" + ofToString(seat,0);}
+void clamourNode::setRow(string s){row = s;name = row + "_" + ofToString(seat);}
 
 void clamourNode::setRawPos_rel(ofVec2f v){rawPos_rel = v;}
 ofVec2f clamourNode::getMeanPos_rel(){return meanPos_rel;}

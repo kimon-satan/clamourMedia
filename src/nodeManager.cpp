@@ -24,6 +24,7 @@ nodeManager::nodeManager()
             t_mn->setDrawType("DEBUG");
             mNodes[t_index] = t_mn;
 
+
         }
     }
 
@@ -40,7 +41,7 @@ nodeManager::nodeManager(vector<string> indexes)
     {
 
         string r = indexes[i].substr(0,1);
-        int s = ofToInt(indexes[i].substr(2,1));
+        int s = ofToInt(indexes[i].substr(2));
         ofPtr<clamourNode> t_mn = ofPtr<clamourNode>( new clamourNode(s,r));
         t_mn->setDrawType("DEBUG");
         mNodes[indexes[i]] = t_mn;
@@ -198,6 +199,7 @@ void nodeManager::switchOffNode(string t_index)
 
 void nodeManager::switchOnNode(string t_index)
 {
+
 
     if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) ==mActiveNodes.end())mActiveNodes.push_back(mNodes[t_index]);
 

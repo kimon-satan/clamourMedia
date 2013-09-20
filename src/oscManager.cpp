@@ -165,6 +165,7 @@ void oscManager::update()
     {
         if(!v[i]->getIsOn())
         {
+
             startSynth(v[i]);
             v[i]->setIsOn(true);
         }
@@ -280,6 +281,7 @@ void oscManager::setControl(vector<string> clients, string control)
     for(int i = 0; i < clients.size(); i++)
     {
 
+
         ofPtr<clamourNode> n = pNodeManager->getNode(clients[i]);
 
         if(n->getIsOn())
@@ -287,6 +289,7 @@ void oscManager::setControl(vector<string> clients, string control)
 
 
             pNodeManager->switchOffNode(clients[i]);
+
             if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
             {
                 //flag the node to be switched back on
