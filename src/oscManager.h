@@ -11,6 +11,7 @@
 
 #include "ofxOsc.h"
 #include "nodeManager.h"
+#include "clientManager.h"
 
 #define METEOR_IN_PORT 41234
 #define METEOR_OUT_PORT 42345
@@ -33,6 +34,7 @@ class oscManager{
     oscManager();
     void update();
     void setNodeManager(ofPtr<nodeManager> p);
+    void setClientManager(ofPtr<clientManager> p);
 
     void setControl(vector<string> clients, string control);
     void setControl(vector<string> clients, string control, string text);
@@ -62,6 +64,7 @@ class oscManager{
     map<string, ofxOscBundle> outBundle;
 
     ofPtr<nodeManager> pNodeManager;
+    ofPtr<clientManager> pClientManager;
 
     vector<vector<string> > msg_strings;
     vector<int> msg_string_count;

@@ -1,7 +1,8 @@
 #ifndef ZONERENDERER_H
 #define ZONERENDERER_H
 
-#include "zoneManager.h"
+#include "zone.h"
+
 
 class zoneRenderer
 {
@@ -21,8 +22,6 @@ public:
 protected:
 private:
 
-    int screenWidth;
-    int screenHeight;
 
 };
 

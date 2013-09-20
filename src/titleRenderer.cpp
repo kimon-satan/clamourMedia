@@ -62,7 +62,7 @@ void titleRenderer::draw(){
 
         ofSetColor(255, it->second.alpha);
         ofRectangle r(largeTitle.getStringBoundingBox(it->second.text, 0, 0));
-        largeTitle.drawString(it->second.text, width/2 - r.width/2, height/2 - r.height/2);
+        largeTitle.drawString(it->second.text, screenData::width/2 - r.width/2, screenData::height/2 - r.height/2);
 
     }
 
@@ -70,13 +70,6 @@ void titleRenderer::draw(){
 }
 
 //getters and setters
-
-void titleRenderer::setScreen(int w, int h){
-
-    width = w;
-    height = h;
-
-}
 
 
 void titleRenderer::addTitle(string s, title t){

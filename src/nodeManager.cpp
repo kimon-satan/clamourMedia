@@ -112,12 +112,13 @@ void nodeManager::updateNodes()
 void nodeManager::distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp)
 {
 
+    float w_prop = (float)screenData::width/screenData::height;
 
     if(pattern == "RANDOM_CIRCLE")
     {
 
         ofVec2f c(params["X"], params["Y"]);
-        if(posp)c *= ofVec2f(1.0/screenProp,1.0);
+        if(posp)c *= ofVec2f(w_prop,1.0);
         float r = params["RADIUS"];
 
         for(int i = 0; i < clients.size(); i++)
@@ -125,8 +126,8 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
 
             ofVec2f p(0,ofRandom(0,r));
             p = p.getRotated(ofRandom(-180,180));
-            if(dimp)p *= ofVec2f(1.0/screenProp,1.0);
-            mNodes[clients[i]]->setPosition(p+c);
+            if(dimp)p *= ofVec2f(w_prop,1.0);
+            mNodes[clients[i]]->setRawPos_abs(p+c);
 
         }
 
@@ -135,7 +136,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
     {
 
         ofVec2f c(params["X"], params["Y"]);
-        if(posp)c *= ofVec2f(1.0/screenProp,1.0);
+        if(posp)c *= ofVec2f(w_prop,1.0);
         float r = params["RADIUS"];
 
         float interval = (float)360.0/clients.size();
@@ -145,8 +146,8 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
 
             ofVec2f p(0,r);
             p = p.getRotated(-180 + i * interval);
-            if(dimp)p *= ofVec2f(1.0/screenProp,1.0);
-            mNodes[clients[i]]->setPosition(p+c);
+            if(dimp)p *= ofVec2f(w_prop,1.0);
+            mNodes[clients[i]]->setRawPos_abs(p+c);
 
         }
 
@@ -205,9 +206,7 @@ void nodeManager::switchOnNode(string t_index)
 void nodeManager::switchOnNode(string t_index, float x, float y)
 {
 
-    // scale props to screen
-    x *= 1.0/screenProp;
-    mNodes[t_index]->setPosition(ofVec2f(x, y));
+    mNodes[t_index]->setRawPos_rel(ofVec2f(x, y));
     switchOnNode(t_index);
 
 }
@@ -219,12 +218,7 @@ void nodeManager::switchOnNode(string t_index, float x, float y)
 void nodeManager::updateNodePosition(string t_index, float x, float y)
 {
 
-    //scale into screen coordinate space
-
-    //perhaps add in a pos_p variable at some point
-    x *= 1.0/screenProp;
-
-    mNodes[t_index]->setPosition(ofVec2f(x,y));
+    mNodes[t_index]->setRawPos_rel(ofVec2f(x,y));
 
 }
 
@@ -235,22 +229,11 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y)
     ofVec2f s(x,y);
     ofVec2f p = mNodes[t_index]->getShiftStart() + s * mNodes[t_index]->getShiftAmount();
 
-    mNodes[t_index]->setPosition(p);
+    mNodes[t_index]->setRawPos_rel(p);
 
 }
 
-void nodeManager::updateOnlineClients(vector<string> v)
-{
-    mOnlineClients = v;
-}
-vector<string> nodeManager::getOnlineClients()
-{
-    return mOnlineClients;
-}
-bool nodeManager::getIsClientOnline(string t_index)
-{
-    return (find(mOnlineClients.begin(), mOnlineClients.end(), t_index) != mOnlineClients.end());
-}
+
 
 vector<ofPtr<clamourNode> > nodeManager::getActiveNodes()
 {
@@ -262,10 +245,10 @@ vector<ofPtr<clamourNode> > nodeManager::getOffNodes()
     return mOffNodes; //recently turned off Nodes
 }
 
-ofVec2f nodeManager::getNodePosition(string index)
+ofVec2f nodeManager::getNodePosition(string index, bool isRel)
 {
 
-    return mNodes[index]->getMeanPos();
+    return (isRel) ? mNodes[index]->getMeanPos_rel() : mNodes[index]->getMeanPos_abs();
 
 }
 
@@ -309,7 +292,7 @@ void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p)
     for(int i = 0; i < indexes.size(); i ++)
     {
 
-        p.init(mNodes[indexes[i]]->getMeanPos()); //if mapped randomly only reset that parameter
+        p.init(mNodes[indexes[i]]->getMeanPos_rel()); //if mapped randomly only reset that parameter
         mNodes[indexes[i]]->getDrawData()->setParameter(p);
 
     }
@@ -329,23 +312,14 @@ void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p)
     for(int i = 0; i < indexes.size(); i ++)
     {
 
-        p.init(mNodes[indexes[i]]->getMeanPos());//if mapped randomly only reset that parameter
+        p.init(mNodes[indexes[i]]->getMeanPos_rel());//if mapped randomly only reset that parameter
         mNodes[indexes[i]]->getSoundData()->setParameter(p);
 
     }
 
 }
 
-void nodeManager::setCtrlIndexes(vector<string> clients, int len)
-{
 
-    for(int i =0; i < clients.size(); i++)
-    {
-
-        mNodes[clients[i]]->setCtrlIndex(len);
-    }
-
-}
 
 
 void nodeManager::flagNodesReturn(vector<string> clients)
@@ -364,6 +338,3 @@ void nodeManager::flagNodeReturn(string client)
     mNodes[client]->setIsReturnToOn(true);
 }
 
-void nodeManager::setScreenProp(float p){ //replace with width & height for better transparency
-    screenProp = p;
-}

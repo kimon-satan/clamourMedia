@@ -5,7 +5,7 @@
 void displayWindow::setup()
 {
 
-    setWindowShape(200,200);
+    setWindowShape(screenData::width, screenData::height);
     setWindowPosition(0, 0);
     setWindowTitle("CLAMOUR DISPLAY");
     smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
@@ -18,11 +18,9 @@ void displayWindow::update()
 
 
     //could do with a flag but leave for now
-    mNodeRenderer.setScreen(getWidth(), getHeight());
-    mTitleRenderer.setScreen(getWidth(), getHeight());
+    screenData::width = getWidth();
+    screenData::height = getHeight();
 
-    //for sanity's sake this could go back to testApp
-    pNodeManager->setScreenProp((float)getHeight()/getWidth());
 
     mTitleRenderer.update();
     ofBackground(0);

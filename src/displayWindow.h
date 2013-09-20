@@ -2,12 +2,14 @@
 #define DISPLAYWINDOW_H
 
 #include "nodeRenderer.h"
-#include "zoneManager.h"
 #include "zoneRenderer.h"
 #include "titleRenderer.h"
 
 #include "ofxFensterManager.h"
- #include "nodeManager.h"
+
+#include "nodeManager.h"
+#include "zoneManager.h"
+//a title manager
 
 
 class displayWindow : public ofxFenster{
@@ -40,8 +42,6 @@ class displayWindow : public ofxFenster{
      nodeRenderer mNodeRenderer;
      titleRenderer mTitleRenderer;
      ofTrueTypeFont smallFont;
-
-
 
 
 };

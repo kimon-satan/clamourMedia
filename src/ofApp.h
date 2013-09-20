@@ -1,5 +1,7 @@
 #pragma once
 
+#include "clamourUtils.h"
+
 #include "ofMain.h"
 #include "displayWindow.h"
 #include "ofxOsc.h"
@@ -8,12 +10,9 @@
 
 #include "oscManager.h"
 #include "game.h"
-#include "zoneManager.h"
-#include "zoneRenderer.h"
+#include "clientManager.h"
 
 
-#define NUM_ROWS 10
-#define NUM_SEATS 10
 
 
 class ofApp : public ofBaseApp
@@ -52,6 +51,8 @@ private:
 
     ofxUICanvas *gui;
 
+    ofPtr<clientManager> mClientManager;
+
     ofPtr<oscManager> mOscManager;
     ofPtr<nodeManager> mNodeManager;
 
@@ -59,7 +60,6 @@ private:
     ofPtr<zoneManager> mZoneManager;
 
     vector<string> mPlayerIndexes;
-    map<string, ofPtr<group> > mGroups;
     vector<ofPtr<game> > mGames;
 
 

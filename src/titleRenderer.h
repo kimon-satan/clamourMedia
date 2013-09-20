@@ -10,6 +10,7 @@
 #define __clamourMedia__titleRenderer__
 
 #include "ofMain.h"
+#include "clamourUtils.h"
 
 struct title{
 
@@ -40,7 +41,6 @@ class titleRenderer{
     void update();
     void draw();
 
-    void setScreen(int w, int h);
     void addTitle(string s, title t);
     void endTitle(string s);
     void reset();
@@ -50,8 +50,6 @@ class titleRenderer{
     map<string, title> mTitles;
 
     ofTrueTypeFont largeTitle;
-    int width, height;
-
 
 
 };

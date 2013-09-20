@@ -34,14 +34,10 @@ class nodeManager{
     void updateNodePosition(string t_index, float x, float y);
     void shiftNodePosition(string t_index, float x, float y);
 
-    void updateOnlineClients(vector<string> v); //needs shifting
-
-    vector<string> getOnlineClients();
-    bool getIsClientOnline(string t_index);
 
     vector<ofPtr<clamourNode> > getOffNodes();
     vector<ofPtr<clamourNode> > getActiveNodes();
-    ofVec2f getNodePosition(string index);
+    ofVec2f getNodePosition(string index, bool isRel);
     ofPtr<clamourNode> getNode(string index);
 
     void distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp);
@@ -51,10 +47,9 @@ class nodeManager{
     void setNodeSoundType(vector<string> indexes, string st);
     void setNodeSoundParam(vector<string> indexes, parameter p);
 
-    void setCtrlIndexes(vector<string> clients, int len);
+
     void flagNodesReturn(vector<string> clients);
     void flagNodeReturn(string client);
-    void setScreenProp(float p);
 
 
 
@@ -63,10 +58,9 @@ class nodeManager{
     map< string, ofPtr<clamourNode> > mNodes;
     vector<ofPtr<clamourNode> > mActiveNodes;
     vector<ofPtr<clamourNode> > mOffNodes;
-    vector<string> mOnlineClients;
 
     soundDictionary mSoundDictionary;
-    float screenProp;
+
 
 };
 

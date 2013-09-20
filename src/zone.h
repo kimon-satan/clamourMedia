@@ -3,6 +3,7 @@
 
 
 #include "ofMain.h"
+#include "clamourUtils.h"
 
 class zone
 {

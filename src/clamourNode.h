@@ -12,8 +12,7 @@
 #include "ofMain.h"
 #include "drawDictionary.h"
 #include "soundDictionary.h"
-
-
+#include "clamourUtils.h"
 
 class clamourNode{
 
@@ -33,10 +32,13 @@ public:
     void setSeat(int i);
     string getRow();
     void setRow(string s);
-    ofVec2f getPosition();
-    void setPosition(ofVec2f v);
-    ofVec2f getMeanPos();
-    void setMeanPos(ofVec2f v);
+
+    ofVec2f getMeanPos_rel();
+    ofVec2f getMeanPos_abs();
+
+    void setRawPos_abs(ofVec2f v);
+    void setRawPos_rel(ofVec2f v);
+
     ofVec2f getShiftStart();
     float getShiftAmount();
     void setShiftAmount(float f);
@@ -54,8 +56,6 @@ public:
     ofPtr<baseData> getSoundData();
 
     void clearHistory();
-    void setCtrlIndex(int len);
-    string getCtrlIndex();
     string getName();
 
 private:
@@ -66,8 +66,11 @@ private:
     string ctrlIndex;
     string drawType;
     string row;
-    ofVec2f position;
-    ofVec2f meanPos;
+
+    ofVec2f rawPos_rel;
+    ofVec2f meanPos_rel;
+    ofVec2f meanPos_abs;
+
     ofVec2f shiftStart;
     float shiftAmount;
     bool isOn, isDragOn, isReturnToOn;

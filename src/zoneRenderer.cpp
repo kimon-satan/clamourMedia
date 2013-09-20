@@ -9,8 +9,8 @@ zoneRenderer::zoneRenderer()
 void zoneRenderer::draw(ofPtr<zone> z){
 
 
-    ofVec2f p = z->getPos() * screenHeight;
-    float r = z->getRadius() * screenHeight;
+    ofVec2f p = z->getPos() * screenData::height;
+    float r = z->getRadius() * screenData::height;
 
     ofNoFill();
     ofSetColor(255);
@@ -22,12 +22,6 @@ void zoneRenderer::draw(ofPtr<zone> z){
 
 //getters and setters
 
-void zoneRenderer::setScreenDims(int width, int height)
-{
-    screenWidth = width;
-    screenHeight = height;
-
-}
 
 
 

@@ -330,15 +330,6 @@
 		<Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.h">
 			<Option virtualFolder="src/addons/ofxXml/" />
 		</Unit>
-		<Unit filename="../../../src/zone.cpp">
-			<Option virtualFolder="src/zoneClasses/" />
-		</Unit>
-		<Unit filename="../../../src/zoneManager.cpp">
-			<Option virtualFolder="src/zoneClasses/" />
-		</Unit>
-		<Unit filename="../../../src/zoneRenderer.cpp">
-			<Option virtualFolder="src/zoneClasses/" />
-		</Unit>
 		<Unit filename="config.make">
 			<Option virtualFolder="build config" />
 		</Unit>
@@ -411,10 +402,19 @@
 		<Unit filename="src/titleRenderer.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/zone.cpp">
+			<Option virtualFolder="src/zoneClasses/" />
+		</Unit>
 		<Unit filename="src/zone.h">
 			<Option virtualFolder="src/zoneClasses/" />
 		</Unit>
+		<Unit filename="src/zoneManager.cpp">
+			<Option virtualFolder="src/zoneClasses/" />
+		</Unit>
 		<Unit filename="src/zoneManager.h">
+			<Option virtualFolder="src/zoneClasses/" />
+		</Unit>
+		<Unit filename="src/zoneRenderer.cpp">
 			<Option virtualFolder="src/zoneClasses/" />
 		</Unit>
 		<Unit filename="src/zoneRenderer.h">

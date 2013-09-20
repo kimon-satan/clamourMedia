@@ -11,18 +11,10 @@
 
 nodeRenderer::nodeRenderer(){
 
-    screenWidth = 1280;
-    screenHeight = 800;
     debugFont.loadFont("fonts/Goulong/Goulong.ttf", 15);
 
 }
 
-void nodeRenderer::setScreen(int w, int h){
-
-    screenWidth = w;
-    screenHeight = h;
-
-}
 
 void nodeRenderer::renderNodes(vector< ofPtr<clamourNode> > nodes){
 
@@ -33,8 +25,8 @@ void nodeRenderer::renderNodes(vector< ofPtr<clamourNode> > nodes){
 
 
     if(dt == "DEBUG"){
-            ofVec2f pos = (*it)->getMeanPos();
-            pos *= screenHeight;
+            ofVec2f pos = (*it)->getMeanPos_abs();
+            pos *= screenData::height;
             debugFont.drawString((*it)->getRow() + "_" + ofToString((*it)->getSeat()), pos.x, pos.y);
     }
     if(dt == "FLICKER")drawFlicker(*it);
@@ -49,8 +41,8 @@ void nodeRenderer::renderNodes(vector< ofPtr<clamourNode> > nodes){
 
 void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
 
-    ofVec2f pos = n->getMeanPos();
-    pos *= screenHeight;
+    ofVec2f pos = n->getMeanPos_abs();
+    pos *= screenData::height;
 
     std::tr1::shared_ptr<flickerDrawData> fdd(dynamic_pointer_cast <flickerDrawData> (n->getDrawData()));
 
@@ -74,8 +66,8 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
 
 void nodeRenderer::drawRound(ofPtr<clamourNode> n){
 
-    ofVec2f pos = n->getMeanPos();
-    pos *= screenHeight;
+    ofVec2f pos = n->getMeanPos_abs();
+    pos *= screenData::height;
 
     std::tr1::shared_ptr<roundDrawData> rdd(dynamic_pointer_cast <roundDrawData> (n->getDrawData()));
 

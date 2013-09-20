@@ -27,8 +27,6 @@ class nodeRenderer{
 
     private:
 
-    int screenWidth, screenHeight;
-
     ofTrueTypeFont debugFont;
 
 

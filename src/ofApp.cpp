@@ -20,9 +20,12 @@ void ofApp::setup(){
         }
     }
 
+    mClientManager = ofPtr<clientManager>(new clientManager(mPlayerIndexes));
+
     mOscManager = ofPtr<oscManager>(new oscManager());
     mNodeManager = ofPtr<nodeManager>(new nodeManager(mPlayerIndexes));
     mOscManager->setNodeManager(mNodeManager);
+    mOscManager->setClientManager(mClientManager);
 
     mDisplay.setNodeManager(mNodeManager);
 
@@ -165,22 +168,13 @@ void ofApp::loadXML(){
 
                     if(action == "create"){
 
-                        ofPtr<group> grp = ofPtr<group>(new group());
-                        grp->name = XML.getValue("NAME", "default");
-
-                        grp->indexes = mPlayerIndexes; //start with all players
-
                         int numSelect = XML.getNumTags("SELECTOR");
 
                         vector<string> selectors;
 
                         for(int sel = 0; sel < numSelect; sel++)selectors.push_back(XML.getValue("SELECTOR", "all", sel));
 
-                        selectClients(selectors, grp);
-
-                        //will eventually need a safety for double allocation
-                        mGroups[grp->name] = grp;
-
+                        mClientManager->createGroup(selectors, XML.getValue("NAME","default"));
 
 
                     }
@@ -311,96 +305,7 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
 
 }
 
-void ofApp::selectClients(vector<string> selectors, ofPtr<group> grp){
 
-    for(int selector = 0; selector < selectors.size(); selector++){
-
-        vector<string> t_indexes;
-
-        if(selectors[selector] == "all"){
-            t_indexes = mPlayerIndexes;
-        }else if(selectors[selector] == "online"){
-            t_indexes = mNodeManager->getOnlineClients();
-        }else if(selectors[selector] == "single"){
-
-            if(grp->indexes.size() > 1){
-                int i = ofRandom(0, grp->indexes.size() - 1);
-                t_indexes.push_back(grp->indexes[i]);
-            }else{
-                t_indexes = grp->indexes;
-            }
-
-        }else if(selectors[selector] == "pair"){
-
-            if(grp->indexes.size() > 2){
-                int first = ofRandom(0, grp->indexes.size() - 2);
-                int second = ofRandom(0, grp->indexes.size() - 1);
-                if (second == first)second = grp->indexes.size() - 1;
-
-                t_indexes.push_back(grp->indexes[first]);
-                t_indexes.push_back(grp->indexes[second]);
-
-            }else{
-                t_indexes = grp->indexes;
-            }
-
-        }
-
-        vector<string>::iterator it;
-
-        for(it = grp->indexes.begin(); it !=grp->indexes.end(); it++){
-
-            if(selectors[selector] == "odd"){
-
-                if(ofToInt((*it).substr(2))%2 != 0){
-                    t_indexes.push_back((*it));
-                }
-
-            }else if(selectors[selector] == "even"){
-
-                if(ofToInt((*it).substr(2))%2 == 0){
-                    t_indexes.push_back((*it));
-                }
-
-            }else if(selectors[selector] == "right"){
-
-                if(ofToInt((*it).substr(2)) <= NUM_SEATS/2){
-                    t_indexes.push_back((*it));
-                }
-
-            }else if(selectors[selector] == "left"){
-
-                if(ofToInt((*it).substr(2)) > NUM_SEATS/2 ){
-                    t_indexes.push_back((*it));
-                }
-
-            }else if(selectors[selector] == "back"){
-
-                string s = (*it).substr(0,1);
-                int i = s[0] - 64; //convert into an integer
-
-                if(i > NUM_ROWS/2){
-                    t_indexes.push_back((*it));
-                }
-
-            }else if(selectors[selector] == "front"){
-
-                string s = (*it).substr(0,1);
-                int i = s[0] - 64; //convert into an integer
-
-                if(i <= NUM_ROWS/2){
-                    t_indexes.push_back((*it));
-                }
-            }
-        }
-
-        grp->indexes = t_indexes;
-
-    }
-
-
-
-}
 void ofApp::update(){
 
     ofBackground(100);
@@ -508,7 +413,7 @@ void ofApp::implementStage(){
         for(int j = 0; j < tComms[i].targets.size(); j++){
 
             ofPtr<group> tg;
-            tg = mGroups[tComms[i].targets[j]];
+            tg = mClientManager->getGroup(tComms[i].targets[j]);
 
             if(tg){
 
@@ -603,22 +508,11 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "NEW_GROUP"){
 
-            ofPtr<group> grp;
-
-            grp = ofPtr<group>(new group());
-            grp->indexes = clients;
-
-
-            grp->name = tComms[i].stringParams["NAME"];
-
             string s_string = tComms[i].stringParams["SELECTORS"];
 
             vector<string> selectors = ofSplitString(s_string, ",");
 
-            selectClients(selectors, grp);
-
-
-            mGroups[grp->name] = grp;
+            mClientManager->createGroup(clients, selectors, tComms[i].stringParams["NAME"]);
 
         }
 
