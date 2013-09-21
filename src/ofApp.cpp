@@ -36,6 +36,7 @@ void ofApp::setup(){
     mSplashManager = ofPtr<splashManager>(new splashManager());
     mDisplay.setSplashManager(mSplashManager);
 
+    //just for debugging
     mZoneManager->createZone("debug");
 
     isMouseDown = false;
@@ -311,7 +312,9 @@ void ofApp::update(){
 
     mOscManager->update();
     mNodeManager->updateNodes();
+    mZoneManager->update(mNodeManager->getNodes()); //may split OSC message functions to avoid 1 frame latency
     mSplashManager->update();
+
 
     ofxUITextArea * t;
     t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_IN");

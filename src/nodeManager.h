@@ -37,6 +37,7 @@ class nodeManager{
 
     vector<ofPtr<clamourNode> > getOffNodes();
     vector<ofPtr<clamourNode> > getActiveNodes();
+    map<string, ofPtr<clamourNode> > getNodes();
     ofVec2f getNodePosition(string index, bool isRel);
     ofPtr<clamourNode> getNode(string index);
 

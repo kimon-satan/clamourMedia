@@ -166,6 +166,7 @@ void nodeManager::switchOffAllNodes()
     {
 
         mActiveNodes[i]->clearHistory();
+        //mActiveNodes[i]->resetZonePair();
 
     }
 
@@ -182,6 +183,7 @@ void nodeManager::switchOffNodes(vector<string> v)
     {
 
         mNodes[v[i]]->clearHistory();
+        //mNodes[v[i]]->resetZonePair();
         if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[v[i]]) != mActiveNodes.end())mOffNodes.push_back(mNodes[v[i]]);
 
     }
@@ -193,13 +195,13 @@ void nodeManager::switchOffNode(string t_index)
 {
 
     mNodes[t_index]->clearHistory();
+    //mNodes[t_index]->resetZonePair();
     if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) != mActiveNodes.end())mOffNodes.push_back(mNodes[t_index]);
 
 }
 
 void nodeManager::switchOnNode(string t_index)
 {
-
 
     if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) ==mActiveNodes.end())mActiveNodes.push_back(mNodes[t_index]);
 
@@ -245,6 +247,10 @@ vector<ofPtr<clamourNode> > nodeManager::getActiveNodes()
 vector<ofPtr<clamourNode> > nodeManager::getOffNodes()
 {
     return mOffNodes; //recently turned off Nodes
+}
+
+map<string, ofPtr<clamourNode> > nodeManager::getNodes(){
+        return mNodes;
 }
 
 ofVec2f nodeManager::getNodePosition(string index, bool isRel)

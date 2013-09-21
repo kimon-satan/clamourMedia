@@ -30,8 +30,8 @@ void displayWindow::draw()
     smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
 
     //draw the zones first
-    //pZoneRenderer->draw();
 
+    mZoneRenderer.draw(pZoneManager->getZones());
     mNodeRenderer.renderNodes(pNodeManager->getActiveNodes());
     mSplashRenderer.drawTitles(pSplashManager->getOnTitles());
 

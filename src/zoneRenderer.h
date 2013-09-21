@@ -10,7 +10,7 @@ public:
     zoneRenderer();
 
     void update();
-    void draw(ofPtr<zone> z);
+    void draw(map<string, ofPtr<zone> > z);
 
     //getters and setters
 

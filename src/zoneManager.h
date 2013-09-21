@@ -9,12 +9,14 @@ class zoneManager
         zoneManager();
         virtual ~zoneManager();
 
-        void update();
+        void update(map<string, ofPtr<clamourNode> > tNodes);
 
         void createZone(string name);
         void hideZone(string name);
         void showZone(string name);
         void destroyZone(string name);
+
+        map<string, ofPtr<zone> > getZones();
 
 
     private:

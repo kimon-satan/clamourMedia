@@ -6,15 +6,22 @@ zoneRenderer::zoneRenderer()
 }
 
 
-void zoneRenderer::draw(ofPtr<zone> z){
+void zoneRenderer::draw(map<string, ofPtr<zone> > z){
 
+    map<string, ofPtr<zone> >::iterator it = z.begin();
+    ofSetColor(100);
 
-    ofVec2f p = z->getPos() * screenData::height;
-    float r = z->getRadius() * screenData::height;
+    while(it != z.end()){
 
-    ofNoFill();
-    ofSetColor(255);
-    ofCircle(p,r);
+        ofVec2f p = it->second->getPos_abs() * screenData::height;
+        float r = it->second->getRadius() * screenData::height;
+
+        (it->second->isOccupied)?ofFill() : ofNoFill();
+
+        ofCircle(p,r);
+
+        ++it;
+    }
 
 
 }

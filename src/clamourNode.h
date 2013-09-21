@@ -14,6 +14,8 @@
 #include "soundDictionary.h"
 #include "clamourUtils.h"
 
+class zone;
+
 class clamourNode{
 
 public:
@@ -58,6 +60,10 @@ public:
     void clearHistory();
     string getName();
 
+    ofPtr<zone> getZonePair();
+    void setZonePair(ofPtr<zone> p);
+    void resetZonePair();
+
 private:
 
     string name;
@@ -77,6 +83,8 @@ private:
     vector<ofVec2f> history;
     std::tr1::shared_ptr<baseData> drawData;
     ofPtr<baseData> soundData;
+
+    ofPtr<zone> zonePair;
 
 
 
