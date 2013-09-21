@@ -47,6 +47,8 @@ private:
 
     void guiEvent(ofxUIEventArgs &e);
 
+    void resetEverything();
+
     displayWindow mDisplay;
 
     ofxUICanvas *gui;
@@ -55,13 +57,11 @@ private:
 
     ofPtr<oscManager> mOscManager;
     ofPtr<nodeManager> mNodeManager;
-
-    ofPtr<zoneRenderer> mZoneRenderer; //this should be with displayWindow
     ofPtr<zoneManager> mZoneManager;
+    ofPtr<splashManager> mSplashManager;
 
     vector<string> mPlayerIndexes;
     vector<ofPtr<game> > mGames;
-
 
     ofPtr<game> mCurrentGame;
     int mGameBrowseIndex;

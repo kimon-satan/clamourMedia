@@ -10,19 +10,15 @@ void displayWindow::setup()
     setWindowTitle("CLAMOUR DISPLAY");
     smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
 
-
 }
 
 void displayWindow::update()
 {
 
-
     //could do with a flag but leave for now
     screenData::width = getWidth();
     screenData::height = getHeight();
 
-
-    mTitleRenderer.update();
     ofBackground(0);
 }
 
@@ -34,13 +30,10 @@ void displayWindow::draw()
     smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
 
     //draw the zones first
-   // pZoneManager->
     //pZoneRenderer->draw();
 
-
-
     mNodeRenderer.renderNodes(pNodeManager->getActiveNodes());
-    mTitleRenderer.draw();
+    mSplashRenderer.drawTitles(pSplashManager->getOnTitles());
 
 }
 
@@ -65,27 +58,15 @@ void displayWindow::setNodeManager(ofPtr<nodeManager> p)
 
 }
 
-void displayWindow::setZoneRenderer(ofPtr<zoneRenderer> p)
-{
-
-    pZoneRenderer = p;
-}
 
 void displayWindow:: setZoneManager(ofPtr<zoneManager> p)
 {
     pZoneManager = p;
 }
 
-void displayWindow::addTitle(string s, title t)
+void displayWindow::setSplashManager(ofPtr<splashManager> p)
 {
-
-    mTitleRenderer.addTitle(s, t);
-}
-
-void displayWindow::endTitle(string s)
-{
-
-    mTitleRenderer.endTitle(s);
+    pSplashManager = p;
 }
 
 void displayWindow::mouseMoved(int x, int y )
@@ -94,10 +75,6 @@ void displayWindow::mouseMoved(int x, int y )
 
 }
 
-void displayWindow::reset()
-{
 
-    mTitleRenderer.reset();
-}
 
 

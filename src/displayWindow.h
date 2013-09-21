@@ -3,13 +3,13 @@
 
 #include "nodeRenderer.h"
 #include "zoneRenderer.h"
-#include "titleRenderer.h"
+#include "splashRenderer.h"
 
 #include "ofxFensterManager.h"
 
 #include "nodeManager.h"
 #include "zoneManager.h"
-//a title manager
+#include "splashManager.h"
 
 
 class displayWindow : public ofxFenster{
@@ -20,16 +20,11 @@ class displayWindow : public ofxFenster{
         void draw();
 
         void setNodeManager(ofPtr<nodeManager> p);
-        void setZoneRenderer(ofPtr<zoneRenderer> p);
         void setZoneManager(ofPtr<zoneManager> p);
+        void setSplashManager(ofPtr<splashManager> p);
 
         void keyPressed(int key);
         void mouseMoved(int x, int y );
-
-        void addTitle(string s, title t);
-        void endTitle(string s);
-
-        void reset();
 
 
 
@@ -38,9 +33,12 @@ class displayWindow : public ofxFenster{
      ofPtr<nodeManager> pNodeManager;
      ofPtr<zoneRenderer> pZoneRenderer;
      ofPtr<zoneManager> pZoneManager;
+     ofPtr<splashManager> pSplashManager;
 
      nodeRenderer mNodeRenderer;
-     titleRenderer mTitleRenderer;
+     splashRenderer mSplashRenderer;
+     zoneRenderer mZoneRenderer;
+
      ofTrueTypeFont smallFont;
 
 

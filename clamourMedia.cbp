@@ -339,6 +339,18 @@
 		<Unit filename="src/clamourNode.h">
 			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
+		<Unit filename="src/clamourUtils.cpp">
+			<Option virtualFolder="src/nodeClasses/" />
+		</Unit>
+		<Unit filename="src/clamourUtils.h">
+			<Option virtualFolder="src/nodeClasses/" />
+		</Unit>
+		<Unit filename="src/clientManager.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/clientManager.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/displayWindow.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

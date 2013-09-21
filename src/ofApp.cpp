@@ -27,13 +27,14 @@ void ofApp::setup(){
     mOscManager->setNodeManager(mNodeManager);
     mOscManager->setClientManager(mClientManager);
 
+
     mDisplay.setNodeManager(mNodeManager);
 
     mZoneManager = ofPtr<zoneManager>(new zoneManager());
-    mZoneRenderer = ofPtr<zoneRenderer>(new zoneRenderer());
-
     mDisplay.setZoneManager(mZoneManager);
-    mDisplay.setZoneRenderer(mZoneRenderer);
+
+    mSplashManager = ofPtr<splashManager>(new splashManager());
+    mDisplay.setSplashManager(mSplashManager);
 
     mZoneManager->createZone("debug");
 
@@ -43,11 +44,9 @@ void ofApp::setup(){
 
     loadXML();
     mCurrentGame = mGames[0];
-
     implementStage();
 
     mGameBrowseIndex = 0;
-
 
     setupGUI();
 
@@ -309,8 +308,10 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
 void ofApp::update(){
 
     ofBackground(100);
+
     mOscManager->update();
     mNodeManager->updateNodes();
+    mSplashManager->update();
 
     ofxUITextArea * t;
     t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_IN");
@@ -360,19 +361,14 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 
     }else if(name == "GAME_SELECT"){
 
-        mDisplay.reset();
-        mCurrentGame.reset(); //reset the pointer
         mCurrentGame = mGames[mGameBrowseIndex];
-        if(!mCurrentGame)return;
-        mCurrentGame->reset();
+        resetEverything();
         implementStage();
         updateGUIElements();
 
     }else if(name == "GAME_RESET"){
 
-        if(!mCurrentGame)return;
-        mCurrentGame->reset();
-        mDisplay.reset();
+        resetEverything();
         implementStage();
         updateGUIElements();
 
@@ -397,6 +393,14 @@ void ofApp::updateGUIElements(){
     t = (ofxUITextArea *)gui->getWidget("CURRENT_STAGE");
     t->setTextString(ofToString(mCurrentGame->getCurrentStage(),1));
 
+
+}
+
+void ofApp::resetEverything(){
+
+    mSplashManager->reset();
+    if(mCurrentGame)mCurrentGame->reset();
+    mNodeManager->switchOffAllNodes();
 
 }
 
@@ -499,12 +503,12 @@ void ofApp::implementStage(){
             if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["ATTACK_SECS"];
             if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["DECAY_SECS"];
 
-            mDisplay.addTitle(tComms[i].stringParams["NAME"], t);
+            mSplashManager->addTitle(tComms[i].stringParams["NAME"], t);
 
 
         }else if(tComms[i].mCommand == "END_TITLE"){
 
-            mDisplay.endTitle(tComms[i].stringParams["NAME"]);
+            mSplashManager->endTitle(tComms[i].stringParams["NAME"]);
 
         }else if(tComms[i].mCommand == "NEW_GROUP"){
 
