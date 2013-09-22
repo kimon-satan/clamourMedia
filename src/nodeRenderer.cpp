@@ -16,21 +16,23 @@ nodeRenderer::nodeRenderer(){
 }
 
 
-void nodeRenderer::renderNodes(vector< ofPtr<clamourNode> > nodes){
+void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes){
 
 
-    for(vector<ofPtr<clamourNode> >::iterator it = nodes.begin(); it != nodes.end(); it ++){
+    for(map<string, ofPtr<clamourNode> >::iterator it = nodes.begin(); it != nodes.end(); it ++){
 
-    string dt = (*it)->getDrawType();
+        if(it->second->getIsActive()){
 
-
-    if(dt == "DEBUG"){
-            ofVec2f pos = (*it)->getMeanPos_abs();
-            pos *= screenData::height;
-            debugFont.drawString((*it)->getRow() + "_" + ofToString((*it)->getSeat()), pos.x, pos.y);
-    }
-    if(dt == "FLICKER")drawFlicker(*it);
-    if(dt == "ROUND")drawRound(*it);
+            string dt = it->second->getDrawType();
+            if(dt == "DEBUG")
+            {
+                ofVec2f pos = it->second->getMeanPos_abs();
+                pos *= screenData::height;
+                debugFont.drawString(it->second->getRow() + "_" + ofToString(it->second->getSeat()), pos.x, pos.y);
+            }
+            if(dt == "FLICKER")drawFlicker(it->second);
+            if(dt == "ROUND")drawRound(it->second);
+        }
 
     }
 
@@ -67,15 +69,18 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
 void nodeRenderer::drawRound(ofPtr<clamourNode> n){
 
     ofVec2f pos = n->getMeanPos_abs();
+
     pos *= screenData::height;
 
     std::tr1::shared_ptr<roundDrawData> rdd(dynamic_pointer_cast <roundDrawData> (n->getDrawData()));
 
 
     ofSetColor(255);
-    float size = rdd->getParameter("size").abs_val;
+    float t_size = rdd->getParameter("size").abs_val;
+
     ofNoFill();
-    ofCircle( pos.x, pos.y, size );
+    ofCircle( pos.x, pos.y, t_size);
+
 
 
 

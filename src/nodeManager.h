@@ -22,7 +22,6 @@ class nodeManager{
     void resetNodes();
     void updateNodes();
 
-
     void switchOnNode(string t_index);
     void switchOnNode(string t_index, float x, float y);
 
@@ -34,9 +33,6 @@ class nodeManager{
     void updateNodePosition(string t_index, float x, float y);
     void shiftNodePosition(string t_index, float x, float y);
 
-
-    vector<ofPtr<clamourNode> > getOffNodes();
-    vector<ofPtr<clamourNode> > getActiveNodes();
     map<string, ofPtr<clamourNode> > getNodes();
     ofVec2f getNodePosition(string index, bool isRel);
     ofPtr<clamourNode> getNode(string index);
@@ -49,16 +45,9 @@ class nodeManager{
     void setNodeSoundParam(vector<string> indexes, parameter p);
 
 
-    void flagNodesReturn(vector<string> clients);
-    void flagNodeReturn(string client);
-
-
-
     private:
 
     map< string, ofPtr<clamourNode> > mNodes;
-    vector<ofPtr<clamourNode> > mActiveNodes;
-    vector<ofPtr<clamourNode> > mOffNodes;
 
     soundDictionary mSoundDictionary;
 

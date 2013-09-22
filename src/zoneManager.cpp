@@ -17,7 +17,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     while(n_it != tNodes.end())
     {
 
-        if(!n_it->second->getIsOn()){
+        if(!n_it->second->getIsActive()){
 
              if(n_it->second->getZonePair()){
                             //incase the node has jumped straight from one zone to the next

@@ -44,12 +44,20 @@ public:
     ofVec2f getShiftStart();
     float getShiftAmount();
     void setShiftAmount(float f);
-    bool getIsOn();
-    void setIsOn(bool b);
+
     bool getIsDragOn();
     void setIsDragOn(bool b);
-    bool getIsReturnToOn();
-    void setIsReturnToOn(bool b);
+
+    bool getIsActive();
+    void setIsActive(bool b);
+
+    bool getIsChanged();
+    void setIsChanged(bool b);
+
+    bool getIsResetSound();
+    void setIsResetSound(bool b);
+
+
     void setDrawType(string dt);
     string getDrawType();
     std::tr1::shared_ptr<baseData> getDrawData();
@@ -79,7 +87,8 @@ private:
 
     ofVec2f shiftStart;
     float shiftAmount;
-    bool isOn, isDragOn, isReturnToOn;
+    bool isOn, isDragOn;
+    bool isActive, isChanged, isResetSound;
     vector<ofVec2f> history;
     std::tr1::shared_ptr<baseData> drawData;
     ofPtr<baseData> soundData;

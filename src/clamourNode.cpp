@@ -16,13 +16,13 @@ clamourNode::clamourNode(int ts, string tr)
     row = tr;
     name = tr + "_" + ofToString(ts);
     rawPos_rel.set(0.5,0.5);
-    isOn = false;
     isDragOn = false;
     smoothFrames = 10;
     drawType = "DEBUG";
     shiftAmount = 0.2;
-    isReturnToOn = false;
-
+    isActive = false;
+    isResetSound = false;
+    isChanged = false;
 
 };
 
@@ -142,14 +142,7 @@ void clamourNode::clearHistory()
 {
     history.clear();
 }
-bool clamourNode::getIsOn()
-{
-    return isOn;
-}
-void clamourNode::setIsOn(bool b)
-{
-    isOn = b;
-}
+
 bool clamourNode::getIsDragOn()
 {
     return isDragOn;
@@ -188,15 +181,15 @@ void clamourNode::setSoundData(baseData sd)
     soundData->init(meanPos_rel);
 }
 
+bool clamourNode::getIsActive(){return isActive; }
+void clamourNode::setIsActive(bool b){isActive = b; }
 
-bool clamourNode::getIsReturnToOn()
-{
-    return isReturnToOn;
-}
-void clamourNode::setIsReturnToOn(bool b)
-{
-    isReturnToOn = b;
-}
+bool clamourNode::getIsChanged(){return isChanged; }
+void clamourNode::setIsChanged(bool b){isChanged = b; }
+
+bool clamourNode::getIsResetSound(){ return isResetSound;}
+void clamourNode::setIsResetSound(bool b){ isResetSound = b;}
+
 
 string clamourNode::getName()
 {

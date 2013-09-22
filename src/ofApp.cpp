@@ -431,7 +431,6 @@ void ofApp::implementStage(){
             }else{
 
                 //it must be an individual client
-                //TODO need to check that the client is online
                 clients.push_back(tComms[i].targets[j]);
 
             }
@@ -451,7 +450,6 @@ void ofApp::implementStage(){
         //now carry out the command
 
         if(tComms[i].mCommand == "SET_CONTROL"){
-
 
             if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end()){
 
@@ -487,13 +485,9 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "SET_SOUND_TYPE"){
 
-            //turn off nodes -- not clear that responsibility should rest here
-            mNodeManager->switchOffNodes(clients);
             mNodeManager->setNodeSoundType(clients, tComms[i].stringParams["SOUND_TYPE"]);
 
         }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
-
-            //does this require the reset of the node as well ?
 
             parameter p(tComms[i].stringParams["PARAM"], tComms[i].floatParams["MIN_VAL"], tComms[i].floatParams["MAX_VAL"], tComms[i].floatParams["ABS_VAL"], (mapType)tComms[i].intParams["MAP_TYPE"]);
             mNodeManager->setNodeSoundParam(clients, p);

@@ -18,7 +18,7 @@ class nodeRenderer{
 
     nodeRenderer();
 
-    void renderNodes(vector<ofPtr<clamourNode> > nodes);
+    void renderNodes(map<string, ofPtr<clamourNode> > nodes);
     void setScreen(int w, int h);
 
     //drawing types

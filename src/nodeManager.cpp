@@ -11,7 +11,7 @@
 nodeManager::nodeManager()
 {
 
-    // soundDictionary::setup(); //load in default synth parameters from XML
+
 
     //populate nodeArray
     for(int i = 0; i < 10; i++)
@@ -34,7 +34,6 @@ nodeManager::nodeManager()
 nodeManager::nodeManager(vector<string> indexes)
 {
 
-    //soundDictionary::setup(); //load in default synth parameters from XML
 
     //populate nodeArray
     for(int i = 0; i < indexes.size(); i++)
@@ -64,46 +63,32 @@ void nodeManager::beginShift(string t_index, float x, float y)
 void nodeManager::updateNodes()
 {
 
-    //do not turn nodes off before here !
 
-    for(int i = 0; i < mActiveNodes.size(); i ++)
-    {
+    map<string, ofPtr<clamourNode> >::iterator it;
 
-        mActiveNodes[i]->updateHistory();
-        mActiveNodes[i]->updateDrawData();
-        mActiveNodes[i]->updateSoundData();
+    it = mNodes.begin();
 
-    }
+    while(it != mNodes.end()){
 
-    //purge old nodes
-    for(int i = 0; i < mOffNodes.size(); i++)
-    {
-
-        mOffNodes[i]->setIsOn(false);
-
-        if(!mOffNodes[i]->getIsReturnToOn())  // if the this is flagged then the node will be swtiched straight back on with a new synth
-        {
-            vector<ofPtr<clamourNode> >::iterator it = remove(mActiveNodes.begin(), mActiveNodes.end(), mOffNodes[i]);
-            if(it != mActiveNodes.end())mActiveNodes.erase(it);
+        if(it->second->getIsActive()){
+            it->second->updateHistory();
+            it->second->updateDrawData();
+            it->second->updateSoundData();
         }
-        else
-        {
-            mOffNodes[i]->setIsReturnToOn(false);
-        }
+
+
+        ++it;
 
     }
 
 
-    mOffNodes.clear(); //oscManager already used them so no need to retain
+
 
     //turn on any flagged nodes
 
 
 
-
     // any nodes turned off after here will be switched off in the subsequent frame
-
-
 
 
 
@@ -161,17 +146,14 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
 void nodeManager::switchOffAllNodes()
 {
 
-    //turn off all current nodes
-    for(int i = 0; i < mActiveNodes.size(); i ++)
-    {
+    map<string, ofPtr<clamourNode> >::iterator it;
 
-        mActiveNodes[i]->clearHistory();
-        //mActiveNodes[i]->resetZonePair();
+    it = mNodes.begin();
 
+    while(it != mNodes.end()){
+        switchOffNode(it->second->getName());
+        ++it;
     }
-
-    mOffNodes = mActiveNodes;
-
 
 }
 
@@ -179,13 +161,10 @@ void nodeManager::switchOffAllNodes()
 void nodeManager::switchOffNodes(vector<string> v)
 {
 
+    //change to flags
     for(int i = 0; i < v.size(); i ++)
     {
-
-        mNodes[v[i]]->clearHistory();
-        //mNodes[v[i]]->resetZonePair();
-        if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[v[i]]) != mActiveNodes.end())mOffNodes.push_back(mNodes[v[i]]);
-
+        switchOffNode(v[i]);
     }
 
 
@@ -194,17 +173,20 @@ void nodeManager::switchOffNodes(vector<string> v)
 void nodeManager::switchOffNode(string t_index)
 {
 
-    mNodes[t_index]->clearHistory();
-    //mNodes[t_index]->resetZonePair();
-    if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) != mActiveNodes.end())mOffNodes.push_back(mNodes[t_index]);
+    if(mNodes[t_index]->getIsActive()){
+        mNodes[t_index]->setIsActive(false);
+        mNodes[t_index]->setIsChanged(true);
+        mNodes[t_index]->clearHistory();
+    }
 
 }
 
 void nodeManager::switchOnNode(string t_index)
 {
-
-    if(find(mActiveNodes.begin(), mActiveNodes.end(), mNodes[t_index]) ==mActiveNodes.end())mActiveNodes.push_back(mNodes[t_index]);
-
+    if(!mNodes[t_index]->getIsActive()){
+        mNodes[t_index]->setIsActive(true);
+        mNodes[t_index]->setIsChanged(true);
+    }
 }
 
 void nodeManager::switchOnNode(string t_index, float x, float y)
@@ -216,14 +198,9 @@ void nodeManager::switchOnNode(string t_index, float x, float y)
 }
 
 
-
-
-
 void nodeManager::updateNodePosition(string t_index, float x, float y)
 {
-
     mNodes[t_index]->setRawPos_rel(ofVec2f(x,y));
-
 }
 
 void nodeManager::shiftNodePosition(string t_index, float x, float y)
@@ -238,16 +215,6 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y)
 }
 
 
-
-vector<ofPtr<clamourNode> > nodeManager::getActiveNodes()
-{
-    return mActiveNodes;
-}
-
-vector<ofPtr<clamourNode> > nodeManager::getOffNodes()
-{
-    return mOffNodes; //recently turned off Nodes
-}
 
 map<string, ofPtr<clamourNode> > nodeManager::getNodes(){
         return mNodes;
@@ -288,6 +255,7 @@ void nodeManager::setNodeSoundType(vector<string> indexes, string st)
     {
 
         mNodes[indexes[i]]->setSoundData(sd);
+        if(mNodes[indexes[i]]->getIsActive())mNodes[indexes[i]]->setIsResetSound(true);
 
     }
 
@@ -329,20 +297,4 @@ void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p)
 
 
 
-
-void nodeManager::flagNodesReturn(vector<string> clients)
-{
-
-    for(int i =0; i < clients.size(); i++)
-    {
-
-        mNodes[clients[i]]->setIsReturnToOn(true);
-    }
-}
-
-void nodeManager::flagNodeReturn(string client)
-{
-
-    mNodes[client]->setIsReturnToOn(true);
-}
 

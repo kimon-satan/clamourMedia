@@ -32,7 +32,7 @@ void displayWindow::draw()
     //draw the zones first
 
     mZoneRenderer.draw(pZoneManager->getZones());
-    mNodeRenderer.renderNodes(pNodeManager->getActiveNodes());
+    mNodeRenderer.renderNodes(pNodeManager->getNodes());
     mSplashRenderer.drawTitles(pSplashManager->getOnTitles());
 
 }

@@ -65,7 +65,7 @@ void oscManager::update()
             float y = m.getArgAsFloat(4);
             string movType = m.getArgAsString(5);
 
-            if(pNodeManager->getNode(t_index)->getIsOn())
+            if(pNodeManager->getNode(t_index)->getIsActive())
             {
 
                 if(movType == "drag" || movType == "drag_c")
@@ -152,36 +152,49 @@ void oscManager::update()
 
 
     //stop the synths for recently turned off nodes
-    vector<ofPtr<clamourNode> > v = pNodeManager->getOffNodes();
+    map<string, ofPtr<clamourNode> > t_nodes = pNodeManager->getNodes();
+    map<string, ofPtr<clamourNode> >::iterator it;
 
-    for(int i = 0; i < v.size(); i++)
+    it = t_nodes.begin();
+
+    while(it != t_nodes.end())
     {
-        stopSynth(v[i]);
-    }
+        if(it->second->getIsChanged()){
 
-    //start the synths for the recently turned on nodes
-    v = pNodeManager->getActiveNodes();
-    for(int i = 0; i < v.size(); i++)
-    {
-        if(!v[i]->getIsOn())
-        {
+            if(it->second->getIsActive()){
+                startSynth(it->second);
+            }else{
+                stopSynth(it->second);
+            }
 
-            startSynth(v[i]);
-            v[i]->setIsOn(true);
+            it->second->setIsChanged(false);
+
+        }else if(it->second->getIsResetSound()){
+
+            if(it->second->getIsActive()){
+                stopSynth(it->second);
+                startSynth(it->second);
+            }
+
+            it->second->setIsResetSound(false);
+
         }
+
+        ++it;
     }
+
 
     //send the client's outbundle to Meteor if it has messages waiting
 
-    map<string, ofxOscBundle>::iterator it;
+    map<string, ofxOscBundle>::iterator osc_it;
 
-    for(it = outBundle.begin(); it != outBundle.end(); it++)
+    for(osc_it = outBundle.begin(); osc_it != outBundle.end(); osc_it++)
     {
 
-        if(it->second.getMessageCount() > 0)
+        if(osc_it->second.getMessageCount() > 0)
         {
-            sender.sendBundle(it->second);
-            it->second.clear();
+            sender.sendBundle(osc_it->second);
+            osc_it->second.clear();
         }
 
     }
@@ -274,38 +287,22 @@ string oscManager::getMsgString(int mt)
 void oscManager::setControl(vector<string> clients, string control)
 {
 
-
     pClientManager->setCtrlIndexes(clients, 5);
+
 
 
     for(int i = 0; i < clients.size(); i++)
     {
 
-
-        ofPtr<clamourNode> n = pNodeManager->getNode(clients[i]);
-
-        if(n->getIsOn())
+        if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
         {
+            pNodeManager->switchOnNode(clients[i]);
 
+        }else{
 
             pNodeManager->switchOffNode(clients[i]);
-
-            if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
-            {
-                //flag the node to be switched back on
-                pNodeManager->flagNodeReturn(clients[i]);
-            }
-
         }
-        else
-        {
 
-            if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
-            {
-                pNodeManager->switchOnNode(clients[i]);
-            }
-
-        }
 
         ofxOscMessage m;
 
@@ -327,8 +324,7 @@ void oscManager::setControl(vector<string> clients, string control, string text)
 {
 
     pClientManager->setCtrlIndexes(clients, 5);
-    pNodeManager->switchOffNodes(clients);
-
+    pNodeManager->switchOffNodes(clients); //this is definitely a text control
 
     for(int i = 0; i < clients.size(); i++)
     {
