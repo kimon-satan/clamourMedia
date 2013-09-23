@@ -160,9 +160,10 @@ void oscManager::updateInMessages()
 
 }
 
-void oscManager::updateOutMessages(){
+void oscManager::updateOutMessages()
+{
 
-     //stop the synths for recently turned off nodes
+    //stop the synths for recently turned off nodes
     map<string, ofPtr<clamourNode> > t_nodes = pNodeManager->getNodes();
     map<string, ofPtr<clamourNode> >::iterator it;
 
@@ -170,36 +171,75 @@ void oscManager::updateOutMessages(){
 
     while(it != t_nodes.end())
     {
-        if(it->second->getChanged() == CLAMOUR_ON_OFF){
+        if(it->second->getChanged() == CLAMOUR_ON_OFF)
+        {
 
-            if(it->second->getIsActive()){
+            if(it->second->getIsActive())
+            {
                 startSynth(it->second);
-            }else{
+            }
+            else
+            {
                 stopSynth(it->second);
             }
 
 
-        }else if(it->second->getChanged() == CLAMOUR_SOUND){
+        }
+        else if(it->second->getChanged() == CLAMOUR_SOUND)
+        {
 
-            if(it->second->getIsActive()){
+            if(it->second->getIsActive())
+            {
                 stopSynth(it->second);
                 startSynth(it->second);
             }
 
-        }else if(it->second->getChanged() == CLAMOUR_POSITION){
+        }
+        else if(it->second->getChanged() == CLAMOUR_POSITION)
+        {
 
             updateSynth(it->second);
 
         }
 
-         it->second->setChanged(CLAMOUR_NONE);
+        it->second->setChanged(CLAMOUR_NONE);
 
         ++it;
     }
 
+    if(pZoneManager->getZones().size() == 0)return; //no zones to update
+
+    map<string, ofPtr<zone> >::iterator zit = pZoneManager->getZones().begin();
+
+    while(zit != pZoneManager->getZones().end())
+    {
+
+        if(zit->second->getChanged() == CLAMOUR_ON_OFF)
+        {
+
+            if(zit->second->getIsReacting())
+            {
+
+                //send an osc to supercollider
+                cout << "send to SC" << endl;
+
+            }
+            else
+            {
+
+                //send a stop osc
+            }
+
+            zit->second->setChanged(CLAMOUR_NONE);
+        }
+
+        ++zit;
+    }
+
 }
 
-void oscManager::sendBundle(){
+void oscManager::sendBundle()
+{
 
     //send the client's outbundle to Meteor if it has messages waiting
 
@@ -263,16 +303,19 @@ void oscManager::logMessages(ofxOscMessage m, int mt)
 }
 
 
-
-
-
 void oscManager::setNodeManager(ofPtr<nodeManager> p)
 {
     pNodeManager = p;
 }
+
 void oscManager::setClientManager(ofPtr<clientManager> p)
 {
     pClientManager =p;
+}
+
+void oscManager::setZoneManager(ofPtr<zoneManager> p){
+    pZoneManager = p;
+
 }
 
 string oscManager::getMsgString(int mt)
@@ -311,7 +354,9 @@ void oscManager::setControl(vector<string> clients, string control)
         {
             pNodeManager->switchOnNode(clients[i]);
 
-        }else{
+        }
+        else
+        {
 
             pNodeManager->switchOffNode(clients[i]);
         }
@@ -431,6 +476,29 @@ void oscManager::startSynth(ofPtr<clamourNode> n)
     {
         m.addFloatArg(vals[i]);
     }
+
+    SCsender.sendMessage(m);
+    logMessages(m, CLAMOUR_MSG_SC_OUT);
+
+}
+
+void oscManager::startSynth(ofPtr<zone> z)
+{
+
+//    ofPtr<baseData> sd = n->getSoundData();
+
+    ofxOscMessage m;
+    m.setAddress("/startZoneSynth");
+    m.addStringArg(z->getName());
+
+   /* m.addStringArg(sd->getName());
+
+    vector<float> vals = sd->getAbsVals();
+
+    for(int i = 0; i < vals.size(); i++)
+    {
+        m.addFloatArg(vals[i]);
+    }*/
 
     SCsender.sendMessage(m);
     logMessages(m, CLAMOUR_MSG_SC_OUT);

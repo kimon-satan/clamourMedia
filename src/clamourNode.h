@@ -14,15 +14,7 @@
 #include "soundDictionary.h"
 #include "clamourUtils.h"
 
-enum changeType{
 
-    CLAMOUR_NONE,
-    CLAMOUR_ON_OFF,
-    CLAMOUR_POSITION,
-    CLAMOUR_SOUND,
-    CLAMOUR_COUNT
-
-};
 
 class zone;
 

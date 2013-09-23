@@ -33,6 +33,7 @@ void ofApp::setup(){
 
     mZoneManager = ofPtr<zoneManager>(new zoneManager());
     mDisplay.setZoneManager(mZoneManager);
+    mOscManager->setZoneManager(mZoneManager);
 
     mSplashManager = ofPtr<splashManager>(new splashManager());
     mDisplay.setSplashManager(mSplashManager);

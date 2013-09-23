@@ -6,11 +6,16 @@
 #include "clamourUtils.h"
 #include "clamourNode.h"
 
+
+
 class zone
 {
 public:
     zone();
     virtual ~zone();
+
+    void update();
+    void react();
 
     void addNode(ofPtr<clamourNode> p);
     void removeNode(ofPtr<clamourNode> p);
@@ -18,7 +23,6 @@ public:
     //getters and setters
     void setName(string name);
     string getName();
-
 
     map<string, ofPtr<clamourNode> > getCaptureNodes();
 
@@ -48,14 +52,24 @@ public:
     void setIsOccupied(bool b);
     bool getIsOccupied();
 
+    bool getIsReacting();
+    float getReactProp();
+
+    void setChanged(changeType c);
+    changeType getChanged();
+
 private:
 
     string name;
     bool isOccupied;
+    changeType mChangeType;
 
     //draw stuff
     bool isHidden;
     string drawType;
+    int reactTotal;
+    int reactCount;
+    float reactSecs;
 
     //collision stuff
     bool isClosed;
@@ -71,6 +85,11 @@ private:
 
     //mechanics stuff
     map <string , ofPtr<clamourNode> > mCaptureNodes;
+
+    //sound stuff
+
+    //zone and node need to come from a base class
+
 
 
 };

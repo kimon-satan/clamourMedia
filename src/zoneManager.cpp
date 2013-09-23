@@ -35,74 +35,97 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
         for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
         {
 
-            if(z_it->second->getShapeType() == "circle")
-            {
+            if(checkInZone(n_it->second, z_it->second)){
 
-                ofVec2f d = n_it->second->getMeanPos_abs() - z_it->second->getPos_abs();
+                if(n_it->second->getZonePair() == z_it->second)break; //already in the zone
 
-                if(d.length() < z_it->second->getRadius())
-                {
+                //new nodes inside the zone
 
-                    //the node is inside the zone
+                if(z_it->second->getIsClosed()){
+                    repellNode(n_it->second, z_it->second);
+                }else{
 
-
-
-
-                    if(n_it->second->getZonePair() != z_it->second)
+                    if(n_it->second->getZonePair())
                     {
-
-                        //for all nodes not already inside the zone
-
-                        if(z_it->second->getIsClosed())
-                        {
-
-                            //repell the node - put this into a function to deal with different shapes
-
-                            n_it->second->setRawPos_abs(z_it->second->getPos_abs()+ d.normalize() * z_it->second->getRadius());
-                            n_it->second->modifyHistory();
-
-                            n_it++;
-                            continue;
-                        }
-
-                        if(n_it->second->getZonePair())
-                        {
-                            //incase the node has jumped straight from one zone to the next
-                            n_it->second->getZonePair()->removeNode(n_it->second);
-                            n_it->second->resetZonePair();
-                        }
-
-                        n_it->second->setZonePair(z_it->second);
-                        z_it->second->addNode(n_it->second);
-
-                        //reactions here - a separate function
-                        z_it->second->setIsClosed(true);
-
-                    }
-
-                    n_it++; //no need to do anything else (nodes can't occupy 2 zones)
-                    continue;
-
-                }
-                else
-                {
-                    if(n_it->second->getZonePair() == z_it->second)
-                    {
-                        z_it->second->removeNode(n_it->second);
+                        //incase the node has jumped straight from one zone to the next
+                        n_it->second->getZonePair()->removeNode(n_it->second);
                         n_it->second->resetZonePair();
-                        z_it->second->setIsClosed(false);
                     }
+
+                    n_it->second->setZonePair(z_it->second);
+                    z_it->second->addNode(n_it->second);
+
+                    //now update zone reactions
+                    if(getReaction(z_it->second))makeReaction(z_it->second);
+
+                    break; //no need to check any more zones for this node
                 }
 
             }
+            else if(n_it->second->getZonePair() == z_it->second){
 
-            ++n_it;
+                z_it->second->removeNode(n_it->second);
+                n_it->second->resetZonePair();
+
+            }
 
         }
 
+        ++n_it;
 
     }
 
+    //call update method here which resets closed zones and increments reactions etc
+
+    for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
+    {
+        z_it->second->update();
+        if(z_it->second->getCaptureNodes().size() == 0)z_it->second->setIsClosed(false);
+
+    }
+
+
+}
+
+bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z){
+
+
+    if(z->getShapeType() == "circle"){
+
+        ofVec2f d = n->getMeanPos_abs() - z->getPos_abs();
+        return(d.length() < z->getRadius());
+
+    }
+
+    return false;
+
+
+}
+
+void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z){
+
+    ofVec2f d = (n->getMeanPos_abs() - z->getPos_abs()).normalize();
+
+    //ultimately methods for other shapes too
+    n->setRawPos_abs(z->getPos_abs()+ d * z->getRadius());
+    n->modifyHistory();
+
+}
+
+bool zoneManager::getReaction(ofPtr<zone> z){
+
+    if(z->getIsReacting())return false;
+    if(z->getCaptureNodes().size() == 1)return true;
+
+    return false;
+
+}
+
+void zoneManager::makeReaction(ofPtr<zone> z){
+
+    z->react(); //start the clock ticking
+    z->setChanged(CLAMOUR_ON_OFF);
+    z->setIsClosed(true);
 
 }
 
@@ -115,6 +138,8 @@ void zoneManager::createZone(string name)
     mZones[name] = z;
 
 }
+
+
 
 void zoneManager::createZone(zone z)
 {

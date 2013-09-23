@@ -19,10 +19,16 @@ class zoneManager
         void destroyZone(string name);
         void destroyAllZones();
 
+
         map<string, ofPtr<zone> > getZones();
 
 
     private:
+
+        void repellNode(ofPtr<clamourNode> n, ofPtr<zone> z);
+        bool checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z);
+        bool getReaction(ofPtr<zone> z);
+        void makeReaction(ofPtr<zone> z);
 
         map <string, ofPtr<zone> > mZones;
 };
