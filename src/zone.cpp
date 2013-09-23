@@ -6,6 +6,7 @@ zone::zone()
     setShape_rel(ofVec2f(0.5,0.5),0.15);
     isHidden = false;
     isOccupied = false;
+    isClosed = false;
 }
 
 
@@ -92,7 +93,14 @@ ofRectangle zone::getRect_abs()
     return rect_abs;
 }
 
+void zone::setIsOccupied(bool b){isOccupied =b;}
+bool zone::getIsOccupied(){return isOccupied;}
 
+bool zone::getIsHidden(){ return isHidden; }
+void zone::setIsHidden(bool b){isHidden = b; }
+
+void zone::setIsClosed(bool b){ isClosed = b;}
+bool zone::getIsClosed(){ return isClosed;}
 
 zone::~zone()
 {

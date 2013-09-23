@@ -21,8 +21,7 @@ clamourNode::clamourNode(int ts, string tr)
     drawType = "DEBUG";
     shiftAmount = 0.2;
     isActive = false;
-    isResetSound = false;
-    isChanged = false;
+    mChanged = CLAMOUR_NONE;
 
 };
 
@@ -39,6 +38,29 @@ void clamourNode::updateHistory()
     rawPos_rel.y = max(0.0f, min(1.0f, rawPos_rel.y));
 
     history.push_back(rawPos_rel);
+
+    ofVec2f p(0,0);
+
+    for(int i = 0; i < history.size(); i ++)
+    {
+        p = p + history[i];
+    }
+
+    p /= (float)history.size();
+
+    meanPos_rel.set(p);
+
+}
+
+void clamourNode::modifyHistory(){
+
+    //for when a new position has been set after the history was updated
+
+    //constrain to edges
+    rawPos_rel.x = max(0.0f, min(1.0f, rawPos_rel.x));
+    rawPos_rel.y = max(0.0f, min(1.0f, rawPos_rel.y));
+
+    history[history.size() - 1] = rawPos_rel; //replace the last term
 
     ofVec2f p(0,0);
 
@@ -88,7 +110,7 @@ void clamourNode::setSeat(int i)
 {
     seat = i;
     name = row + "_" + ofToString(seat);
-    cout << name << endl;
+
 }
 string clamourNode::getRow()
 {
@@ -184,11 +206,8 @@ void clamourNode::setSoundData(baseData sd)
 bool clamourNode::getIsActive(){return isActive; }
 void clamourNode::setIsActive(bool b){isActive = b; }
 
-bool clamourNode::getIsChanged(){return isChanged; }
-void clamourNode::setIsChanged(bool b){isChanged = b; }
-
-bool clamourNode::getIsResetSound(){ return isResetSound;}
-void clamourNode::setIsResetSound(bool b){ isResetSound = b;}
+changeType clamourNode::getChanged(){return mChanged; }
+void clamourNode::setChanged(changeType c){mChanged = c; }
 
 
 string clamourNode::getName()

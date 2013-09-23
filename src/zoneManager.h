@@ -12,9 +12,12 @@ class zoneManager
         void update(map<string, ofPtr<clamourNode> > tNodes);
 
         void createZone(string name);
+        void createZone(zone z);
+
         void hideZone(string name);
         void showZone(string name);
         void destroyZone(string name);
+        void destroyAllZones();
 
         map<string, ofPtr<zone> > getZones();
 

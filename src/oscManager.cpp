@@ -25,7 +25,7 @@ oscManager::oscManager()
 
 }
 
-void oscManager::update()
+void oscManager::updateInMessages()
 {
 
     for(int i = 0; i < 3; i ++)
@@ -78,7 +78,6 @@ void oscManager::update()
 
                 }
 
-                updateSynth(pNodeManager->getNode(t_index));
 
             }
 
@@ -151,7 +150,19 @@ void oscManager::update()
     }
 
 
-    //stop the synths for recently turned off nodes
+
+
+
+
+
+
+
+
+}
+
+void oscManager::updateOutMessages(){
+
+     //stop the synths for recently turned off nodes
     map<string, ofPtr<clamourNode> > t_nodes = pNodeManager->getNodes();
     map<string, ofPtr<clamourNode> >::iterator it;
 
@@ -159,7 +170,7 @@ void oscManager::update()
 
     while(it != t_nodes.end())
     {
-        if(it->second->getIsChanged()){
+        if(it->second->getChanged() == CLAMOUR_ON_OFF){
 
             if(it->second->getIsActive()){
                 startSynth(it->second);
@@ -167,22 +178,28 @@ void oscManager::update()
                 stopSynth(it->second);
             }
 
-            it->second->setIsChanged(false);
 
-        }else if(it->second->getIsResetSound()){
+        }else if(it->second->getChanged() == CLAMOUR_SOUND){
 
             if(it->second->getIsActive()){
                 stopSynth(it->second);
                 startSynth(it->second);
             }
 
-            it->second->setIsResetSound(false);
+        }else if(it->second->getChanged() == CLAMOUR_POSITION){
+
+            updateSynth(it->second);
 
         }
+
+         it->second->setChanged(CLAMOUR_NONE);
 
         ++it;
     }
 
+}
+
+void oscManager::sendBundle(){
 
     //send the client's outbundle to Meteor if it has messages waiting
 
@@ -198,10 +215,6 @@ void oscManager::update()
         }
 
     }
-
-
-
-
 }
 
 

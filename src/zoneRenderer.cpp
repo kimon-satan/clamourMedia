@@ -16,7 +16,7 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z){
         ofVec2f p = it->second->getPos_abs() * screenData::height;
         float r = it->second->getRadius() * screenData::height;
 
-        (it->second->isOccupied)?ofFill() : ofNoFill();
+        (it->second->getIsOccupied())?ofFill() : ofNoFill();
 
         ofCircle(p,r);
 

@@ -38,6 +38,18 @@ public:
     vector<ofVec2f> getPoly_abs();
     ofRectangle getRect_abs();
 
+
+    bool getIsHidden();
+    void setIsHidden(bool b);
+
+    void setIsClosed(bool b);
+    bool getIsClosed();
+
+    void setIsOccupied(bool b);
+    bool getIsOccupied();
+
+private:
+
     string name;
     bool isOccupied;
 
@@ -45,11 +57,8 @@ public:
     bool isHidden;
     string drawType;
 
-
-private:
-
-
     //collision stuff
+    bool isClosed;
     ofVec2f pos_abs;
     ofVec2f pos_rel;
     float radius; //necessarily absolute

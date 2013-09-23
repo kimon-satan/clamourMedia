@@ -14,6 +14,16 @@
 #include "soundDictionary.h"
 #include "clamourUtils.h"
 
+enum changeType{
+
+    CLAMOUR_NONE,
+    CLAMOUR_ON_OFF,
+    CLAMOUR_POSITION,
+    CLAMOUR_SOUND,
+    CLAMOUR_COUNT
+
+};
+
 class zone;
 
 class clamourNode{
@@ -24,6 +34,8 @@ public:
     clamourNode(int ts, string tr);
 
     void updateHistory();
+    void modifyHistory();
+
     void updateDrawData();
     void updateSoundData();
     void resetShift(float x, float y);
@@ -51,15 +63,12 @@ public:
     bool getIsActive();
     void setIsActive(bool b);
 
-    bool getIsChanged();
-    void setIsChanged(bool b);
-
-    bool getIsResetSound();
-    void setIsResetSound(bool b);
-
+    changeType getChanged();
+    void setChanged(changeType c);
 
     void setDrawType(string dt);
     string getDrawType();
+
     std::tr1::shared_ptr<baseData> getDrawData();
 
     void setSoundData(baseData sd);
@@ -87,8 +96,9 @@ private:
 
     ofVec2f shiftStart;
     float shiftAmount;
-    bool isOn, isDragOn;
-    bool isActive, isChanged, isResetSound;
+    bool isDragOn, isActive;
+
+    changeType mChanged;
     vector<ofVec2f> history;
     std::tr1::shared_ptr<baseData> drawData;
     ofPtr<baseData> soundData;

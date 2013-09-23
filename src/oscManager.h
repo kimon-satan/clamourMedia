@@ -32,7 +32,9 @@ class oscManager{
     public:
 
     oscManager();
-    void update();
+    void updateInMessages();
+    void updateOutMessages();
+    void sendBundle();
     void setNodeManager(ofPtr<nodeManager> p);
     void setClientManager(ofPtr<clientManager> p);
 

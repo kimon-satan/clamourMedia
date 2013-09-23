@@ -63,7 +63,6 @@ void nodeManager::beginShift(string t_index, float x, float y)
 void nodeManager::updateNodes()
 {
 
-
     map<string, ofPtr<clamourNode> >::iterator it;
 
     it = mNodes.begin();
@@ -80,17 +79,6 @@ void nodeManager::updateNodes()
         ++it;
 
     }
-
-
-
-
-    //turn on any flagged nodes
-
-
-
-    // any nodes turned off after here will be switched off in the subsequent frame
-
-
 
 
 }
@@ -175,7 +163,7 @@ void nodeManager::switchOffNode(string t_index)
 
     if(mNodes[t_index]->getIsActive()){
         mNodes[t_index]->setIsActive(false);
-        mNodes[t_index]->setIsChanged(true);
+        mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
         mNodes[t_index]->clearHistory();
     }
 
@@ -185,7 +173,7 @@ void nodeManager::switchOnNode(string t_index)
 {
     if(!mNodes[t_index]->getIsActive()){
         mNodes[t_index]->setIsActive(true);
-        mNodes[t_index]->setIsChanged(true);
+        mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
     }
 }
 
@@ -211,6 +199,7 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y)
     ofVec2f p = mNodes[t_index]->getShiftStart() + s * mNodes[t_index]->getShiftAmount();
 
     mNodes[t_index]->setRawPos_rel(p);
+    mNodes[t_index]->setChanged(CLAMOUR_POSITION);
 
 }
 
@@ -255,7 +244,7 @@ void nodeManager::setNodeSoundType(vector<string> indexes, string st)
     {
 
         mNodes[indexes[i]]->setSoundData(sd);
-        if(mNodes[indexes[i]]->getIsActive())mNodes[indexes[i]]->setIsResetSound(true);
+        if(mNodes[indexes[i]]->getIsActive())mNodes[indexes[i]]->setChanged(CLAMOUR_SOUND);
 
     }
 

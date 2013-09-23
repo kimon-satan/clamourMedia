@@ -5,6 +5,7 @@ void ofApp::setup(){
 
 
 	ofSetFrameRate(60);
+	ofSetCircleResolution(50);
 	ofSetWindowPosition(800, 800);
 	ofSetWindowTitle("CLAMOUR CONTROL");
 	ofSetVerticalSync(false);
@@ -36,8 +37,7 @@ void ofApp::setup(){
     mSplashManager = ofPtr<splashManager>(new splashManager());
     mDisplay.setSplashManager(mSplashManager);
 
-    //just for debugging
-    mZoneManager->createZone("debug");
+
 
     isMouseDown = false;
 
@@ -310,10 +310,17 @@ void ofApp::update(){
 
     ofBackground(100);
 
-    mOscManager->update();
+    //get incoming from Meteor
+    mOscManager->updateInMessages();
+
+    //now do all the calculations
     mNodeManager->updateNodes();
-    mZoneManager->update(mNodeManager->getNodes()); //may split OSC message functions to avoid 1 frame latency
+    mZoneManager->update(mNodeManager->getNodes());
     mSplashManager->update();
+
+    //update superCollider
+    mOscManager->updateOutMessages();
+    mOscManager->sendBundle();
 
 
     ofxUITextArea * t;
@@ -404,6 +411,7 @@ void ofApp::resetEverything(){
     mSplashManager->reset();
     if(mCurrentGame)mCurrentGame->reset();
     mNodeManager->switchOffAllNodes();
+    mZoneManager->destroyAllZones();
 
 }
 
@@ -515,6 +523,18 @@ void ofApp::implementStage(){
 
             mClientManager->createGroup(clients, selectors, tComms[i].stringParams["NAME"]);
 
+        }else if(tComms[i].mCommand == "CREATE_ZONE"){
+
+                zone z;
+                z.setName(tComms[i].stringParams["NAME"]);
+                z.setShape_rel(ofVec2f(tComms[i].floatParams["X"],tComms[i].floatParams["Y"]),tComms[i].floatParams["RADIUS"]);
+
+                mZoneManager->createZone(z);
+
+
+        }else if(tComms[i].mCommand == "DESTROY_ZONE"){
+
+                mZoneManager->destroyZone(tComms[i].stringParams["NAME"]);
         }
 
 
