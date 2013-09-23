@@ -2,13 +2,11 @@
 #define ZONE_H
 
 
-#include "ofMain.h"
-#include "clamourUtils.h"
 #include "clamourNode.h"
+#include "baseZode.h"
 
 
-
-class zone
+class zone : public baseZode
 {
 public:
     zone();
@@ -21,8 +19,6 @@ public:
     void removeNode(ofPtr<clamourNode> p);
 
     //getters and setters
-    void setName(string name);
-    string getName();
 
     map<string, ofPtr<clamourNode> > getCaptureNodes();
 
@@ -55,18 +51,13 @@ public:
     bool getIsReacting();
     float getReactProp();
 
-    void setChanged(changeType c);
-    changeType getChanged();
-
 private:
 
-    string name;
     bool isOccupied;
-    changeType mChangeType;
 
     //draw stuff
     bool isHidden;
-    string drawType;
+
     int reactTotal;
     int reactCount;
     float reactSecs;
@@ -86,9 +77,6 @@ private:
     //mechanics stuff
     map <string , ofPtr<clamourNode> > mCaptureNodes;
 
-    //sound stuff
-
-    //zone and node need to come from a base class
 
 
 

@@ -333,6 +333,12 @@
 		<Unit filename="config.make">
 			<Option virtualFolder="build config" />
 		</Unit>
+		<Unit filename="src/baseZode.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/baseZode.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/clamourNode.cpp">
 			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
@@ -340,10 +346,10 @@
 			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>
 		<Unit filename="src/clamourUtils.cpp">
-			<Option virtualFolder="src/nodeClasses/" />
+			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/clamourUtils.h">
-			<Option virtualFolder="src/nodeClasses/" />
+			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/clientManager.cpp">
 			<Option virtualFolder="src/" />

@@ -209,19 +209,22 @@ void oscManager::updateOutMessages()
 
     if(pZoneManager->getZones().size() == 0)return; //no zones to update
 
-    map<string, ofPtr<zone> >::iterator zit = pZoneManager->getZones().begin();
+    map<string, ofPtr<zone> > t_zones = pZoneManager->getZones();
+    map<string, ofPtr<zone> >::iterator zit = t_zones.begin();
 
-    while(zit != pZoneManager->getZones().end())
+    while(zit != t_zones.end())
     {
 
         if(zit->second->getChanged() == CLAMOUR_ON_OFF)
         {
 
+            zit->second->setChanged(CLAMOUR_NONE);
+
             if(zit->second->getIsReacting())
             {
 
                 //send an osc to supercollider
-                cout << "send to SC" << endl;
+                startSynth(zit->second);
 
             }
             else
@@ -230,7 +233,7 @@ void oscManager::updateOutMessages()
                 //send a stop osc
             }
 
-            zit->second->setChanged(CLAMOUR_NONE);
+
         }
 
         ++zit;

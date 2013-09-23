@@ -75,11 +75,26 @@ void clamourNode::modifyHistory(){
 
 }
 
+void clamourNode::setDrawType(string dt)
+{
+
+    drawType = dt;
+    drawData = drawDictionary::createDrawData(drawType);
+    drawData->init(meanPos_rel); //override
+
+}
+
 void clamourNode::updateDrawData()
 {
 
     drawData->update(meanPos_rel); //used for mappings
 
+}
+
+void clamourNode::setSoundData(baseData sd)
+{
+    soundData = ofPtr<baseData>(new baseData(sd));
+    soundData->init(meanPos_rel); //override
 }
 
 void clamourNode::updateSoundData()
@@ -92,13 +107,14 @@ void clamourNode::updateSoundData()
 void clamourNode::resetShift(float x , float y)
 {
 
-
     ofVec2f v(ofVec2f(x,y) * shiftAmount);
     shiftStart.set(meanPos_rel - v);
     isDragOn = true;
 
 }
 
+void clamourNode::setIsActive(bool b){isActive = b;}
+bool clamourNode::getIsActive(){return isActive;}
 
 //getters and setters
 
@@ -174,46 +190,6 @@ void clamourNode::setIsDragOn(bool b)
     isDragOn = b;
 }
 
-void clamourNode::setDrawType(string dt)
-{
-
-    drawType = dt;
-    drawData = drawDictionary::createDrawData(drawType);
-    drawData->init(meanPos_rel);
-
-}
-string clamourNode::getDrawType()
-{
-    return drawType;
-}
-
-std::tr1::shared_ptr<baseData> clamourNode::getDrawData()
-{
-    return drawData;
-}
-
-ofPtr<baseData> clamourNode::getSoundData()
-{
-    return soundData;
-}
-
-void clamourNode::setSoundData(baseData sd)
-{
-    soundData = ofPtr<baseData>(new baseData(sd));
-    soundData->init(meanPos_rel);
-}
-
-bool clamourNode::getIsActive(){return isActive; }
-void clamourNode::setIsActive(bool b){isActive = b; }
-
-changeType clamourNode::getChanged(){return mChanged; }
-void clamourNode::setChanged(changeType c){mChanged = c; }
-
-
-string clamourNode::getName()
-{
-    return name;
-}
 
 ofPtr<zone> clamourNode::getZonePair()
 {

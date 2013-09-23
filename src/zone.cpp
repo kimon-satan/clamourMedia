@@ -8,7 +8,7 @@ zone::zone()
     isOccupied = false;
     isClosed = false;
     reactTotal = 60;
-    mChangeType = CLAMOUR_NONE;
+    mChanged = CLAMOUR_NONE;
 }
 
 void zone::update(){
@@ -29,6 +29,7 @@ void zone::addNode(ofPtr<clamourNode> n){
 }
 
 void zone::removeNode(ofPtr<clamourNode> n){
+
     mCaptureNodes.erase(n->getName());
     if(mCaptureNodes.size() == 0)isOccupied = false;
 }
@@ -36,8 +37,7 @@ void zone::removeNode(ofPtr<clamourNode> n){
 
 //getters and setters
 
-void zone::setName(string n){name = n;}
-string zone::getName(){return name;}
+
 
 map<string, ofPtr<clamourNode> > zone::getCaptureNodes(){
     return mCaptureNodes;
@@ -118,8 +118,6 @@ bool zone::getIsClosed(){ return isClosed;}
 bool zone::getIsReacting(){return (reactCount > 0);}
 float zone::getReactProp(){return (float)reactCount/(float)reactTotal;}
 
-void zone::setChanged(changeType c){mChangeType = c; }
-changeType zone::getChanged(){ return mChangeType; }
 
 zone::~zone()
 {

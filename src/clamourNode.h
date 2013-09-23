@@ -9,16 +9,14 @@
 #ifndef __clamourMedia__clamourNode__
 #define __clamourMedia__clamourNode__
 
-#include "ofMain.h"
-#include "drawDictionary.h"
-#include "soundDictionary.h"
-#include "clamourUtils.h"
+
+#include "baseZode.h"
 
 
 
 class zone;
 
-class clamourNode{
+class clamourNode : public baseZode {
 
 public:
 
@@ -28,7 +26,9 @@ public:
     void updateHistory();
     void modifyHistory();
 
+    void setDrawType(string dt);
     void updateDrawData();
+    void setSoundData(baseData sd);
     void updateSoundData();
     void resetShift(float x, float y);
 
@@ -52,22 +52,10 @@ public:
     bool getIsDragOn();
     void setIsDragOn(bool b);
 
-    bool getIsActive();
+    bool getIsActive(); //does this have an equivalent in Zone ?
     void setIsActive(bool b);
 
-    changeType getChanged();
-    void setChanged(changeType c);
-
-    void setDrawType(string dt);
-    string getDrawType();
-
-    std::tr1::shared_ptr<baseData> getDrawData();
-
-    void setSoundData(baseData sd);
-    ofPtr<baseData> getSoundData();
-
     void clearHistory();
-    string getName();
 
     ofPtr<zone> getZonePair();
     void setZonePair(ofPtr<zone> p);
@@ -75,11 +63,10 @@ public:
 
 private:
 
-    string name;
     int smoothFrames;
     int seat;
     string ctrlIndex;
-    string drawType;
+
     string row;
 
     ofVec2f rawPos_rel;
@@ -90,13 +77,8 @@ private:
     float shiftAmount;
     bool isDragOn, isActive;
 
-    changeType mChanged;
     vector<ofVec2f> history;
-    std::tr1::shared_ptr<baseData> drawData;
-    ofPtr<baseData> soundData;
-
     ofPtr<zone> zonePair;
-
 
 
 };
