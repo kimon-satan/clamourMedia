@@ -20,8 +20,8 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z){
         ofNoFill();
         ofCircle(p,r);
 
-        if(it->second->getIsReacting()){
-            ofSetColor(it->second->getReactProp() * 255.0);
+        if(it->second->getIsFiring()){
+            ofSetColor(it->second->getEnvVal() * 255.0);
             ofFill();
             ofCircle(p,r);
         }

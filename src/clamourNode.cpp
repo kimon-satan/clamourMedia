@@ -20,7 +20,6 @@ clamourNode::clamourNode(int ts, string tr)
     smoothFrames = 10;
     drawType = "DEBUG";
     shiftAmount = 0.2;
-    isActive = false;
     mChanged = CLAMOUR_NONE;
 
 };
@@ -113,8 +112,6 @@ void clamourNode::resetShift(float x , float y)
 
 }
 
-void clamourNode::setIsActive(bool b){isActive = b;}
-bool clamourNode::getIsActive(){return isActive;}
 
 //getters and setters
 

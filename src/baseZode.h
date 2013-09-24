@@ -13,6 +13,9 @@ public:
     baseZode();
     virtual ~baseZode();
 
+    void update();
+    void react();
+
     //getters and setters
     void setName(string name);
     string getName();
@@ -28,6 +31,17 @@ public:
     virtual void setSoundData(baseData sd);
     ofPtr<baseData> getSoundData();
 
+    //does the zode have input to fire
+    bool getIsFired();
+    void setIsFired(bool b);
+
+    //is the zode actually firing
+    bool getIsFiring();
+    void setIsFiring(bool b);
+
+    float getEnvVal();
+    float getPostVal();
+
 protected:
 
     string name;
@@ -35,6 +49,15 @@ protected:
     ofPtr<baseData> soundData;
     changeType mChanged;
     string drawType;
+
+    bool isFired, isFiring;
+
+    envType mEnvType;
+
+    int totalAtt, totalDec, totalPost, attCount, decCount, postCount;
+	float envVal, postVal;
+    parameter attSecs, decSecs, postSecs;
+
 
 private:
 

@@ -69,7 +69,9 @@ void nodeManager::updateNodes()
 
     while(it != mNodes.end()){
 
-        if(it->second->getIsActive()){
+        it->second->update();
+
+        if(it->second->getIsFiring()){
             it->second->updateHistory();
             it->second->updateDrawData();
             it->second->updateSoundData();
@@ -161,8 +163,8 @@ void nodeManager::switchOffNodes(vector<string> v)
 void nodeManager::switchOffNode(string t_index)
 {
 
-    if(mNodes[t_index]->getIsActive()){
-        mNodes[t_index]->setIsActive(false);
+    if(mNodes[t_index]->getIsFired()){
+        mNodes[t_index]->setIsFired(false);
         mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
         mNodes[t_index]->clearHistory();
     }
@@ -171,8 +173,9 @@ void nodeManager::switchOffNode(string t_index)
 
 void nodeManager::switchOnNode(string t_index)
 {
-    if(!mNodes[t_index]->getIsActive()){
-        mNodes[t_index]->setIsActive(true);
+    if(!mNodes[t_index]->getIsFired()){
+        mNodes[t_index]->setIsFired(true);
+        mNodes[t_index]->react();
         mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
     }
 }
@@ -244,7 +247,7 @@ void nodeManager::setNodeSoundType(vector<string> indexes, string st)
     {
 
         mNodes[indexes[i]]->setSoundData(sd);
-        if(mNodes[indexes[i]]->getIsActive())mNodes[indexes[i]]->setChanged(CLAMOUR_SOUND);
+        if(mNodes[indexes[i]]->getIsFiring())mNodes[indexes[i]]->setChanged(CLAMOUR_SOUND);
 
     }
 

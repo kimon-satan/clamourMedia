@@ -7,21 +7,9 @@ zone::zone()
     isHidden = false;
     isOccupied = false;
     isClosed = false;
-    reactTotal = 60;
     mChanged = CLAMOUR_NONE;
 }
 
-void zone::update(){
-
-    if(reactCount > 0)reactCount -= 1;
-
-}
-
-void zone::react(){
-
-    reactCount = reactTotal;
-
-}
 
 void zone::addNode(ofPtr<clamourNode> n){
     mCaptureNodes[n->getName()] = n;
@@ -114,9 +102,6 @@ void zone::setIsHidden(bool b){isHidden = b; }
 
 void zone::setIsClosed(bool b){ isClosed = b;}
 bool zone::getIsClosed(){ return isClosed;}
-
-bool zone::getIsReacting(){return (reactCount > 0);}
-float zone::getReactProp(){return (float)reactCount/(float)reactTotal;}
 
 
 zone::~zone()

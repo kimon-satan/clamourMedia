@@ -17,7 +17,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     while(n_it != tNodes.end())
     {
 
-        if(!n_it->second->getIsActive())
+        if(!n_it->second->getIsFiring())
         {
 
             if(n_it->second->getZonePair())
@@ -80,7 +80,10 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
     {
         z_it->second->update();
-        if(z_it->second->getCaptureNodes().size() == 0)z_it->second->setIsClosed(false);
+        if(z_it->second->getCaptureNodes().size() == 0){
+                z_it->second->setIsClosed(false);
+                z_it->second->setIsFired(false);
+        }
 
     }
 
@@ -114,7 +117,7 @@ void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z){
 
 bool zoneManager::getReaction(ofPtr<zone> z){
 
-    if(z->getIsReacting())return false;
+    if(z->getIsFired())return false; //this could be variable
     if(z->getCaptureNodes().size() == 1)return true;
 
     return false;
@@ -123,8 +126,11 @@ bool zoneManager::getReaction(ofPtr<zone> z){
 
 void zoneManager::makeReaction(ofPtr<zone> z){
 
+    z->setIsFired(true);
     z->react(); //start the clock ticking
     z->setChanged(CLAMOUR_ON_OFF);
+
+    //whatever reactions here
     z->setIsClosed(true);
 
 }

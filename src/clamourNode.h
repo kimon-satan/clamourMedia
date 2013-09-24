@@ -52,9 +52,6 @@ public:
     bool getIsDragOn();
     void setIsDragOn(bool b);
 
-    bool getIsActive(); //does this have an equivalent in Zone ?
-    void setIsActive(bool b);
-
     void clearHistory();
 
     ofPtr<zone> getZonePair();
@@ -75,7 +72,7 @@ private:
 
     ofVec2f shiftStart;
     float shiftAmount;
-    bool isDragOn, isActive;
+    bool isDragOn;
 
     vector<ofVec2f> history;
     ofPtr<zone> zonePair;

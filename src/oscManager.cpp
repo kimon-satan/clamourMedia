@@ -65,7 +65,7 @@ void oscManager::updateInMessages()
             float y = m.getArgAsFloat(4);
             string movType = m.getArgAsString(5);
 
-            if(pNodeManager->getNode(t_index)->getIsActive())
+            if(pNodeManager->getNode(t_index)->getIsFiring())
             {
 
                 if(movType == "drag" || movType == "drag_c")
@@ -174,7 +174,7 @@ void oscManager::updateOutMessages()
         if(it->second->getChanged() == CLAMOUR_ON_OFF)
         {
 
-            if(it->second->getIsActive())
+            if(it->second->getIsFiring())
             {
                 startSynth(it->second);
             }
@@ -188,7 +188,7 @@ void oscManager::updateOutMessages()
         else if(it->second->getChanged() == CLAMOUR_SOUND)
         {
 
-            if(it->second->getIsActive())
+            if(it->second->getIsFiring())
             {
                 stopSynth(it->second);
                 startSynth(it->second);
@@ -220,7 +220,7 @@ void oscManager::updateOutMessages()
 
             zit->second->setChanged(CLAMOUR_NONE);
 
-            if(zit->second->getIsReacting())
+            if(zit->second->getIsFiring())
             {
 
                 //send an osc to supercollider
@@ -353,14 +353,14 @@ void oscManager::setControl(vector<string> clients, string control)
     for(int i = 0; i < clients.size(); i++)
     {
 
+        //makes more sense in ofApp
+
         if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
         {
             pNodeManager->switchOnNode(clients[i]);
-
         }
         else
         {
-
             pNodeManager->switchOffNode(clients[i]);
         }
 

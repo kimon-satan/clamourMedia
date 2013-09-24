@@ -12,9 +12,6 @@ public:
     zone();
     virtual ~zone();
 
-    void update();
-    void react();
-
     void addNode(ofPtr<clamourNode> p);
     void removeNode(ofPtr<clamourNode> p);
 
@@ -57,10 +54,6 @@ private:
 
     //draw stuff
     bool isHidden;
-
-    int reactTotal;
-    int reactCount;
-    float reactSecs;
 
     //collision stuff
     bool isClosed;

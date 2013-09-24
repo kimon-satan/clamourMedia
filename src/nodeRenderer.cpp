@@ -21,7 +21,7 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes){
 
     for(map<string, ofPtr<clamourNode> >::iterator it = nodes.begin(); it != nodes.end(); it ++){
 
-        if(it->second->getIsActive()){
+        if(it->second->getIsFiring()){
 
             string dt = it->second->getDrawType();
             if(dt == "DEBUG")
@@ -75,7 +75,7 @@ void nodeRenderer::drawRound(ofPtr<clamourNode> n){
     std::tr1::shared_ptr<roundDrawData> rdd(dynamic_pointer_cast <roundDrawData> (n->getDrawData()));
 
 
-    ofSetColor(255);
+    ofSetColor(255 * n->getEnvVal());
     float t_size = rdd->getParameter("size").abs_val;
 
     ofNoFill();
