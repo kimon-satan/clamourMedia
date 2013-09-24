@@ -262,13 +262,18 @@ void ofApp::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty
                 t_cmd.targets.push_back(XML.getValue("TARGET", "",tgt));
             }
 
+            int numZTargets = XML.getNumTags("Z_TARGET");
+
+            for(int tgt = 0; tgt < numZTargets; tgt++){
+                t_cmd.zTargets.push_back(XML.getValue("Z_TARGET", "",tgt));
+            }
+
             t_cmd.stage = stage;
             t_cmd.priority = pty;
 
             parseActions(t_cmd, XML);
 
             gm->addCommand(t_cmd);
-
 
             XML.popTag(); // COMMAND
         }
@@ -296,6 +301,7 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("ATTACK_SECS"))cmd.floatParams["ATTACK_SECS"] = XML.getValue("ATTACK_SECS", 0.0);
     if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
     if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
+    if(XML.tagExists("ENV_TYPE"))cmd.stringParams["ENV_TYPE"] = XML.getValue("ENV_TYPE", "default");
 
     if(XML.tagExists("PATTERN"))cmd.stringParams["PATTERN"] = XML.getValue("PATTERN", "default");
     if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.5);
@@ -494,7 +500,16 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "SET_SOUND_TYPE"){
 
-            mNodeManager->setNodeSoundType(clients, tComms[i].stringParams["SOUND_TYPE"]);
+            if(clients.size() > 0){
+
+                mNodeManager->setNodeSoundType(clients, tComms[i].stringParams["SOUND_TYPE"]);
+            }
+
+            if(tComms[i].zTargets.size() > 0){
+
+                mZoneManager->setZoneSoundType(tComms[i].zTargets, tComms[i].stringParams["SOUND_TYPE"]);
+            }
+
 
         }else if(tComms[i].mCommand == "SET_SOUND_PARAM"){
 
@@ -529,6 +544,7 @@ void ofApp::implementStage(){
                 zone z;
                 z.setName(tComms[i].stringParams["NAME"]);
                 z.setShape_rel(ofVec2f(tComms[i].floatParams["X"],tComms[i].floatParams["Y"]),tComms[i].floatParams["RADIUS"]);
+                z.setEnvType(tComms[i].stringParams["ENV_TYPE"]);
 
                 mZoneManager->createZone(z);
 

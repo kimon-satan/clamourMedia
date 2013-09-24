@@ -55,6 +55,9 @@ nodeManager::nodeManager(vector<string> indexes)
 void nodeManager::beginShift(string t_index, float x, float y)
 {
 
+    mNodes[t_index]->updateHistory(); //set the mean pos to the raw Pos
+  //  mNodes[t_index]->setRawPos_rel(mNodes[t_index]->getMeanPos_rel()); // update the rawPos
+  //  mNodes[t_index]->clearHistory();
     mNodes[t_index]->resetShift(x, y);
 
 }
@@ -165,7 +168,7 @@ void nodeManager::switchOffNode(string t_index)
 
     if(mNodes[t_index]->getIsFired()){
         mNodes[t_index]->setIsFired(false);
-        mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
+        if(mNodes[t_index]->getEnvType() == CLAMOUR_ASR)mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
         mNodes[t_index]->clearHistory();
     }
 
@@ -192,6 +195,7 @@ void nodeManager::switchOnNode(string t_index, float x, float y)
 void nodeManager::updateNodePosition(string t_index, float x, float y)
 {
     mNodes[t_index]->setRawPos_rel(ofVec2f(x,y));
+    if(mNodes[t_index]->getChanged() == CLAMOUR_NONE)mNodes[t_index]->setChanged(CLAMOUR_POSITION); //don't let position override on/off messages
 }
 
 void nodeManager::shiftNodePosition(string t_index, float x, float y)
@@ -200,16 +204,15 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y)
     if(!mNodes[t_index]->getIsDragOn())return;
     ofVec2f s(x,y);
     ofVec2f p = mNodes[t_index]->getShiftStart() + s * mNodes[t_index]->getShiftAmount();
-
     mNodes[t_index]->setRawPos_rel(p);
-    mNodes[t_index]->setChanged(CLAMOUR_POSITION);
+    if(mNodes[t_index]->getChanged() == CLAMOUR_NONE)mNodes[t_index]->setChanged(CLAMOUR_POSITION);
 
 }
 
 
 
 map<string, ofPtr<clamourNode> > nodeManager::getNodes(){
-        return mNodes;
+    return mNodes;
 }
 
 ofVec2f nodeManager::getNodePosition(string index, bool isRel)

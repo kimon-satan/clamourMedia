@@ -16,7 +16,7 @@ soundDictionary::soundDictionary(){
 
     ofxXmlSettings XML;
 
-    if(XML.loadFile("/home/kimonsatan/Documents/SuperCollider/Code/clamourSC/clamourSynths.xml")){
+    if(XML.loadFile("XMLs/clamourSynths.xml")){
 
         if(XML.pushTag("CLAMOUR_SYNTHS")){
 

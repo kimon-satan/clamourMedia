@@ -220,6 +220,70 @@ void zoneManager::destroyAllZones()
 
 }
 
+void zoneManager::setZoneDrawType(vector<string> indexes, string dt)
+{
+
+    for(int i = 0; i < indexes.size(); i ++)
+    {
+
+        mZones[indexes[i]]->setDrawType(dt);
+
+    }
+
+}
+
+
+void zoneManager::setZoneSoundType(vector<string> indexes, string st)
+{
+
+    baseData sd = mSoundDictionary.createSoundData(st);
+
+    for(int i = 0; i < indexes.size(); i ++)
+    {
+
+        mZones[indexes[i]]->setSoundData(sd);
+        if(mZones[indexes[i]]->getIsFiring())mZones[indexes[i]]->setChanged(CLAMOUR_SOUND);
+
+    }
+
+}
+
+
+void zoneManager::setZoneDrawParam(vector<string> indexes, parameter p)
+{
+
+    for(int i = 0; i < indexes.size(); i ++)
+    {
+
+        //FIX_ME either give the zone a position or parameter needs a non position initializer
+
+        p.init(ofVec2f(0.5,0.5)); //if mapped randomly only reset that parameter
+        mZones[indexes[i]]->getDrawData()->setParameter(p);
+
+    }
+
+}
+
+
+void zoneManager::setZoneSoundParam(vector<string> indexes, parameter p)
+{
+
+    //sorry could be neater but it's late !
+
+    parameter t = mZones[indexes[0]]->getSoundData()->getParameter(p.name); //a copy of the original
+    p.index = t.index; //copy these over
+    p.warp = t.warp;
+
+    for(int i = 0; i < indexes.size(); i ++)
+    {
+
+        p.init(ofVec2f(0.5,0.5));//if mapped randomly only reset that parameter
+        mZones[indexes[i]]->getSoundData()->setParameter(p);
+
+    }
+
+}
+
 map<string, ofPtr<zone> > zoneManager::getZones()
 {
     return mZones;

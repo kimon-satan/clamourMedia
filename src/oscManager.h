@@ -50,11 +50,11 @@ class oscManager{
     //to SC
 
     void sendInit();
-    void startSynth(ofPtr<clamourNode> n);
+
     void stopSynth(ofPtr<clamourNode> n);
     void updateSynth(ofPtr<clamourNode> n);
 
-    void startSynth(ofPtr<zone> z);
+    void startSynth(ofPtr<baseZode> z);
 
     //getters and setters (internal)
     string getMsgString(int mt);

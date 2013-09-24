@@ -64,8 +64,9 @@ void oscManager::updateInMessages()
             float x = m.getArgAsFloat(3);
             float y = m.getArgAsFloat(4);
             string movType = m.getArgAsString(5);
+            ofPtr<clamourNode> n = pNodeManager->getNode(t_index);
 
-            if(pNodeManager->getNode(t_index)->getIsFiring())
+            if(n->getIsFiring())
             {
 
                 if(movType == "drag" || movType == "drag_c")
@@ -130,6 +131,7 @@ void oscManager::updateInMessages()
         else if(m.getAddress() == "/node/off")
         {
 
+            pNodeManager->getNode(t_index)->setIsDragOn(false); //prevents shifting call before on call
             pNodeManager->switchOffNode(t_index);
 
         }
@@ -174,7 +176,8 @@ void oscManager::updateOutMessages()
         if(it->second->getChanged() == CLAMOUR_ON_OFF)
         {
 
-            if(it->second->getIsFiring())
+
+            if(it->second->getIsFired())
             {
                 startSynth(it->second);
             }
@@ -462,7 +465,7 @@ void oscManager::sendInit()
 
 }
 
-void oscManager::startSynth(ofPtr<clamourNode> n)
+void oscManager::startSynth(ofPtr<baseZode> n)
 {
 
     ofPtr<baseData> sd = n->getSoundData();
@@ -472,6 +475,12 @@ void oscManager::startSynth(ofPtr<clamourNode> n)
     m.addStringArg(n->getName());
 
     m.addStringArg(sd->getName());
+
+    string et = (n->getEnvType() == CLAMOUR_ASR)? "ASR" : "AR"; //might change to string later
+    m.addStringArg(et);
+    m.addFloatArg(n->getAttSecs());
+    m.addFloatArg(n->getDecSecs());
+
 
     vector<float> vals = sd->getAbsVals();
 
@@ -485,28 +494,7 @@ void oscManager::startSynth(ofPtr<clamourNode> n)
 
 }
 
-void oscManager::startSynth(ofPtr<zone> z)
-{
 
-//    ofPtr<baseData> sd = n->getSoundData();
-
-    ofxOscMessage m;
-    m.setAddress("/startZoneSynth");
-    m.addStringArg(z->getName());
-
-   /* m.addStringArg(sd->getName());
-
-    vector<float> vals = sd->getAbsVals();
-
-    for(int i = 0; i < vals.size(); i++)
-    {
-        m.addFloatArg(vals[i]);
-    }*/
-
-    SCsender.sendMessage(m);
-    logMessages(m, CLAMOUR_MSG_SC_OUT);
-
-}
 
 void oscManager::updateSynth(ofPtr<clamourNode> n)
 {

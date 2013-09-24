@@ -42,6 +42,12 @@ public:
     float getEnvVal();
     float getPostVal();
 
+    float getAttSecs();
+    float getDecSecs();
+
+    envType getEnvType();
+    void setEnvType(string s);
+
 protected:
 
     string name;

@@ -53,7 +53,7 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
     if(ofRandom(1) < fdd->getParameter("flicker").abs_val){
 
         glBegin(GL_POINTS);
-        glColor3ub(255,255,255);
+        glColor3ub(255 * n->getEnvVal() ,255 * n->getEnvVal(),255 * n->getEnvVal());
 
         float size = fdd->getParameter("size").abs_val;
 

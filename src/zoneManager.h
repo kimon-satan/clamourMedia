@@ -22,6 +22,13 @@ class zoneManager
 
         map<string, ofPtr<zone> > getZones();
 
+        //could be in a base but not much advantage ?
+
+        void setZoneDrawParam(vector<string> indexes, parameter p);
+        void setZoneDrawType(vector<string> indexes, string st);
+        void setZoneSoundParam(vector<string> indexes, parameter p);
+        void setZoneSoundType(vector<string> indexes, string st);
+
 
     private:
 
@@ -31,6 +38,8 @@ class zoneManager
         void makeReaction(ofPtr<zone> z);
 
         map <string, ofPtr<zone> > mZones;
+
+        soundDictionary mSoundDictionary;
 };
 
 #endif // ZONEMANAGER_H

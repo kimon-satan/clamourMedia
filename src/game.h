@@ -23,6 +23,7 @@ struct command{
     };
 
     vector<string> targets;
+    vector<string> zTargets;
     int stage;
     int priority;
 

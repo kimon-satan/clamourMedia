@@ -49,6 +49,8 @@ void clamourNode::updateHistory()
 
     meanPos_rel.set(p);
 
+
+
 }
 
 void clamourNode::modifyHistory(){
@@ -137,8 +139,10 @@ void clamourNode::setRow(string s)
 
 void clamourNode::setRawPos_rel(ofVec2f v)
 {
+
     rawPos_rel = v;
 }
+
 ofVec2f clamourNode::getMeanPos_rel()
 {
     return meanPos_rel;
@@ -147,8 +151,9 @@ ofVec2f clamourNode::getMeanPos_rel()
 void clamourNode::setRawPos_abs(ofVec2f v)
 {
 
-    float f = (float)screenData::height/screenData::width;
+    float f = (float)screenData::height/(float)screenData::width;
     rawPos_rel.set(v.x * f, v.y);
+    if(name == "A_1")cout << rawPos_rel << endl;
 
 }
 

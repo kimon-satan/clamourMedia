@@ -222,3 +222,11 @@ float baseZode::getPostVal()
 {
     return postVal;
 }
+
+float baseZode::getAttSecs(){return attSecs.abs_val;}
+float baseZode::getDecSecs(){return decSecs.abs_val;}
+
+envType baseZode::getEnvType(){return mEnvType;}
+void baseZode::setEnvType(string s){
+    mEnvType = (s == "ASR")?CLAMOUR_ASR : CLAMOUR_AR;
+}
