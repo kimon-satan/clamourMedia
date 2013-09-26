@@ -58,51 +58,74 @@ string clientManager::createCtrlIndex(int len)
 
 }
 
-void clientManager::createGroup(vector<string> selectors, string name)
+void clientManager::createGroup(vector<selector> selectors, string name)
 {
 
-    ofPtr<group> grp = ofPtr<group>(new group());
-    grp->name = name;
-    grp->indexes = mPlayerIndexes; //start with all players
-
-    selectClients(selectors, grp);
-
-    //will eventually need a safety for double allocation
-    mGroups[grp->name] = grp;
-
+   createGroup(mPlayerIndexes, selectors, name); //start with all players
 
 }
 
-void clientManager::createGroup(vector<string> clients, vector<string> selectors, string name)
+void clientManager::createGroup(vector<string> clients, vector<selector> selectors, string name)
 {
 
     ofPtr<group> grp = ofPtr<group>(new group());
     grp->name = name;
-    grp->indexes = clients; //start with all players
+    grp->indexes = clients;
 
-    selectClients(selectors, grp);
+    if(selectors.size() > 0){
+        selectClients(selectors, grp);
+    } //otherwise its just a simple merge
 
     mGroups[grp->name] = grp;
 
 }
 
-void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
+void clientManager::createGroup(vector<string> clients, vector<selector> selectors, string name, vector<string> subFrmGrps){
+
+    createGroup(clients, selectors, name);
+
+    //now remove any clients from the listed groups
+    for(int i = 0; i < subFrmGrps.size(); i ++){
+        //for each sub grp
+
+        vector<string>::iterator it =  mGroups[subFrmGrps[i]]->indexes.begin();
+
+        while(it != mGroups[subFrmGrps[i]]->indexes.end()){ //look through each of the terms in the subFrmGrp
+
+            if(find(mGroups[name]->indexes.begin(), mGroups[name]->indexes.end(),*it)!= mGroups[name]->indexes.end()){ //if it matches one in the new grp
+
+                it = mGroups[subFrmGrps[i]]->indexes.erase(it); //erase it from the subFrm
+
+            }else{
+
+                ++it;
+            }
+        }
+
+    }
+
+
+}
+
+
+
+void clientManager::selectClients(vector<selector> selectors, ofPtr<group> grp)
 {
 
-    for(int selector = 0; selector < selectors.size(); selector++)
+    for(int tSel = 0; tSel < selectors.size(); tSel++)
     {
 
         vector<string> t_indexes;
 
-        if(selectors[selector] == "all")
+        if(selectors[tSel].sType== "all")
         {
             t_indexes = mPlayerIndexes;
         }
-        else if(selectors[selector] == "online")
+        else if(selectors[tSel].sType == "online")
         {
             t_indexes = mOnlineClients;
         }
-        else if(selectors[selector] == "single")
+        else if(selectors[tSel].sType == "single")
         {
 
             if(grp->indexes.size() > 1)
@@ -116,7 +139,7 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
             }
 
         }
-        else if(selectors[selector] == "pair")
+        else if(selectors[tSel].sType == "pair")
         {
 
             if(grp->indexes.size() > 2)
@@ -134,6 +157,22 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
                 t_indexes = grp->indexes;
             }
 
+        }else if(selectors[tSel].sType == "random"){
+
+            if(grp->indexes.size() > selectors[tSel].numPlayers){
+
+                random_shuffle(grp->indexes.begin(), grp->indexes.end());
+
+                for(int i = 0; i < selectors[tSel].numPlayers; i++){
+                    t_indexes.push_back(grp->indexes[i]);
+                }
+
+            }
+            else
+            {
+                t_indexes = grp->indexes;
+            }
+
         }
 
         vector<string>::iterator it;
@@ -141,7 +180,7 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
         for(it = grp->indexes.begin(); it !=grp->indexes.end(); it++)
         {
 
-            if(selectors[selector] == "odd")
+            if(selectors[tSel].sType == "odd")
             {
 
                 if(ofToInt((*it).substr(2))%2 != 0)
@@ -150,7 +189,7 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
                 }
 
             }
-            else if(selectors[selector] == "even")
+            else if(selectors[tSel].sType == "even")
             {
 
                 if(ofToInt((*it).substr(2))%2 == 0)
@@ -159,7 +198,7 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
                 }
 
             }
-            else if(selectors[selector] == "right")
+            else if(selectors[tSel].sType == "right")
             {
 
                 if(ofToInt((*it).substr(2)) <= NUM_SEATS/2)
@@ -168,7 +207,7 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
                 }
 
             }
-            else if(selectors[selector] == "left")
+            else if(selectors[tSel].sType == "left")
             {
 
                 if(ofToInt((*it).substr(2)) > NUM_SEATS/2 )
@@ -177,28 +216,51 @@ void clientManager::selectClients(vector<string> selectors, ofPtr<group> grp)
                 }
 
             }
-            else if(selectors[selector] == "back")
+            else if(selectors[tSel].sType == "back")
             {
 
-                string s = (*it).substr(0,1);
-                int i = s[0] - 64; //convert into an integer
-
-                if(i > NUM_ROWS/2)
+                if(clamourUtils::rowToInt(*it) > NUM_ROWS/2)
                 {
                     t_indexes.push_back((*it));
                 }
 
             }
-            else if(selectors[selector] == "front")
+            else if(selectors[tSel].sType == "front")
             {
 
-                string s = (*it).substr(0,1);
-                int i = s[0] - 64; //convert into an integer
-
-                if(i <= NUM_ROWS/2)
+                if(clamourUtils::rowToInt(*it) <= NUM_ROWS/2)
                 {
                     t_indexes.push_back((*it));
                 }
+
+            }else if(selectors[tSel].sType == "le_row"){
+
+                if(clamourUtils::rowToInt(*it) <= clamourUtils::rowToInt(selectors[tSel].row))
+                {
+                    t_indexes.push_back((*it));
+                }
+
+            }else if(selectors[tSel].sType == "ge_row"){
+
+                if(clamourUtils::rowToInt(*it) >= clamourUtils::rowToInt(selectors[tSel].row))
+                {
+                    t_indexes.push_back((*it));
+                }
+
+            }else if(selectors[tSel].sType == "le_seat"){
+
+                if(ofToInt((*it).substr(2)) <= selectors[tSel].seat )
+                {
+                    t_indexes.push_back((*it));
+                }
+
+            }else if(selectors[tSel].sType == "ge_seat"){
+
+                if(ofToInt((*it).substr(2)) >= selectors[tSel].seat )
+                {
+                    t_indexes.push_back((*it));
+                }
+
             }
         }
 

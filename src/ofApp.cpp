@@ -12,8 +12,8 @@ void ofApp::setup(){
 
 	ofxFensterManager::get()->setupWindow(&mDisplay);
 
-	 for(int i = 0; i < NUM_ROWS; i++){
-        for(int j = 0; j < NUM_SEATS; j++){
+	 for(int i = 0; i < NUM_SEATS; i++){
+        for(int j = 0; j < NUM_ROWS; j++){
 
             string t_index = ofToString(char(65 + j)) + "_" + ofToString(i + 1);
             mPlayerIndexes.push_back(t_index);
@@ -171,11 +171,17 @@ void ofApp::loadXML(){
 
                         int numSelect = XML.getNumTags("SELECTOR");
 
-                        vector<string> selectors;
+                        //only simple selectors for now ... would require a different XML interface
+                        vector<selector> tSels;
 
-                        for(int sel = 0; sel < numSelect; sel++)selectors.push_back(XML.getValue("SELECTOR", "all", sel));
+                        for(int sel = 0; sel < numSelect; sel++){
+                                selector t;
+                                t.sType = XML.getValue("SELECTOR", "all", sel);
+                                tSels.push_back(t);
+                        }
 
-                        mClientManager->createGroup(selectors, XML.getValue("NAME","default"));
+
+                        mClientManager->createGroup(tSels, XML.getValue("NAME","default"));
 
 
                     }
@@ -292,6 +298,7 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("SOUND_TYPE"))cmd.stringParams["SOUND_TYPE"] = XML.getValue("SOUND_TYPE","");
     if(XML.tagExists("SELECTORS"))cmd.stringParams["SELECTORS"] = XML.getValue("SELECTORS","");
 
+    //should really allow multiple setting of params
     if(XML.tagExists("PARAM"))cmd.stringParams["PARAM"] = XML.getValue("PARAM", "");
     if(XML.tagExists("MIN_VAL"))cmd.floatParams["MIN_VAL"] = XML.getValue("MIN_VAL", 0.0);
     if(XML.tagExists("MAX_VAL"))cmd.floatParams["MAX_VAL"] = XML.getValue("MAX_VAL", 1.0);
@@ -309,6 +316,34 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("DIM_P"))cmd.intParams["DIM_P"] = XML.getValue("DIM_P", 0);
     if(XML.tagExists("POS_P"))cmd.intParams["POS_P"] = XML.getValue("POS_P", 0);
     if(XML.tagExists("RADIUS"))cmd.floatParams["RADIUS"] = XML.getValue("RADIUS", 0.25);
+
+    //special stuff
+
+    if(cmd.mCommand == "NEW_GROUP"){
+
+        if(XML.tagExists("RMV_FROM"))cmd.stringParams["RMV_FROM"] = XML.getValue("RMV_FROM","");
+
+        int numSelectors = XML.getNumTags("SELECTOR");
+
+        for(int i = 0; i < numSelectors; i ++){
+
+            if(XML.pushTag("SELECTOR", i)){
+
+               selector ts;
+
+               ts.sType = XML.getValue("S_TYPE","none");
+               ts.row = XML.getValue("ROW", "A");
+               ts.seat = XML.getValue("SEAT", 1);
+               ts.numPlayers = XML.getValue("NUM_P",1);
+
+               cmd.selectors.push_back(ts);
+
+               XML.popTag();
+
+            }
+        }
+
+    }
 
 }
 
@@ -533,11 +568,34 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "NEW_GROUP"){
 
-            string s_string = tComms[i].stringParams["SELECTORS"];
+            if(tComms[i].selectors.size() == 0){
 
-            vector<string> selectors = ofSplitString(s_string, ",");
+                string s_string = tComms[i].stringParams["SELECTORS"];
 
-            mClientManager->createGroup(clients, selectors, tComms[i].stringParams["NAME"]);
+                vector<string> tSelNames = ofSplitString(s_string, ",");
+
+                for(int ts = 0; ts < tSelNames.size(); ts++){
+                    selector t;
+                    t.sType = tSelNames[ts];
+                    tComms[i].selectors.push_back(t);
+                }
+
+            }
+
+            if(tComms[i].stringParams.find("RMV_FROM") != tComms[i].stringParams.end()){
+
+
+                vector<string> rNames = ofSplitString(tComms[i].stringParams["RMV_FROM"], ",");
+                mClientManager->createGroup(clients, tComms[i].selectors, tComms[i].stringParams["NAME"], rNames);
+
+
+            }else{
+
+                mClientManager->createGroup(clients, tComms[i].selectors, tComms[i].stringParams["NAME"]);
+
+            }
+
+
 
         }else if(tComms[i].mCommand == "CREATE_ZONE"){
 

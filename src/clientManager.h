@@ -11,6 +11,16 @@ struct group{
 
 };
 
+struct selector{
+
+    string sType;
+    int seat;
+    string row;
+    int numPlayers;
+    //perhaps more
+
+};
+
 class clientManager
 {
     public:
@@ -23,9 +33,10 @@ class clientManager
         void setCtrlIndexes(vector<string> clients, int len);
         string getCtrlIndex(string client);
         string createCtrlIndex(int len);
-        void createGroup(vector<string> selectors, string name);
-        void createGroup(vector<string> clients, vector<string> selectors, string name);
-        void selectClients(vector<string> selectors, ofPtr<group> grp);
+        void createGroup(vector<selector> selectors, string name);
+        void createGroup(vector<string> clients, vector<selector> selectors, string name);
+        void createGroup(vector<string> clients, vector<selector> selectors, string name, vector<string> rmvFrmGrps);
+        void selectClients(vector<selector> selectors, ofPtr<group> grp);
         ofPtr<group> getGroup(string n);
 
     private:

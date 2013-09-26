@@ -1,8 +1,10 @@
 #ifndef CLAMOURUTILS_H
 #define CLAMOURUTILS_H
 
-#define NUM_ROWS 10
-#define NUM_SEATS 10
+#define NUM_ROWS 12
+#define NUM_SEATS 13
+
+#include "ofMain.h"
 
 enum changeType{
 
@@ -31,6 +33,14 @@ public:
 
 };
 
+
+class clamourUtils{
+
+    public:
+
+    static int rowToInt(string r);
+
+};
 
 
 

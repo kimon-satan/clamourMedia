@@ -10,7 +10,7 @@
 #define __clamourMedia__game__
 
 #include "ofMain.h"
-
+#include "clientManager.h" //for selectors
 
 
 struct command{
@@ -24,6 +24,7 @@ struct command{
 
     vector<string> targets;
     vector<string> zTargets;
+    vector<selector> selectors;
     int stage;
     int priority;
 
