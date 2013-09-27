@@ -45,6 +45,12 @@ public:
     float getAttSecs();
     float getDecSecs();
 
+    void setAttSecs(float f);
+    void setDecSecs(float f);
+
+    void setAttSecs(parameter p);
+    void setDecSecs(parameter p);
+
     envType getEnvType();
     void setEnvType(string s);
 

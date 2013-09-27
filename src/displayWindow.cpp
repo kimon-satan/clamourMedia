@@ -6,7 +6,7 @@ void displayWindow::setup()
 {
 
     setWindowShape(screenData::width, screenData::height);
-    setWindowPosition(0, 0);
+    setWindowPosition(50, 50);
     setWindowTitle("CLAMOUR DISPLAY");
     smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
 

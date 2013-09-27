@@ -1,4 +1,4 @@
-ofxFenster
 ofxOsc
-ofxUI
 ofxXmlSettings
+ofxFenster
+ofxUI

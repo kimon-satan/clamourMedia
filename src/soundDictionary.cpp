@@ -66,7 +66,7 @@ soundDictionary::soundDictionary(){
 
     }else{
 
-        cout << "clamourSynths.xml has not been found /n";
+        cout << "clamourSynths.xml has not been found \n";
     };
 
 

@@ -12,7 +12,7 @@ baseZode::baseZode()
     envVal = 0;
     postVal = 0;
 
-    attSecs.abs_val = 0.1;
+    attSecs.abs_val = 0.1; //need to be xml methods for this
     decSecs.abs_val = 2;
     postSecs.abs_val = 0;
 
@@ -139,6 +139,7 @@ void baseZode::react()
     totalAtt = attCount;
 
 
+
 }
 
 void baseZode::setDrawType(string dt)
@@ -221,6 +222,33 @@ float baseZode::getEnvVal()
 float baseZode::getPostVal()
 {
     return postVal;
+}
+
+void baseZode::setAttSecs(float f){
+
+    attSecs.abs_val = f;
+    attSecs.map_type = CLAMOUR_MAP_FIXED;
+
+}
+
+void baseZode::setDecSecs(float f){
+
+    decSecs.abs_val = f;
+    decSecs.map_type = CLAMOUR_MAP_FIXED;
+
+}
+
+
+void baseZode::setAttSecs(parameter p){
+
+    attSecs = p;
+
+}
+
+void baseZode::setDecSecs(parameter p){
+
+    decSecs = p;
+
 }
 
 float baseZode::getAttSecs(){return attSecs.abs_val;}

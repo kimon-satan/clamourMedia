@@ -45,8 +45,8 @@ public:
     void setIsOccupied(bool b);
     bool getIsOccupied();
 
-    bool getIsReacting();
-    float getReactProp();
+   // bool getIsReacting();
+  //  float getReactProp();
 
 private:
 

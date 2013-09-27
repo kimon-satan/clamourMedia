@@ -515,6 +515,19 @@ void ofApp::implementStage(){
 
             mOscManager->setText(clients, tComms[i].stringParams["TEXT"]);
 
+        }else if(tComms[i].mCommand == "SET_NODE_ENV"){
+
+            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end()){
+                mNodeManager->setNodeAttSecs(clients,tComms[i].floatParams["ATTACK_SECS"]);
+            }
+
+            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end()){
+                mNodeManager->setNodeDecSecs(clients,tComms[i].floatParams["DECAY_SECS"]);
+            }
+
+            //TODO add parameter versions
+
+
         }else if(tComms[i].mCommand == "SET_DRAW_TYPE"){
 
             mNodeManager->setNodeDrawType(clients, tComms[i].stringParams["DRAW_TYPE"]);
@@ -556,8 +569,8 @@ void ofApp::implementStage(){
             title t;
 
             t.text = tComms[i].stringParams["TEXT"];
-            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["ATTACK_SECS"];
-            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.begin())t.att_secs = tComms[i].floatParams["DECAY_SECS"];
+            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end())t.att_secs = tComms[i].floatParams["ATTACK_SECS"];
+            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end())t.att_secs = tComms[i].floatParams["DECAY_SECS"];
 
             mSplashManager->addTitle(tComms[i].stringParams["NAME"], t);
 
@@ -603,6 +616,14 @@ void ofApp::implementStage(){
                 z.setName(tComms[i].stringParams["NAME"]);
                 z.setShape_rel(ofVec2f(tComms[i].floatParams["X"],tComms[i].floatParams["Y"]),tComms[i].floatParams["RADIUS"]);
                 z.setEnvType(tComms[i].stringParams["ENV_TYPE"]);
+
+                //simple attack & decay setting
+                if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end()){
+                    z.setAttSecs(tComms[i].floatParams["ATTACK_SECS"]);
+                }
+                if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end()){
+                    z.setDecSecs(tComms[i].floatParams["DECAY_SECS"]);
+                }
 
                 mZoneManager->createZone(z);
 

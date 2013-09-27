@@ -13,7 +13,7 @@ oscManager::oscManager()
 {
 
     receiver.setup(METEOR_IN_PORT);
-    sender.setup("localhost", METEOR_OUT_PORT);
+    sender.setup("192.168.2.200", METEOR_OUT_PORT);
     SCsender.setup("localhost", SC_OUT_PORT);
 
     for(int i = 0; i < 3; i ++)

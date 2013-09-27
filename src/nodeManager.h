@@ -39,6 +39,11 @@ class nodeManager{
 
     void distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp);
 
+    void setNodeAttSecs(vector<string> indexes, float att);
+    void setNodeDecSecs(vector<string> indexes, float dec);
+
+    //add parameter versions for randomisation later
+
     void setNodeDrawType(vector<string> indexes, string dt);
     void setNodeDrawParam(vector<string> indexes, parameter p);
     void setNodeSoundType(vector<string> indexes, string st);

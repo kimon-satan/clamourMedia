@@ -228,6 +228,19 @@ ofPtr<clamourNode> nodeManager::getNode(string index)
     return mNodes[index];
 }
 
+void nodeManager::setNodeAttSecs(vector<string> indexes, float att){
+
+    for(int i = 0; i < indexes.size(); i ++)mNodes[indexes[i]]->setAttSecs(att);
+
+}
+
+void nodeManager::setNodeDecSecs(vector<string> indexes, float dec){
+
+    for(int i = 0; i < indexes.size(); i ++)mNodes[indexes[i]]->setDecSecs(dec);
+
+}
+
+
 void nodeManager::setNodeDrawType(vector<string> indexes, string dt)
 {
 
