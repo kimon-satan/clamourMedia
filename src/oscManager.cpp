@@ -357,6 +357,7 @@ void oscManager::setControl(vector<string> clients, string control)
     {
 
         //makes more sense in ofApp
+        pNodeManager->wakeupNode(clients[i]);
 
         if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
         {

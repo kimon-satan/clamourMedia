@@ -388,6 +388,9 @@ void ofApp::loadZone(zone &z, ofxXmlSettings &XML){
             XML.popTag();
         }
 
+        //TODO reactions loader here
+        //z.addReaction ... problem with ofPtr and copy hmmm...
+
 }
 
 void ofApp::loadRule(zoneRule &r, ofxXmlSettings &XML){

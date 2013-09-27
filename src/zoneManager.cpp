@@ -17,12 +17,12 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     while(n_it != tNodes.end())
     {
 
-        if(!n_it->second->getIsFiring())
+        if(n_it->second->getIsSleeping())
         {
 
             if(n_it->second->getZonePair())
             {
-                if(!n_it->second->getZonePair()->getIsLocked()){
+                if(!n_it->second->getZonePair()->getIsClosedIn()){
                     n_it->second->getZonePair()->removeNode(n_it->second);
                     n_it->second->resetZonePair();
                 }
@@ -36,7 +36,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
         for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
         {
 
-            if(z_it->second->getIsLocked()){
+            if(z_it->second->getIsClosedIn()){
 
                 if(n_it->second->getZonePair() == z_it->second){
                     //only for already captured nodes
@@ -55,7 +55,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
 
                 //new nodes inside the zone
 
-                if(z_it->second->getIsClosed()){
+                if(z_it->second->getIsClosedOut()){
                     repellNode(n_it->second, z_it->second);
                 }else{
 
@@ -71,23 +71,20 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
                     z_it->second->addNode(n_it->second);
 
                     //now update zone reactions
-                    if(getReaction(z_it->second))makeReaction(z_it->second);
+                    if(getOnTrig(z_it->second))onReact(z_it->second);
 
                     break; //no need to check any more zones for this node
                 }
 
             }
             else if(n_it->second->getZonePair() == z_it->second){
-
                 z_it->second->removeNode(n_it->second);
                 n_it->second->resetZonePair();
-
             }
 
         }
 
         ++n_it;
-
     }
 
     //call update method here which resets closed zones and increments reactions etc
@@ -95,10 +92,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
     {
         z_it->second->update();
-        if(z_it->second->getCaptureNodes().size() == 0){ //off rule here
-                z_it->second->setIsLocked(false);
-                z_it->second->setIsFired(false);
-        }
+        if(getOffTrig(z_it->second))offReact(z_it->second);
 
     }
 
@@ -168,27 +162,80 @@ bool zoneManager::getIsRuleMet(ofPtr<zone> z, zoneRule r){
 
 }
 
-bool zoneManager::getReaction(ofPtr<zone> z){
-
+bool zoneManager::getOnTrig(ofPtr<zone> z){
 
     if(z->getIsFired())return false; //this could be variable
 
-    zoneRule zr = z->getOnRule();
+    zoneRule on_zr = z->getOnRule();
+    zoneRule off_zr = z->getOffRule();
 
-    return getIsRuleMet(z,zr);
+    if(!off_zr.isEnabled){
+        return getIsRuleMet(z,on_zr);
+    }else{
+        return getIsRuleMet(z, off_zr)? false : getIsRuleMet(z,on_zr); //off overrides on
+    }
 
 }
 
-void zoneManager::makeReaction(ofPtr<zone> z){
+bool zoneManager::getOffTrig(ofPtr<zone> z){
+
+
+    if(!z->getIsFired())return false;
+
+    zoneRule on_zr = z->getOnRule();
+    zoneRule off_zr = z->getOffRule();
+
+    if(!off_zr.isEnabled){
+        return !getIsRuleMet(z,on_zr);// will fire when on rule is no longer met
+    }else{
+        return getIsRuleMet(z, off_zr); // off overrides on
+    }
+
+}
+
+
+void zoneManager::onReact(ofPtr<zone> z){
 
     z->setIsFired(true);
-    z->react(); //start the clock ticking
+    z->react();
     z->setChanged(CLAMOUR_ON_OFF);
-
-    //whatever reactions here
-    z->setIsLocked(true);
+    implementReactions(z, true);
 
 }
+
+void zoneManager::offReact(ofPtr<zone> z){
+
+    z->setIsFired(false);
+    if(z->getEnvType() == CLAMOUR_ASR)z->setChanged(CLAMOUR_ON_OFF);
+    implementReactions(z, false);
+
+}
+
+void zoneManager::implementReactions(ofPtr<zone> z, bool isOn){
+
+    vector<ofPtr<zoneEffect> > r = z->getReactions(); //TODO copy the reactions out and replace them at the end of this method
+                                                     // ptrs don't work here
+    vector<ofPtr<zoneEffect> >::iterator it = r.begin();
+
+    while(it != r.end()){
+
+        if(((*it)->trigType == "ON" && !isOn) ||
+            ((*it)->trigType == "OFF" && isOn))continue; //this action shouldn't be completed now
+
+        bool isReverse = ((*it)->trigType == "ON_OFF" && !isOn);
+
+        if((*it)->effectType == "closeInZone"){
+             z->setIsClosedIn(!isReverse);
+        }else if((*it)->effectType == "openInZone"){
+             z->setIsClosedIn(isReverse);
+        }else if((*it)->effectType == "closeOutZone"){
+            z->setIsClosedOut(!isReverse);
+        }else if((*it)->effectType == "openOutZone"){
+            z->setIsClosedOut(isReverse);
+        }
+        ++it;
+    }
+};
 
 void zoneManager::createZone(string name)
 {
@@ -206,6 +253,7 @@ void zoneManager::createZone(zone z)
 {
 
     ofPtr<zone> zp = ofPtr<zone>(new zone(z));
+    zp->recalcAbsDims();
     mZones[zp->getName()] = zp;
 
 }

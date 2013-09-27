@@ -39,8 +39,12 @@ class zoneManager
 
         bool getIsRuleMet(ofPtr<zone> z, zoneRule r);
 
-        bool getReaction(ofPtr<zone> z);
-        void makeReaction(ofPtr<zone> z);
+        bool getOnTrig(ofPtr<zone> z);
+        bool getOffTrig(ofPtr<zone> z);
+
+        void onReact(ofPtr<zone> z);
+        void offReact(ofPtr<zone> z);
+        void implementReactions(ofPtr<zone> z, bool isOn);
 
         map <string, ofPtr<zone> > mZones;
 

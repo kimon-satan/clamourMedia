@@ -21,8 +21,8 @@ clamourNode::clamourNode(int ts, string tr)
     drawType = "DEBUG";
     shiftAmount = 0.2;
     mChanged = CLAMOUR_NONE;
-    isSleeping = false;
-    canSleep = true;
+    isSleeping = true;
+    canSleep = false;
 
 };
 

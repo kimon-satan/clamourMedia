@@ -7,7 +7,12 @@
 
 struct zoneRule{
 
+    zoneRule(){
+        isEnabled = true;
+    };
+
     string ruleType;
+    bool isEnabled;
 
     int gtOccupants;
     int ltOccupants;
@@ -20,10 +25,13 @@ struct zoneRule{
 struct zoneEffect{
 
     //these relate to aspects which effect other nodes, zones, stages etc;
-
     string effectType;
 
-    //closeOutZone, closeInZone
+    //closeOutZone, openOutZone, closeInZone, openInZone
+
+    string trigType; //ON, OFF, ON_OFF
+
+    vector<clamourNode> prevNodeStates; // easier just to store the whole node
 
 
 };
@@ -50,6 +58,8 @@ public:
     void setShape_rel(vector<ofVec2f> pps); //a poly
     void setShape_rel(ofRectangle r); //duh
 
+    void recalcAbsDims();
+
     string getShapeType();
 
     ofVec2f getPos_abs();
@@ -59,17 +69,11 @@ public:
     ofRectangle getRect_abs();
 
 
-    bool getIsHidden();
-    void setIsHidden(bool b);
+    void setIsClosedOut(bool b);
+    bool getIsClosedOut();
 
-    void setIsClosed(bool b);
-    bool getIsClosed();
-
-    void setIsLocked(bool b);
-    bool getIsLocked();
-
-    void setIsOccupied(bool b);
-    bool getIsOccupied();
+    void setIsClosedIn(bool b);
+    bool getIsClosedIn();
 
     void setOnRule(zoneRule zr);
     zoneRule getOnRule();
@@ -77,16 +81,15 @@ public:
     void setOffRule(zoneRule zr);
     zoneRule getOffRule();
 
+    vector<ofPtr<zoneEffect> > getReactions();
+    void addReaction(zoneEffect e);
+
 
 private:
 
-    bool isOccupied;
-
-    //draw stuff
-    bool isHidden;
 
     //collision stuff
-    bool isClosed, isLocked;
+    bool isClosedOut, isClosedIn;
     ofVec2f pos_abs;
     ofVec2f pos_rel;
     float radius; //necessarily absolute
@@ -101,10 +104,9 @@ private:
     map <string , ofPtr<clamourNode> > mCaptureNodes;
 
     zoneRule mOnRule;
-    zoneRule mOffRule; // only for ASR zones
+    zoneRule mOffRule;
 
-
-
+    vector<ofPtr<zoneEffect> > reactions;
 
 
 };

@@ -21,7 +21,7 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes){
 
     for(map<string, ofPtr<clamourNode> >::iterator it = nodes.begin(); it != nodes.end(); it ++){
 
-        if(it->second->getIsFiring()){
+        if(!it->second->getIsSleeping()){
 
             string dt = it->second->getDrawType();
             if(dt == "DEBUG")
@@ -50,12 +50,17 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
 
 
     ofSetColor(255);
+
+
     if(ofRandom(1) < fdd->getParameter("flicker").abs_val){
 
         glBegin(GL_POINTS);
-        glColor3ub(255 * n->getEnvVal() ,255 * n->getEnvVal(),255 * n->getEnvVal());
+       // glColor3ub(255 * n->getEnvVal() ,255 * n->getEnvVal(),255 * n->getEnvVal());
+       glColor3ub(255,255,255);
 
-        float size = fdd->getParameter("size").abs_val;
+        float mul = (n->getIsFiring())? 0.5 : 1.0;
+        float size = fdd->getParameter("size").abs_val * mul;
+        int numPs = (n->getIsFiring())? 200 : 50;
 
         for(int i = 0; i < 50; i ++){
             glVertex2d(pos.x + ofRandom(-size/2,size/2), pos.y + ofRandom(-size/2,size/2));

@@ -74,7 +74,11 @@ void nodeManager::updateNodes()
 
         it->second->update();
 
-        if(it->second->getIsFiring()){
+        if(it->second->getCanSleep()){
+            it->second->setIsSleeping(!it->second->getIsFiring());
+        }
+
+        if(!it->second->getIsSleeping()){
             it->second->updateHistory();
             it->second->updateDrawData();
             it->second->updateSoundData();
@@ -188,6 +192,12 @@ void nodeManager::switchOnNode(string t_index, float x, float y)
 
     mNodes[t_index]->setRawPos_rel(ofVec2f(x, y));
     switchOnNode(t_index);
+
+}
+
+void nodeManager::wakeupNode(string t_index){
+
+    mNodes[t_index]->setIsSleeping(mNodes[t_index]->getCanSleep());
 
 }
 

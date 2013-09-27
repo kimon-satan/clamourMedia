@@ -29,6 +29,8 @@ class nodeManager{
     void switchOffNode(string t_index);
     void switchOffNodes(vector<string> v);
 
+    void wakeupNode(string t_index);
+
     void beginShift(string t_index, float x, float y);
     void updateNodePosition(string t_index, float x, float y);
     void shiftNodePosition(string t_index, float x, float y);
