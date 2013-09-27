@@ -58,7 +58,15 @@ public:
     void setZonePair(ofPtr<zone> p);
     void resetZonePair();
 
+    bool getIsSleeping();
+    void setIsSleeping(bool b);
+
+    bool getCanSleep();
+    void setCanSleep(bool b);
+
 private:
+
+    bool isSleeping, canSleep;
 
     int smoothFrames;
     int seat;

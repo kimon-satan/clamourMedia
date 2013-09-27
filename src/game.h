@@ -11,7 +11,8 @@
 
 #include "ofMain.h"
 #include "clientManager.h" //for selectors
-
+#include "clamourNode.h"
+#include "zone.h"
 
 struct command{
 
@@ -32,6 +33,11 @@ struct command{
     map <string , float> floatParams;
     map <string , int> intParams;
     map <string, string> stringParams;
+
+    zone mZone;
+    clamourNode mNode;
+
+    vector<parameter> params;
 
 
 };

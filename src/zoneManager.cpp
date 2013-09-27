@@ -22,9 +22,10 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
 
             if(n_it->second->getZonePair())
             {
-                //incase the node has jumped straight from one zone to the next
-                n_it->second->getZonePair()->removeNode(n_it->second);
-                n_it->second->resetZonePair();
+                if(!n_it->second->getZonePair()->getIsLocked()){
+                    n_it->second->getZonePair()->removeNode(n_it->second);
+                    n_it->second->resetZonePair();
+                }
             }
 
             ++n_it;
@@ -35,15 +36,29 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
         for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
         {
 
+            if(z_it->second->getIsLocked()){
+
+                if(n_it->second->getZonePair() == z_it->second){
+                    //only for already captured nodes
+                    containNode(n_it->second, z_it->second);
+
+                }
+
+            }
+
             if(checkInZone(n_it->second, z_it->second)){
 
-                if(n_it->second->getZonePair() == z_it->second)break; //already in the zone
+
+                if(n_it->second->getZonePair() == z_it->second){
+                    break; //already in the zone
+                }
 
                 //new nodes inside the zone
 
                 if(z_it->second->getIsClosed()){
                     repellNode(n_it->second, z_it->second);
                 }else{
+
 
                     if(n_it->second->getZonePair())
                     {
@@ -80,8 +95,8 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
     {
         z_it->second->update();
-        if(z_it->second->getCaptureNodes().size() == 0){
-                z_it->second->setIsClosed(false);
+        if(z_it->second->getCaptureNodes().size() == 0){ //off rule here
+                z_it->second->setIsLocked(false);
                 z_it->second->setIsFired(false);
         }
 
@@ -115,12 +130,52 @@ void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z){
 
 }
 
-bool zoneManager::getReaction(ofPtr<zone> z){
+void zoneManager::containNode(ofPtr<clamourNode> n, ofPtr<zone> z){
 
-    if(z->getIsFired())return false; //this could be variable
-    if(z->getCaptureNodes().size() == 1)return true;
+    ofVec2f d = (n->getMeanPos_abs() - z->getPos_abs());
+
+    float dist = min(d.length(), z->getRadius() * (float)0.95);
+
+    n->setRawPos_abs(z->getPos_abs() + d.normalize() * dist);
+    n->modifyHistory();
+
+}
+
+bool zoneManager::getIsRuleMet(ofPtr<zone> z, zoneRule r){
+
+
+    if(r.ruleType == "MIN_OCCUPANTS"){
+
+        return(z->getCaptureNodes().size() >= r.gtOccupants);
+
+    }else if(r.ruleType == "MAX_OCCUPANTS"){
+
+        if(z->getCaptureNodes().size() > 0 &&
+           z->getCaptureNodes().size() <= r.ltOccupants)return true;
+
+    }else if(r.ruleType == "RANGE_OCCUPANTS"){
+
+        if(z->getCaptureNodes().size() >= r.gtOccupants  &&
+           z->getCaptureNodes().size() <= r.ltOccupants)return true;
+
+    }else{
+
+      return false;
+
+    }
 
     return false;
+
+}
+
+bool zoneManager::getReaction(ofPtr<zone> z){
+
+
+    if(z->getIsFired())return false; //this could be variable
+
+    zoneRule zr = z->getOnRule();
+
+    return getIsRuleMet(z,zr);
 
 }
 
@@ -131,7 +186,7 @@ void zoneManager::makeReaction(ofPtr<zone> z){
     z->setChanged(CLAMOUR_ON_OFF);
 
     //whatever reactions here
-    z->setIsClosed(true);
+    z->setIsLocked(true);
 
 }
 

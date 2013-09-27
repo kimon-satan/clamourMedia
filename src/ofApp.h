@@ -41,7 +41,12 @@ private:
 
     void loadXML();
     void loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty = 0);
+
     void parseActions(command &cmd, ofxXmlSettings &XML);
+    void loadZone(zone &z, ofxXmlSettings &XML);
+    void loadRule(zoneRule &r, ofxXmlSettings &XML);
+    //also load param, load sound, load draw
+
     void selectClients(vector<string> selectors, ofPtr<group> grp);
     void implementStage();
 

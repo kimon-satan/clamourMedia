@@ -5,6 +5,29 @@
 #include "clamourNode.h"
 #include "baseZode.h"
 
+struct zoneRule{
+
+    string ruleType;
+
+    int gtOccupants;
+    int ltOccupants;
+
+    vector<string> incDrawTypes;
+    vector<string> excDrawTypes;
+
+};
+
+struct zoneEffect{
+
+    //these relate to aspects which effect other nodes, zones, stages etc;
+
+    string effectType;
+
+    //closeOutZone, closeInZone
+
+
+};
+
 
 class zone : public baseZode
 {
@@ -42,11 +65,18 @@ public:
     void setIsClosed(bool b);
     bool getIsClosed();
 
+    void setIsLocked(bool b);
+    bool getIsLocked();
+
     void setIsOccupied(bool b);
     bool getIsOccupied();
 
-   // bool getIsReacting();
-  //  float getReactProp();
+    void setOnRule(zoneRule zr);
+    zoneRule getOnRule();
+
+    void setOffRule(zoneRule zr);
+    zoneRule getOffRule();
+
 
 private:
 
@@ -56,7 +86,7 @@ private:
     bool isHidden;
 
     //collision stuff
-    bool isClosed;
+    bool isClosed, isLocked;
     ofVec2f pos_abs;
     ofVec2f pos_rel;
     float radius; //necessarily absolute
@@ -69,6 +99,10 @@ private:
 
     //mechanics stuff
     map <string , ofPtr<clamourNode> > mCaptureNodes;
+
+    zoneRule mOnRule;
+    zoneRule mOffRule; // only for ASR zones
+
 
 
 

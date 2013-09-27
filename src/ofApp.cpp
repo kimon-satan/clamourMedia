@@ -288,9 +288,18 @@ void ofApp::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty
 
 }
 
+
+
 void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
 
     cmd.mCommand = XML.getValue("ACTION", "none");
+
+    if(cmd.mCommand == "CREATE_ZONE"){
+        loadZone(cmd.mZone, XML);
+        return;
+    }
+
+    //load the action into the command
 
     if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
     if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
@@ -317,7 +326,7 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
     if(XML.tagExists("POS_P"))cmd.intParams["POS_P"] = XML.getValue("POS_P", 0);
     if(XML.tagExists("RADIUS"))cmd.floatParams["RADIUS"] = XML.getValue("RADIUS", 0.25);
 
-    //special stuff
+    //command specific stuff
 
     if(cmd.mCommand == "NEW_GROUP"){
 
@@ -344,6 +353,54 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
         }
 
     }
+
+
+
+
+
+}
+
+void ofApp::loadZone(zone &z, ofxXmlSettings &XML){
+
+      z.setShape_rel(ofVec2f(
+                     XML.getValue("X",0.0f),XML.getValue("Y",0.0f)
+                             ),
+                     XML.getValue("RADIUS", 0.1f));
+
+        z.setName(XML.getValue("NAME", "default"));
+        z.setAttSecs(XML.getValue("ATTACK_SECS", 0.01));
+        z.setDecSecs(XML.getValue("DECAY_SECS", 0.2));
+        z.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+        z.setDrawType(XML.getValue("DRAW_TYPE", "BASIC"));
+       // z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder")); //need a way to implemtn this later
+
+        if(XML.pushTag("ON_RULE")){
+            zoneRule r;
+            loadRule(r, XML);
+            z.setOnRule(r);
+            XML.popTag();
+        }
+
+        if(XML.pushTag("OFF_RULE")){
+            zoneRule r;
+            loadRule(r, XML);
+            z.setOffRule(r);
+            XML.popTag();
+        }
+
+}
+
+void ofApp::loadRule(zoneRule &r, ofxXmlSettings &XML){
+
+    r.ruleType = XML.getValue("TYPE", "MIN_OCCUPANTS");
+    r.gtOccupants = XML.getValue("GE", 1);
+    r.ltOccupants = XML.getValue("LE", 2);
+
+    int numExc = XML.getNumTags("EXC");
+    int numInc = XML.getNumTags("INC");
+
+    for(int i = 0; i < numExc; i ++)r.excDrawTypes.push_back(XML.getValue("EXC", ""));
+    for(int i = 0; i < numInc; i ++)r.incDrawTypes.push_back(XML.getValue("INC", ""));
 
 }
 
@@ -612,20 +669,8 @@ void ofApp::implementStage(){
 
         }else if(tComms[i].mCommand == "CREATE_ZONE"){
 
-                zone z;
-                z.setName(tComms[i].stringParams["NAME"]);
-                z.setShape_rel(ofVec2f(tComms[i].floatParams["X"],tComms[i].floatParams["Y"]),tComms[i].floatParams["RADIUS"]);
-                z.setEnvType(tComms[i].stringParams["ENV_TYPE"]);
 
-                //simple attack & decay setting
-                if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end()){
-                    z.setAttSecs(tComms[i].floatParams["ATTACK_SECS"]);
-                }
-                if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end()){
-                    z.setDecSecs(tComms[i].floatParams["DECAY_SECS"]);
-                }
-
-                mZoneManager->createZone(z);
+                mZoneManager->createZone(tComms[i].mZone);
 
 
         }else if(tComms[i].mCommand == "DESTROY_ZONE"){

@@ -7,7 +7,13 @@ zone::zone()
     isHidden = false;
     isOccupied = false;
     isClosed = false;
+    isLocked = false;
+
     mChanged = CLAMOUR_NONE;
+
+    mOnRule.ruleType = "MIN_OCCUPANTS";
+    mOnRule.gtOccupants = 1;
+
 }
 
 
@@ -94,6 +100,12 @@ ofRectangle zone::getRect_abs()
     return rect_abs;
 }
 
+void zone::setOnRule(zoneRule zr){mOnRule = zr;}
+zoneRule zone::getOnRule(){return mOnRule;}
+
+void zone::setOffRule(zoneRule zr){mOffRule = zr;}
+zoneRule zone::getOffRule(){return mOffRule;}
+
 void zone::setIsOccupied(bool b){isOccupied =b;}
 bool zone::getIsOccupied(){return isOccupied;}
 
@@ -102,6 +114,9 @@ void zone::setIsHidden(bool b){isHidden = b; }
 
 void zone::setIsClosed(bool b){ isClosed = b;}
 bool zone::getIsClosed(){ return isClosed;}
+
+void zone::setIsLocked(bool b){ isLocked = b;}
+bool zone::getIsLocked(){ return isLocked;}
 
 
 zone::~zone()

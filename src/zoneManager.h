@@ -33,7 +33,12 @@ class zoneManager
     private:
 
         void repellNode(ofPtr<clamourNode> n, ofPtr<zone> z);
+        void containNode(ofPtr<clamourNode> n, ofPtr<zone> z);
+
         bool checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z);
+
+        bool getIsRuleMet(ofPtr<zone> z, zoneRule r);
+
         bool getReaction(ofPtr<zone> z);
         void makeReaction(ofPtr<zone> z);
 

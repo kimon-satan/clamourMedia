@@ -21,6 +21,8 @@ clamourNode::clamourNode(int ts, string tr)
     drawType = "DEBUG";
     shiftAmount = 0.2;
     mChanged = CLAMOUR_NONE;
+    isSleeping = false;
+    canSleep = true;
 
 };
 
@@ -153,7 +155,6 @@ void clamourNode::setRawPos_abs(ofVec2f v)
 
     float f = (float)screenData::height/(float)screenData::width;
     rawPos_rel.set(v.x * f, v.y);
-    if(name == "A_1")cout << rawPos_rel << endl;
 
 }
 
@@ -206,5 +207,21 @@ void clamourNode::setZonePair(ofPtr<zone> p)
 void clamourNode::resetZonePair()
 {
     zonePair.reset();
+}
+
+bool clamourNode::getIsSleeping(){
+    return isSleeping;
+}
+
+void clamourNode::setIsSleeping(bool b){
+    isSleeping = b;
+}
+
+bool clamourNode::getCanSleep(){
+    return canSleep;
+}
+
+void clamourNode::setCanSleep(bool b){
+    canSleep = b;
 }
 
