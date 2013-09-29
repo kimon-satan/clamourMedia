@@ -499,10 +499,10 @@
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/parameter.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/base/" />
 		</Unit>
 		<Unit filename="src/parameter.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/base/" />
 		</Unit>
 		<Unit filename="src/soundDictionary.cpp">
 			<Option virtualFolder="src/base/" />

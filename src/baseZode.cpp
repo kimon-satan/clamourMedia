@@ -145,31 +145,38 @@ void baseZode::react()
 void baseZode::setDrawType(string dt)
 {
 
-    drawType = dt;
-    drawData = drawDictionary::createDrawData(drawType);
-    //drawData->init(meanPos_rel); //override in node
+    drawData = drawDictionary::createDrawData(dt);
 
 }
 
-string baseZode::getDrawType()
-{
-    return drawType;
-}
-
-std::tr1::shared_ptr<baseData> baseZode::getDrawData()
+baseData baseZode::getDrawData()
 {
     return drawData;
 }
 
-ofPtr<baseData> baseZode::getSoundData()
+baseData baseZode::getSoundData()
 {
     return soundData;
 }
 
 void baseZode::setSoundData(baseData sd)
 {
-    soundData = ofPtr<baseData>(new baseData(sd));
-    // soundData->init(meanPos_rel); //override
+    soundData = sd;
+
+}
+
+void baseZode::setSoundParameter(parameter p){
+
+    // init needed ?
+    soundData.setParameter(p);
+
+}
+
+void baseZode::setDrawParameter(parameter p){
+
+    //init needed ?
+    drawData.setParameter(p);
+
 }
 
 //does the zode have input to fire

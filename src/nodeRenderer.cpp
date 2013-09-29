@@ -23,15 +23,16 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes){
 
         if(!it->second->getIsSleeping()){
 
-            string dt = it->second->getDrawType();
-            if(dt == "DEBUG")
+            baseData bd = it->second->getDrawData();
+
+            if(bd.getName() == "DEBUG")
             {
                 ofVec2f pos = it->second->getMeanPos_abs();
                 pos *= screenData::height;
                 debugFont.drawString(it->second->getRow() + "_" + ofToString(it->second->getSeat()), pos.x, pos.y);
             }
-            if(dt == "FLICKER")drawFlicker(it->second);
-            if(dt == "ROUND")drawRound(it->second);
+            if(bd.getName() == "FLICKER")drawFlicker(it->second, bd);
+            if(bd.getName() == "ROUND")drawRound(it->second, bd);
         }
 
     }
@@ -41,25 +42,23 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes){
 }
 
 
-void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
+void nodeRenderer::drawFlicker(ofPtr<clamourNode> n, baseData &bd){
 
     ofVec2f pos = n->getMeanPos_abs();
     pos *= screenData::height;
-
-    std::tr1::shared_ptr<flickerDrawData> fdd(dynamic_pointer_cast <flickerDrawData> (n->getDrawData()));
 
 
     ofSetColor(255);
 
 
-    if(ofRandom(1) < fdd->getParameter("flicker").abs_val){
+    if(ofRandom(1) < bd.getParameter("flicker").abs_val){
 
         glBegin(GL_POINTS);
        // glColor3ub(255 * n->getEnvVal() ,255 * n->getEnvVal(),255 * n->getEnvVal());
        glColor3ub(255,255,255);
 
         float mul = (n->getIsFiring())? 0.5 : 1.0;
-        float size = fdd->getParameter("size").abs_val * mul;
+        float size = bd.getParameter("size").abs_val * mul;
         int numPs = (n->getIsFiring())? 200 : 50;
 
         for(int i = 0; i < 50; i ++){
@@ -71,22 +70,15 @@ void nodeRenderer::drawFlicker(ofPtr<clamourNode> n){
 }
 
 
-void nodeRenderer::drawRound(ofPtr<clamourNode> n){
+void nodeRenderer::drawRound(ofPtr<clamourNode> n, baseData &bd){
 
     ofVec2f pos = n->getMeanPos_abs();
-
     pos *= screenData::height;
 
-    std::tr1::shared_ptr<roundDrawData> rdd(dynamic_pointer_cast <roundDrawData> (n->getDrawData()));
-
-
     ofSetColor(255 * n->getEnvVal());
-    float t_size = rdd->getParameter("size").abs_val;
+    float t_size = bd.getParameter("size").abs_val;
 
     ofNoFill();
     ofCircle( pos.x, pos.y, t_size);
-
-
-
 
 }

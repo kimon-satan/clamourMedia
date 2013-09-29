@@ -48,7 +48,7 @@ class zoneManager
 
         map <string, ofPtr<zone> > mZones;
 
-        soundDictionary mSoundDictionary;
+
 };
 
 #endif // ZONEMANAGER_H

@@ -14,32 +14,37 @@
 //draw dictionary methods
 
 
-std::tr1::shared_ptr<baseData> drawDictionary::createDrawData(string dt)
+baseData drawDictionary::createDrawData(string dt)
 {
 
-    std::tr1::shared_ptr<baseData> data;
+    baseData data;
 
-    if(dt == "DEBUG")data = std::tr1::shared_ptr<debugDrawData>(new debugDrawData());
-    if(dt == "FLICKER")data = std::tr1::shared_ptr<flickerDrawData>(new flickerDrawData());
-    if(dt == "ROUND")data = std::tr1::shared_ptr<roundDrawData>(new roundDrawData());
-
+    if(dt == "DEBUG")drawDictionary::debugDrawData(data);
+    if(dt == "FLICKER")drawDictionary::flickerDrawData(data);
+    if(dt == "ROUND")drawDictionary::roundDrawData(data);
 
     return data;
 
 }
 
 
-flickerDrawData::flickerDrawData()
+void drawDictionary::debugDrawData(baseData &bd){
+    bd.setName("DEBUG");
+}
+
+void drawDictionary::flickerDrawData(baseData &bd)
 {
 
-    parameters["flicker"] = parameter("flicker", 0.1, 0.75, 0.5, CLAMOUR_MAP_X);
-    parameters["size"] = parameter("size", 3, 20, 5, CLAMOUR_MAP_FIXED);
+    bd.setName("FLICKER");
+    bd.setParameter(parameter("flicker", 0.1, 0.75, 0.5, CLAMOUR_MAP_X));
+    bd.setParameter(parameter("size", 3, 20, 5, CLAMOUR_MAP_FIXED));
 
 }
 
-roundDrawData::roundDrawData()
+void drawDictionary::roundDrawData(baseData &bd)
 {
 
-    parameters["size"] = parameter("size", 3, 20, 5, CLAMOUR_MAP_FIXED);
+    bd.setName("ROUND");
+    bd.setParameter(parameter("size", 3, 20, 5, CLAMOUR_MAP_FIXED));
 
 }

@@ -469,13 +469,13 @@ void oscManager::sendInit()
 void oscManager::startSynth(ofPtr<baseZode> n)
 {
 
-    ofPtr<baseData> sd = n->getSoundData();
+    baseData sd = n->getSoundData();
 
     ofxOscMessage m;
     m.setAddress("/startSynth");
     m.addStringArg(n->getName());
 
-    m.addStringArg(sd->getName());
+    m.addStringArg(sd.getName());
 
     string et = (n->getEnvType() == CLAMOUR_ASR)? "ASR" : "AR"; //might change to string later
     m.addStringArg(et);
@@ -483,7 +483,7 @@ void oscManager::startSynth(ofPtr<baseZode> n)
     m.addFloatArg(n->getDecSecs());
 
 
-    vector<float> vals = sd->getAbsVals();
+    vector<float> vals = sd.getAbsVals();
 
     for(int i = 0; i < vals.size(); i++)
     {
@@ -504,11 +504,11 @@ void oscManager::updateSynth(ofPtr<clamourNode> n)
     m.setAddress("/updateSynth");
     m.addStringArg(n->getName());
 
-    ofPtr<baseData> sd = n->getSoundData();
+    baseData sd = n->getSoundData();
 
-    m.addStringArg(sd->getName()); //add the name to keep the indexing th same for update and start at the SC end
+    m.addStringArg(sd.getName()); //add the name to keep the indexing th same for update and start at the SC end
 
-    vector<float> vals = sd->getAbsVals();
+    vector<float> vals = sd.getAbsVals();
 
     for(int i = 0; i < vals.size(); i++)
     {

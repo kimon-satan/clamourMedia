@@ -56,8 +56,6 @@ class nodeManager{
 
     map< string, ofPtr<clamourNode> > mNodes;
 
-    soundDictionary mSoundDictionary;
-
 
 };
 

@@ -129,11 +129,8 @@
 					<ENV_TYPE>AS</ENV_TYPE>	
 					<ATTACK_SECS>0.01</ATTACK_SECS>
 					<DECAY_SECS>1.0</DECAY_SECS>
-					
 					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
-				
-					
-					
+					<REACT><TYPE>closeOutZone</TYPE><TRIG>ON_OFF</TRIG></REACT>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>

@@ -43,9 +43,20 @@ private:
     void loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty = 0);
 
     void parseActions(command &cmd, ofxXmlSettings &XML);
+
     void loadZone(zone &z, ofxXmlSettings &XML);
     void loadRule(zoneRule &r, ofxXmlSettings &XML);
-    //also load param, load sound, load draw
+    void loadReaction(reaction &r, ofxXmlSettings &XML);
+
+    void loadNode(clamourNode &n, ofxXmlSettings &XML); //what to do here
+
+    //ideally a node preset
+    // and also redefine node .. changes whatever parameters have been set ?
+
+    void loadParam(parameter &p, ofxXmlSettings &XML);
+
+    void loadSound(baseData &bd, ofxXmlSettings &XML);
+    void loadDraw(baseData &bd, ofxXmlSettings &XML);
 
     void selectClients(vector<string> selectors, ofPtr<group> grp);
     void implementStage();

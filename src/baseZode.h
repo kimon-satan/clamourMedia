@@ -24,12 +24,12 @@ public:
     void setChanged(changeType c);
 
     virtual void setDrawType(string dt);
-    string getDrawType();
-
-    std::tr1::shared_ptr<baseData> getDrawData();
+    baseData getDrawData();
+    void setDrawParameter(parameter p);
 
     virtual void setSoundData(baseData sd);
-    ofPtr<baseData> getSoundData();
+    baseData getSoundData();
+    void setSoundParameter(parameter p);
 
     //does the zode have input to fire
     bool getIsFired();
@@ -57,10 +57,9 @@ public:
 protected:
 
     string name;
-    std::tr1::shared_ptr<baseData> drawData;
-    ofPtr<baseData> soundData;
+    baseData drawData;
+    baseData soundData;
     changeType mChanged;
-    string drawType;
 
     bool isFired, isFiring;
 

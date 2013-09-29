@@ -22,14 +22,14 @@ struct zoneRule{
 
 };
 
-struct zoneEffect{
+struct reaction{
 
     //these relate to aspects which effect other nodes, zones, stages etc;
-    string effectType;
+    string rType;
 
     //closeOutZone, openOutZone, closeInZone, openInZone
 
-    string trigType; //ON, OFF, ON_OFF
+    string trig; //ON, OFF, ON_OFF
 
     vector<clamourNode> prevNodeStates; // easier just to store the whole node
 
@@ -81,8 +81,9 @@ public:
     void setOffRule(zoneRule zr);
     zoneRule getOffRule();
 
-    vector<ofPtr<zoneEffect> > getReactions();
-    void addReaction(zoneEffect e);
+    vector<reaction> getReactions();
+    void setReactions(vector<reaction>);
+    void addReaction(reaction e);
 
 
 private:
@@ -106,7 +107,7 @@ private:
     zoneRule mOnRule;
     zoneRule mOffRule;
 
-    vector<ofPtr<zoneEffect> > reactions;
+    vector<reaction > mReactions;
 
 
 };

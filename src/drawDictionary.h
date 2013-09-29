@@ -12,47 +12,17 @@
 #include "parameter.h"
 
 
-class debugDrawData: public baseData{
-
-    public:
-
-    private:
-    //internal variables
-
-};
-
-class flickerDrawData: public baseData{
-
-    public:
-
-    flickerDrawData();
-    virtual ~flickerDrawData(){};
-
-    private:
-    //internal variables
-
-
-};
-
-class roundDrawData: public baseData{
-
-    public:
-
-    roundDrawData();
-    virtual ~roundDrawData(){};
-
-    private:
-    //internal variables
-
-
-};
-
 class drawDictionary{
 
 
     public:
 
-    static std::tr1::shared_ptr<baseData> createDrawData(string dt);
+    static baseData createDrawData(string dt);
+
+    //drawTypes here
+    static void debugDrawData(baseData &bd);
+    static void flickerDrawData(baseData &bd);
+    static void roundDrawData(baseData &bd);
 
 
 };

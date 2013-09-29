@@ -154,15 +154,20 @@ bool zone::getIsClosedIn()
     return isClosedIn;
 }
 
-vector<ofPtr<zoneEffect> >zone::getReactions()
+vector<reaction >zone::getReactions()
 {
-    return reactions;
+    return mReactions;
 }
 
-void zone::addReaction(zoneEffect e){
+void zone::addReaction(reaction e){
 
-    ofPtr<zoneEffect> ze = ofPtr<zoneEffect>(new zoneEffect(e));
-    reactions.push_back(ze);
+    mReactions.push_back(e);
+
+}
+
+void zone::setReactions(vector<reaction> r){
+
+    mReactions = r;
 
 }
 

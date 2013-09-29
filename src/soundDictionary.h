@@ -15,14 +15,11 @@
 class soundDictionary{
 
 public:
-    
-    soundDictionary();
-    baseData createSoundData(string synthName);
-    
-private:
-    
-    map <string, baseData> synthDictionary;
-    
+
+    static void loadSynthDefs();
+    static baseData createSoundData(string synthName);
+    static map <string, baseData> synthDictionary;
+
 };
 
 

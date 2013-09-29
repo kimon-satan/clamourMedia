@@ -92,7 +92,9 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
     for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it)
     {
         z_it->second->update();
-        if(getOffTrig(z_it->second))offReact(z_it->second);
+        if(getOffTrig(z_it->second)){
+            offReact(z_it->second);
+        }
 
     }
 
@@ -213,28 +215,35 @@ void zoneManager::offReact(ofPtr<zone> z){
 
 void zoneManager::implementReactions(ofPtr<zone> z, bool isOn){
 
-    vector<ofPtr<zoneEffect> > r = z->getReactions(); //TODO copy the reactions out and replace them at the end of this method
+
+    vector<reaction> r = z->getReactions(); //TODO copy the reactions out and replace them at the end of this method
                                                      // ptrs don't work here
-    vector<ofPtr<zoneEffect> >::iterator it = r.begin();
+    vector<reaction>::iterator it = r.begin();
 
     while(it != r.end()){
 
-        if(((*it)->trigType == "ON" && !isOn) ||
-            ((*it)->trigType == "OFF" && isOn))continue; //this action shouldn't be completed now
+        if((it->trig == "ON" && !isOn) ||
+            (it->trig == "OFF" && isOn)){
+                ++it;
+                continue;
+            }
 
-        bool isReverse = ((*it)->trigType == "ON_OFF" && !isOn);
+        bool isReverse = (it->trig == "ON_OFF" && !isOn);
 
-        if((*it)->effectType == "closeInZone"){
+        if(it->rType == "closeInZone"){
              z->setIsClosedIn(!isReverse);
-        }else if((*it)->effectType == "openInZone"){
+        }else if(it->rType == "openInZone"){
              z->setIsClosedIn(isReverse);
-        }else if((*it)->effectType == "closeOutZone"){
+        }else if(it->rType == "closeOutZone"){
             z->setIsClosedOut(!isReverse);
-        }else if((*it)->effectType == "openOutZone"){
+        }else if(it->rType == "openOutZone"){
             z->setIsClosedOut(isReverse);
         }
         ++it;
     }
+
+    z->setReactions(r);
+
 };
 
 void zoneManager::createZone(string name)
@@ -244,6 +253,7 @@ void zoneManager::createZone(string name)
     //perhaps pass the zone from the main app
     ofPtr<zone> z = ofPtr<zone>(new zone());
     mZones[name] = z;
+
 
 }
 
@@ -339,7 +349,7 @@ void zoneManager::setZoneDrawType(vector<string> indexes, string dt)
 void zoneManager::setZoneSoundType(vector<string> indexes, string st)
 {
 
-    baseData sd = mSoundDictionary.createSoundData(st);
+    baseData sd = soundDictionary::createSoundData(st);
 
     for(int i = 0; i < indexes.size(); i ++)
     {
@@ -361,7 +371,7 @@ void zoneManager::setZoneDrawParam(vector<string> indexes, parameter p)
         //FIX_ME either give the zone a position or parameter needs a non position initializer
 
         p.init(ofVec2f(0.5,0.5)); //if mapped randomly only reset that parameter
-        mZones[indexes[i]]->getDrawData()->setParameter(p);
+        mZones[indexes[i]]->setDrawParameter(p);
 
     }
 
@@ -371,9 +381,9 @@ void zoneManager::setZoneDrawParam(vector<string> indexes, parameter p)
 void zoneManager::setZoneSoundParam(vector<string> indexes, parameter p)
 {
 
-    //sorry could be neater but it's late !
+    //assumes all zones of the same draw type
 
-    parameter t = mZones[indexes[0]]->getSoundData()->getParameter(p.name); //a copy of the original
+    parameter t = mZones[indexes[0]]->getSoundData().getParameter(p.name); //a copy of the original
     p.index = t.index; //copy these over
     p.warp = t.warp;
 
@@ -381,7 +391,7 @@ void zoneManager::setZoneSoundParam(vector<string> indexes, parameter p)
     {
 
         p.init(ofVec2f(0.5,0.5));//if mapped randomly only reset that parameter
-        mZones[indexes[i]]->getSoundData()->setParameter(p);
+        mZones[indexes[i]]->setSoundParameter(p);
 
     }
 

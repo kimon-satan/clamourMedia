@@ -22,8 +22,8 @@ class nodeRenderer{
     void setScreen(int w, int h);
 
     //drawing types
-    void drawFlicker(ofPtr<clamourNode> n);
-    void drawRound(ofPtr<clamourNode> n);
+    void drawFlicker(ofPtr<clamourNode> n, baseData &bd);
+    void drawRound(ofPtr<clamourNode> n, baseData &bd);
 
     private:
 

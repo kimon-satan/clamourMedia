@@ -267,7 +267,7 @@ void nodeManager::setNodeDrawType(vector<string> indexes, string dt)
 void nodeManager::setNodeSoundType(vector<string> indexes, string st)
 {
 
-    baseData sd = mSoundDictionary.createSoundData(st);
+    baseData sd = soundDictionary::createSoundData(st);
 
     for(int i = 0; i < indexes.size(); i ++)
     {
@@ -287,7 +287,7 @@ void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p)
     {
 
         p.init(mNodes[indexes[i]]->getMeanPos_rel()); //if mapped randomly only reset that parameter
-        mNodes[indexes[i]]->getDrawData()->setParameter(p);
+        mNodes[indexes[i]]->setDrawParameter(p);
 
     }
 
@@ -297,9 +297,9 @@ void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p)
 void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p)
 {
 
-    //sorry could be neater but it's late !
+    //NB this method assumes all nodes are of the same soundType
 
-    parameter t = mNodes[indexes[0]]->getSoundData()->getParameter(p.name); //a copy of the original
+    parameter t = mNodes[indexes[0]]->getSoundData().getParameter(p.name); //a copy of the original
     p.index = t.index; //copy these over
     p.warp = t.warp;
 
@@ -307,7 +307,7 @@ void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p)
     {
 
         p.init(mNodes[indexes[i]]->getMeanPos_rel());//if mapped randomly only reset that parameter
-        mNodes[indexes[i]]->getSoundData()->setParameter(p);
+        mNodes[indexes[i]]->setSoundParameter(p);
 
     }
 

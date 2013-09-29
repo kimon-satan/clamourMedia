@@ -3,12 +3,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-
-	ofSetFrameRate(60);
+    //ofSetLogLevel(OF_LOG_VERBOSE);
+    ofSetVerticalSync(true);
+	//ofSetFrameRate(60);
 	ofSetCircleResolution(50);
-	ofSetWindowPosition(800, 800);
+	ofSetWindowPosition(800, 100);
 	ofSetWindowTitle("CLAMOUR CONTROL");
-	ofSetVerticalSync(false);
+
 
 	ofxFensterManager::get()->setupWindow(&mDisplay);
 
@@ -20,6 +21,8 @@ void ofApp::setup(){
 
         }
     }
+
+    soundDictionary::loadSynthDefs();
 
     mClientManager = ofPtr<clientManager>(new clientManager(mPlayerIndexes));
 
@@ -299,6 +302,13 @@ void ofApp::parseActions(command &cmd, ofxXmlSettings &XML){
         return;
     }
 
+    if(cmd.mCommand == "SET_NODE"){
+        loadNode(cmd.mNode, XML); //later an option
+        return;
+    }
+
+
+
     //load the action into the command
 
     if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
@@ -371,8 +381,11 @@ void ofApp::loadZone(zone &z, ofxXmlSettings &XML){
         z.setAttSecs(XML.getValue("ATTACK_SECS", 0.01));
         z.setDecSecs(XML.getValue("DECAY_SECS", 0.2));
         z.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+
         z.setDrawType(XML.getValue("DRAW_TYPE", "BASIC"));
-       // z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder")); //need a way to implemtn this later
+        //z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder"));
+
+        //update params & then override with any params that have been specified
 
         if(XML.pushTag("ON_RULE")){
             zoneRule r;
@@ -388,8 +401,20 @@ void ofApp::loadZone(zone &z, ofxXmlSettings &XML){
             XML.popTag();
         }
 
-        //TODO reactions loader here
-        //z.addReaction ... problem with ofPtr and copy hmmm...
+        int numReacts  = XML.getNumTags("REACT");
+
+        for(int rc = 0; rc < numReacts; rc ++){
+            if(XML.pushTag("REACT", rc)){
+                reaction r;
+                loadReaction(r, XML);
+                z.addReaction(r);
+                XML.popTag();
+            }
+
+        }
+
+
+
 
 }
 
@@ -406,6 +431,70 @@ void ofApp::loadRule(zoneRule &r, ofxXmlSettings &XML){
     for(int i = 0; i < numInc; i ++)r.incDrawTypes.push_back(XML.getValue("INC", ""));
 
 }
+
+void ofApp::loadReaction(reaction &r, ofxXmlSettings &XML){
+
+    r.rType = XML.getValue("TYPE", "closeOutZone");
+    r.trig = XML.getValue("TRIG", "ON");
+
+}
+
+void ofApp::loadNode(clamourNode &n, ofxXmlSettings &XML){
+
+    //attack and decay
+
+    //drawType, soundType
+
+    //load up from sound dictionary
+
+    //override draw and sound params if specified
+
+   /* if(XML.pushTag("DRAW"){
+
+        n.setDrawType(XML.getValue("TYPE", "DEBUG"));
+
+        int numParams = XML.getNumTags("PARAM");
+
+        for(int np = 0; np < numParams; np ++){
+
+            if(XML.pushTag("PARAM", np){
+                parameter p;
+                loadParam(p, XML);
+                XML.popTag();
+            }
+
+        }
+
+        XML.popTag();
+    } */
+
+
+
+
+}
+
+void ofApp::loadDraw(baseData &bd, ofxXmlSettings &XML){
+
+
+}
+
+void ofApp::loadSound(baseData &bd, ofxXmlSettings &XML){
+
+
+}
+
+void ofApp::loadParam(parameter &p, ofxXmlSettings &XML){
+
+    p.name = XML.getValue("NAME", "default");
+    p.abs_val = XML.getValue("ABS_VAL", 0.5);
+    p.min_val = XML.getValue("MIN_VAL", 0.0);
+    p.max_val = XML.getValue("MAX_VAL", 1.0);
+    p.map_type = mapType(XML.getValue("MAP_TYPE", CLAMOUR_MAP_FIXED));
+
+    if(XML.tagExists("WARP"))p.warp = XML.getValue("WARP", "lin");
+
+}
+
 
 
 void ofApp::update(){

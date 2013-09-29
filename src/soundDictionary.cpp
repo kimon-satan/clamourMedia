@@ -8,9 +8,9 @@
 
 #include "soundDictionary.h"
 
+map<string, baseData> soundDictionary::synthDictionary;
 
-
-soundDictionary::soundDictionary(){
+void soundDictionary::loadSynthDefs(){
 
     //load the XML definitions into synth Dictionary
 
@@ -54,7 +54,7 @@ soundDictionary::soundDictionary(){
                     }
 
 
-                    synthDictionary[b.getName()] = b;
+                    soundDictionary::synthDictionary[b.getName()] = b;
 
                     XML.popTag(); //SYNTH
                 }
@@ -77,7 +77,7 @@ soundDictionary::soundDictionary(){
 
 baseData soundDictionary::createSoundData(string synthName){
 
-    return synthDictionary[synthName];
+    return soundDictionary::synthDictionary[synthName];
 
 
 }

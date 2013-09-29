@@ -18,7 +18,6 @@ clamourNode::clamourNode(int ts, string tr)
     rawPos_rel.set(0.5,0.5);
     isDragOn = false;
     smoothFrames = 10;
-    drawType = "DEBUG";
     shiftAmount = 0.2;
     mChanged = CLAMOUR_NONE;
     isSleeping = true;
@@ -81,29 +80,28 @@ void clamourNode::modifyHistory(){
 void clamourNode::setDrawType(string dt)
 {
 
-    drawType = dt;
-    drawData = drawDictionary::createDrawData(drawType);
-    drawData->init(meanPos_rel); //override
+    drawData = drawDictionary::createDrawData(dt);
+    drawData.init(meanPos_rel); //override
 
 }
 
 void clamourNode::updateDrawData()
 {
 
-    drawData->update(meanPos_rel); //used for mappings
+    drawData.update(meanPos_rel); //used for mappings
 
 }
 
 void clamourNode::setSoundData(baseData sd)
 {
-    soundData = ofPtr<baseData>(new baseData(sd));
-    soundData->init(meanPos_rel); //override
+    soundData = sd;
+    soundData.init(meanPos_rel); //override
 }
 
 void clamourNode::updateSoundData()
 {
 
-    soundData->update(meanPos_rel); //used for mappings
+    soundData.update(meanPos_rel); //used for mappings
 
 }
 
