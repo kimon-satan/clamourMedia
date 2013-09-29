@@ -46,10 +46,10 @@ class nodeManager{
 
     //add parameter versions for randomisation later
 
-    void setNodeDrawType(vector<string> indexes, string dt);
-    void setNodeDrawParam(vector<string> indexes, parameter p);
-    void setNodeSoundType(vector<string> indexes, string st);
-    void setNodeSoundParam(vector<string> indexes, parameter p);
+    void setNodeDraw(vector<string> indexes, baseData &bd);
+    void setNodeDrawParam(vector<string> indexes, parameter &p);
+    void setNodeSound(vector<string> indexes, baseData &bd);
+    void setNodeSoundParam(vector<string> indexes, parameter &p);
 
 
     private:

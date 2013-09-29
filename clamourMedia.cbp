@@ -528,6 +528,8 @@
 		<Unit filename="src/title.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/xmlLoader.cpp" />
+		<Unit filename="src/xmlLoader.h" />
 		<Unit filename="src/zone.cpp">
 			<Option virtualFolder="src/zoneClasses/" />
 		</Unit>

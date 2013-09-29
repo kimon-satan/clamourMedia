@@ -251,28 +251,23 @@ void nodeManager::setNodeDecSecs(vector<string> indexes, float dec){
 }
 
 
-void nodeManager::setNodeDrawType(vector<string> indexes, string dt)
+void nodeManager::setNodeDraw(vector<string> indexes, baseData &bd)
 {
 
     for(int i = 0; i < indexes.size(); i ++)
     {
-
-        mNodes[indexes[i]]->setDrawType(dt);
-
+        mNodes[indexes[i]]->setDrawData(bd);
     }
 
 }
 
 
-void nodeManager::setNodeSoundType(vector<string> indexes, string st)
+void nodeManager::setNodeSound(vector<string> indexes, baseData &bd)
 {
-
-    baseData sd = soundDictionary::createSoundData(st);
 
     for(int i = 0; i < indexes.size(); i ++)
     {
-
-        mNodes[indexes[i]]->setSoundData(sd);
+        mNodes[indexes[i]]->setSoundData(bd);
         if(mNodes[indexes[i]]->getIsFiring())mNodes[indexes[i]]->setChanged(CLAMOUR_SOUND);
 
     }
@@ -280,7 +275,7 @@ void nodeManager::setNodeSoundType(vector<string> indexes, string st)
 }
 
 
-void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p)
+void nodeManager::setNodeDrawParam(vector<string> indexes, parameter &p)
 {
 
     for(int i = 0; i < indexes.size(); i ++)
@@ -294,7 +289,7 @@ void nodeManager::setNodeDrawParam(vector<string> indexes, parameter p)
 }
 
 
-void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p)
+void nodeManager::setNodeSoundParam(vector<string> indexes, parameter &p)
 {
 
     //NB this method assumes all nodes are of the same soundType
@@ -306,7 +301,7 @@ void nodeManager::setNodeSoundParam(vector<string> indexes, parameter p)
     for(int i = 0; i < indexes.size(); i ++)
     {
 
-        p.init(mNodes[indexes[i]]->getMeanPos_rel());//if mapped randomly only reset that parameter
+        p.init(mNodes[indexes[i]]->getMeanPos_rel());//if mapped randomly only reset that parameter // why not in the class ?
         mNodes[indexes[i]]->setSoundParameter(p);
 
     }

@@ -24,10 +24,10 @@ class zoneManager
 
         //could be in a base but not much advantage ?
 
-        void setZoneDrawParam(vector<string> indexes, parameter p);
-        void setZoneDrawType(vector<string> indexes, string st);
-        void setZoneSoundParam(vector<string> indexes, parameter p);
-        void setZoneSoundType(vector<string> indexes, string st);
+        void setZoneDrawParam(vector<string> indexes, parameter &p);
+        void setZoneDraw(vector<string> indexes, baseData &bd);
+        void setZoneSoundParam(vector<string> indexes, parameter &p);
+        void setZoneSound(vector<string> indexes, baseData &bd);
 
 
     private:

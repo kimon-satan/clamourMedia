@@ -144,9 +144,15 @@ void baseZode::react()
 
 void baseZode::setDrawType(string dt)
 {
-
     drawData = drawDictionary::createDrawData(dt);
+}
 
+void baseZode::setDrawData(baseData bd){
+    drawData = bd;
+}
+
+void baseZode::setSoundType(string st){
+    soundData = soundDictionary::createSoundData(st);
 }
 
 baseData baseZode::getDrawData()

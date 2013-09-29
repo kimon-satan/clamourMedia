@@ -23,10 +23,12 @@ public:
     changeType getChanged();
     void setChanged(changeType c);
 
+    void setDrawData(baseData bd);
     virtual void setDrawType(string dt);
     baseData getDrawData();
     void setDrawParameter(parameter p);
 
+    void setSoundType(string st);
     virtual void setSoundData(baseData sd);
     baseData getSoundData();
     void setSoundParameter(parameter p);

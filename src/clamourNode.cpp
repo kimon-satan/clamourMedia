@@ -79,9 +79,9 @@ void clamourNode::modifyHistory(){
 
 void clamourNode::setDrawType(string dt)
 {
-
+    //an override of baseZode
     drawData = drawDictionary::createDrawData(dt);
-    drawData.init(meanPos_rel); //override
+    drawData.init(meanPos_rel);
 
 }
 

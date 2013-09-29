@@ -333,28 +333,19 @@ void zoneManager::destroyAllZones()
 
 }
 
-void zoneManager::setZoneDrawType(vector<string> indexes, string dt)
+void zoneManager::setZoneDraw(vector<string> indexes, baseData &bd)
 {
 
-    for(int i = 0; i < indexes.size(); i ++)
-    {
-
-        mZones[indexes[i]]->setDrawType(dt);
-
-    }
+    for(int i = 0; i < indexes.size(); i ++)mZones[indexes[i]]->setDrawData(bd);
 
 }
 
 
-void zoneManager::setZoneSoundType(vector<string> indexes, string st)
-{
-
-    baseData sd = soundDictionary::createSoundData(st);
+void zoneManager::setZoneSound(vector<string> indexes, baseData &bd){
 
     for(int i = 0; i < indexes.size(); i ++)
     {
-
-        mZones[indexes[i]]->setSoundData(sd);
+        mZones[indexes[i]]->setSoundData(bd);
         if(mZones[indexes[i]]->getIsFiring())mZones[indexes[i]]->setChanged(CLAMOUR_SOUND);
 
     }
@@ -362,7 +353,7 @@ void zoneManager::setZoneSoundType(vector<string> indexes, string st)
 }
 
 
-void zoneManager::setZoneDrawParam(vector<string> indexes, parameter p)
+void zoneManager::setZoneDrawParam(vector<string> indexes, parameter &p)
 {
 
     for(int i = 0; i < indexes.size(); i ++)
@@ -378,7 +369,7 @@ void zoneManager::setZoneDrawParam(vector<string> indexes, parameter p)
 }
 
 
-void zoneManager::setZoneSoundParam(vector<string> indexes, parameter p)
+void zoneManager::setZoneSoundParam(vector<string> indexes, parameter &p)
 {
 
     //assumes all zones of the same draw type

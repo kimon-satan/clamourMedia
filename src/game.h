@@ -37,8 +37,7 @@ struct command{
     zone mZone;
     clamourNode mNode;
 
-    string soundType, drawType;
-    baseData soundDef, drawDef; //can be used to store soundDef or DrawDef
+    baseData mBaseData; //can be used to store soundDef or DrawDef
 
     vector<parameter> params; //for changing individual parameters
 
