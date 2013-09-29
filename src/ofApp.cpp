@@ -560,7 +560,7 @@ void ofApp::implementStage()
             }
         }
         else if(tComms[i].mCommand == "SET_NODE"){
-
+            mNodeManager->setNodes(clients, tComms[i].mNode);
         }
         else if(tComms[i].mCommand == "CREATE_ZONE")
         {

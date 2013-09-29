@@ -6,7 +6,7 @@
 		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons\;src\;addons\ofxUI\src\;addons\ofxFenster\src\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOsc\libs\oscpack\src\ip\win32\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOsc\src\;addons\ofxXmlSettings\src\;addons\ofxXmlSettings\libs\;src\nodeClasses\;src\base\;src\zoneClasses\;" />
+		<Option virtualFolders="addons\;src\;addons\ofxUI\src\;addons\ofxFenster\src\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOsc\libs\oscpack\src\ip\win32\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOsc\src\;addons\ofxXmlSettings\src\;addons\ofxXmlSettings\libs\;src\nodeClasses\;src\base\;src\zoneClasses\;XMLs\;" />
 		<Build>
 			<Target title="release">
 				<Option output="bin/$(PROJECT_NAME)" prefix_auto="1" extension_auto="1" />
@@ -425,6 +425,9 @@
 		</Unit>
 		<Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.h">
 			<Option virtualFolder="addons/ofxXmlSettings/src" />
+		</Unit>
+		<Unit filename="bin/data/XMLs/draft.xml">
+			<Option virtualFolder="XMLs/" />
 		</Unit>
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />

@@ -1,50 +1,50 @@
 <CLAMOUR_MEDIA>
 
-<!---CONSTANT GROUPS NOT RELYING ON ONLINE OR NOT -->
+	<!---CONSTANT GROUPS NOT RELYING ON ONLINE OR NOT -->
 
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>allPlayers</NAME>
 		<SELECTOR>all</SELECTOR>
 	</GROUP>
-	
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>oddPlayers</NAME>
 		<SELECTOR>odd</SELECTOR>
 	</GROUP>
-	
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>evenPlayers</NAME>
 		<SELECTOR>even</SELECTOR>
 	</GROUP>
-	
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>leftPlayers</NAME>
 		<SELECTOR>left</SELECTOR>
 	</GROUP>
-	
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>rightPlayers</NAME>
 		<SELECTOR>right</SELECTOR>
 	</GROUP>
-	
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>backPlayers</NAME>
 		<SELECTOR>back</SELECTOR>
 	</GROUP>
-	
+
 	<GROUP>
 		<ACTION>create</ACTION>
 		<NAME>frontPlayers</NAME>
 		<SELECTOR>front</SELECTOR>
 	</GROUP>
 
-<!--    GAMES DEFINED HERE  -->
+	<!--    GAMES DEFINED HERE  -->
 
 
 	<GAME>
@@ -56,105 +56,80 @@
 				<TEXT>DEBUG</TEXT>
 			</COMMAND>
 			<COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE><TEXT>DEBUG</TEXT>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>DEBUG</TEXT>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
 			<PRIORITY>
-				<COMMAND><ACTION>END_TITLE</ACTION><NAME>debug</NAME></COMMAND>
 				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_NODE_ENV</ACTION>
-					<ATTACK_SECS>0.25</ATTACK_SECS>
-					<DECAY_SECS>0.01</DECAY_SECS>
+					<ACTION>END_TITLE</ACTION>
+					<NAME>debug</NAME>
+				</COMMAND>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>SET_NODE</ACTION>
+					<CAN_SLEEP>false</CAN_SLEEP>
+					<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
+					<DRAW_TYPE>FLICKER</DRAW_TYPE><SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
+					<DRAW_PARAMS>
+						<PARAM>
+							<NAME>size</NAME><ABS_VAL>20</ABS_VAL>
+						</PARAM>
+					</DRAW_PARAMS>
+					<SOUND_PARAMS>
+						<PARAM>
+							<NAME>pulseRate</NAME><MIN_VAL>4</MIN_VAL><MAX_VAL>20</MAX_VAL><ABS_VAL>4</ABS_VAL>
+							<MAP_TYPE>1</MAP_TYPE>
+						</PARAM>
+						<PARAM>
+							<NAME>pan</NAME><MIN_VAL>-0.75</MIN_VAL><MAX_VAL>0.75</MAX_VAL><ABS_VAL>0</ABS_VAL>
+							<MAP_TYPE>1</MAP_TYPE>
+						</PARAM>
+						<PARAM>
+							<NAME>resFilFreq</NAME><MIN_VAL>300</MIN_VAL><MAX_VAL>2000</MAX_VAL><ABS_VAL>500</ABS_VAL>
+							<MAP_TYPE>2</MAP_TYPE>
+						</PARAM>
+					</SOUND_PARAMS>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
 				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_DRAW_TYPE</ACTION>
-					<DRAW_TYPE>FLICKER</DRAW_TYPE>
-				</COMMAND>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_DRAW_PARAM</ACTION>
-					<PARAM>size</PARAM>
-					<ABS_VAL>20</ABS_VAL>
-				</COMMAND>
-				<COMMAND>
-					 <TARGET>allPlayers</TARGET><ACTION>SET_SOUND_TYPE</ACTION>
-					<SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
-				</COMMAND>
-			</PRIORITY> 
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
-					<PARAM>pulseRate</PARAM>
-					<MIN_VAL>4</MIN_VAL><MAX_VAL>20</MAX_VAL><ABS_VAL>4</ABS_VAL>
-					<MAP_TYPE>1</MAP_TYPE>
-				</COMMAND>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
-					<PARAM>pan</PARAM>
-					<MIN_VAL>-0.75</MIN_VAL><MAX_VAL>0.75</MAX_VAL><ABS_VAL>0</ABS_VAL>
-					<MAP_TYPE>1</MAP_TYPE>
-				</COMMAND>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
-					<PARAM>resFilFreq</PARAM>
-					<MIN_VAL>300</MIN_VAL><MAX_VAL>2000</MAX_VAL><ABS_VAL>500</ABS_VAL>
-					<MAP_TYPE>2</MAP_TYPE>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>SET_CONTROL</ACTION>
+					<CONTROL_TYPE>DRAG_ON_OFF</CONTROL_TYPE>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
 				<COMMAND>
-					 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>DRAG_ON_OFF</CONTROL_TYPE>
-				</COMMAND>  
-			</PRIORITY>
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>DISTRIBUTE_NODES</ACTION>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>DISTRIBUTE_NODES</ACTION>
 					<PATTERN>CIRCUM</PATTERN>
-					<X>0.5</X>
-					<Y>0.5</Y>
-					<POS_P>1</POS_P>
-					<RADIUS>0.25</RADIUS>
+					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
 				<COMMAND>
 					<ACTION>CREATE_ZONE</ACTION>
 					<NAME>debug1</NAME>
-					<X>0.5</X><Y>0.5</Y>	
-					<RADIUS>0.15</RADIUS>	
-					<ENV_TYPE>AS</ENV_TYPE>	
-					<ATTACK_SECS>0.01</ATTACK_SECS>
-					<DECAY_SECS>1.0</DECAY_SECS>
+					<X>0.5</X><Y>0.5</Y><RADIUS>0.15</RADIUS>
+					<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
 					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
 					<REACT><TYPE>closeOutZone</TYPE><TRIG>ON_OFF</TRIG></REACT>
-				</COMMAND>
-			</PRIORITY>
-			<PRIORITY>
-				<COMMAND>
-					 <Z_TARGET>debug1</Z_TARGET><ACTION>SET_SOUND_TYPE</ACTION>
 					<SOUND_TYPE>brownExploder</SOUND_TYPE>
 				</COMMAND>
-			</PRIORITY> 
+			</PRIORITY>
 		</STAGE>
-	<STAGE>
-		<COMMAND>
-			 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-			 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-		</COMMAND>  
-	</STAGE>
-	
 		<STAGE>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE><TEXT>GAME OVER</TEXT>
-				 
-			</COMMAND>  
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>GAME OVER</TEXT>
+			</COMMAND>
 		</STAGE>
-
 	</GAME>
 
 	<GAME>
@@ -174,419 +149,302 @@
 		</STAGE>
 		<STAGE>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
-				 <TEXT>Please wait for the playtest to begin ...</TEXT>
-			</COMMAND>  
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>Please wait for the playtest to begin ...</TEXT>
+			</COMMAND>
 		</STAGE>
 	</GAME>
 
 	<GAME>
 		<NAME>synchrony</NAME>
-	
+
 		<STAGE>
 			<COMMAND>
 				<ACTION>ADD_TITLE</ACTION>
 				<TEXT>Clamour Playtest</TEXT>
 				<NAME>clamour</NAME>
-			</COMMAND> 
+			</COMMAND>
 		</STAGE>
-		<STAGE>		
+		<STAGE>
 			<COMMAND>
 				<ACTION>END_TITLE</ACTION>
 				<NAME>clamour</NAME>
-			</COMMAND>	
+			</COMMAND>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-				 <TEXT>Welcome !</TEXT>
-			</COMMAND>   
-        </STAGE>
-        <STAGE>       
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>Welcome !</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
 			<COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
 				<TEXT>to this Clamour playtest</TEXT>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>Let's begin</TEXT>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>Let's begin</TEXT>
 			</COMMAND>
-      </STAGE>
-		<STAGE>	
+		</STAGE>
+		<STAGE>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
-				 <TEXT>I'd like to test how synchronous you and your mobile devices are.</TEXT>
-			</COMMAND>   
-        </STAGE>
-        <STAGE>
-			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-				 <TEXT>From now on ...</TEXT>
-			</COMMAND>       
-        </STAGE>
-        <STAGE>
-			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
-				 <TEXT>immediately read aloud any text appearing inside quotation marks ...</TEXT>
-			</COMMAND>       	
-        </STAGE>
-        <STAGE>			
-			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-				 <TEXT>Like these " "</TEXT>
-			</COMMAND>   
-        </STAGE>
-        <STAGE>
-			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>Do you understand ?</TEXT>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>I'd like to test how synchronous you and your mobile devices are.</TEXT>
 			</COMMAND>
-        </STAGE>
-        <STAGE>
+		</STAGE>
+		<STAGE>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"Yes"</TEXT>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>From now on ...</TEXT>
 			</COMMAND>
-        </STAGE>
-  
-        <STAGE>
+		</STAGE>
+		<STAGE>
 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"Thankyou"</TEXT>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>immediately read aloud any text appearing inside quotation marks ...</TEXT>
 			</COMMAND>
-        </STAGE>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>Like these " "</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>Do you understand ?</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"Yes"</TEXT>
+			</COMMAND>
+		</STAGE>
 
-			<STAGE>
-			 <COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"Thankyou"</TEXT>
+			</COMMAND>
+		</STAGE>
+
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
 				<TEXT>"Now tell me"</TEXT>
 			</COMMAND>
-        </STAGE>
-        <STAGE>
-			 <COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
 				<TEXT>"What is this all about ?"</TEXT>
 			</COMMAND>
-        </STAGE>
- 
-        <STAGE>
- 			<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"and many small ones"</TEXT>
-			</COMMAND>
-        </STAGE>
-         <STAGE>
-	 			<COMMAND>
-					 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-						<TEXT>"can we work together"</TEXT>
-				</COMMAND>
-			</STAGE>
-			<STAGE>
+		</STAGE>
+
+		<STAGE>
 			<COMMAND>
-				 <TARGET>oddPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"or will our cooperation fail"</TEXT>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"and many small ones"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"can we work together"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>oddPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"or will our cooperation fail"</TEXT>
 			</COMMAND>
 			<COMMAND>
-				 <TARGET>evenPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"or will we fall apart"</TEXT>
+				<TARGET>evenPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"or will we fall apart"</TEXT>
 			</COMMAND>
 
-				<!--create another random group-->
-        </STAGE>
-        <STAGE>
-        	<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"At the moment, you are in control"</TEXT>
+			<!--create another random group-->
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"At the moment, you are in control"</TEXT>
 			</COMMAND>
-        </STAGE>
-        <STAGE>
-        	<COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"You can divide us"</TEXT>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"You can divide us"</TEXT>
 			</COMMAND>
-        </STAGE>
-        <STAGE>
+		</STAGE>
+		<STAGE>
 			<PRIORITY>
 				<COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
-				<SELECTOR>
-					<S_TYPE>ge_seat</S_TYPE><SEAT>6</SEAT>				
-				</SELECTOR>
-				<NAME>electraLeft</NAME>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR>
+						<S_TYPE>ge_seat</S_TYPE>
+						<SEAT>6</SEAT>
+					</SELECTOR>
+					<NAME>electraLeft</NAME>
 				</COMMAND>
-        	</PRIORITY>
+			</PRIORITY>
 			<PRIORITY>
-        	<COMMAND>
-				 <TARGET>electraLeft</TARGET><ACTION>SET_TEXT</ACTION>
+				<COMMAND>
+					<TARGET>electraLeft</TARGET>
+					<ACTION>SET_TEXT</ACTION>
 					<TEXT>"Into left"</TEXT>
-			</COMMAND>
-			</PRIORITY>
-        </STAGE>
-        <STAGE>
-			<PRIORITY>
-				<COMMAND>
-				<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
-				<SELECTOR>
-					<S_TYPE>le_seat</S_TYPE><SEAT>5</SEAT>				
-				</SELECTOR>
-				<NAME>electraRight</NAME>
 				</COMMAND>
-        	</PRIORITY>
-			<PRIORITY>
-        	<COMMAND>
-				 <TARGET>electraRight</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"and right"</TEXT>
-			</COMMAND>
 			</PRIORITY>
-        </STAGE>
-        <STAGE>
-        	<COMMAND>
-				 <TARGET>frontPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"front"</TEXT>
-			</COMMAND>
-        </STAGE>
-        <STAGE>
-        	<COMMAND>
-				 <TARGET>backPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"or back"</TEXT>
-			</COMMAND>
-        </STAGE>
-        
-        <STAGE>
-        	<PRIORITY>
+		</STAGE>
+		<STAGE>
+			<PRIORITY>
 				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
-					<SELECTOR><S_TYPE>le_row</S_TYPE><ROW>D</ROW></SELECTOR>
-					<SELECTOR><S_TYPE>ge_seat</S_TYPE><SEAT>10</SEAT></SELECTOR>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR>
+						<S_TYPE>le_seat</S_TYPE>
+						<SEAT>5</SEAT>
+					</SELECTOR>
+					<NAME>electraRight</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>electraRight</TARGET>
+					<ACTION>SET_TEXT</ACTION>
+					<TEXT>"and right"</TEXT>
+				</COMMAND>
+			</PRIORITY>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>frontPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"front"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>backPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"or back"</TEXT>
+			</COMMAND>
+		</STAGE>
+
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR>
+						<S_TYPE>le_row</S_TYPE>
+						<ROW>D</ROW>
+					</SELECTOR>
+					<SELECTOR>
+						<S_TYPE>ge_seat</S_TYPE>
+						<SEAT>10</SEAT>
+					</SELECTOR>
 					<NAME>aTeam</NAME>
 				</COMMAND>
 				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
-					<SELECTOR><S_TYPE>le_row</S_TYPE><ROW>G</ROW></SELECTOR>
-					<SELECTOR><S_TYPE>ge_row</S_TYPE><ROW>F</ROW></SELECTOR>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR>
+						<S_TYPE>le_row</S_TYPE>
+						<ROW>G</ROW>
+					</SELECTOR>
+					<SELECTOR>
+						<S_TYPE>ge_row</S_TYPE>
+						<ROW>F</ROW>
+					</SELECTOR>
 					<NAME>bTeam</NAME>
 				</COMMAND>
 				<COMMAND>
-					<TARGET>backPlayers</TARGET><ACTION>NEW_GROUP</ACTION>
-					<SELECTOR>online</SELECTOR>	
-					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>8</NUM_P></SELECTOR>
+					<TARGET>backPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR>online</SELECTOR>
+					<SELECTOR>
+						<S_TYPE>random</S_TYPE>
+						<NUM_P>8</NUM_P>
+					</SELECTOR>
 					<NAME>cTeam</NAME>
 				</COMMAND>
 
 				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>NEW_GROUP</ACTION>	
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
 					<SELECTORS>online,single</SELECTORS>
 					<NAME>aSingle</NAME>
 				</COMMAND>
-        	</PRIORITY>
-        	<PRIORITY>
-        	    <COMMAND>
-				 <TARGET>aTeam</TARGET><ACTION>SET_TEXT</ACTION>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>aTeam</TARGET>
+					<ACTION>SET_TEXT</ACTION>
 					<TEXT>"You can build teams ..."</TEXT>
-				</COMMAND>
-        	</PRIORITY>
-        </STAGE>
-		  <STAGE>
-			  	<COMMAND>
-				 <TARGET>cTeam</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"I can build teams ..."</TEXT>
-				</COMMAND>
-		 </STAGE>
-		<STAGE>
-			  	<COMMAND>
-				 <TARGET>bTeam</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"We can build teams ..."</TEXT>
-				</COMMAND>
-		 </STAGE>
-        <STAGE>
-        	<PRIORITY>
-        	    <COMMAND>
-				 <TARGET>allPlayers</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"or single you"</TEXT>
-				</COMMAND>
-        	</PRIORITY>
-        </STAGE>
-        <STAGE>
-        	    <COMMAND>
-				 <TARGET>aSingle</TARGET><ACTION>SET_TEXT</ACTION>
-					<TEXT>"out"</TEXT>
-				</COMMAND>
-        </STAGE>
-        
-	</GAME>
-	
-	<GAME>
-		<NAME>play</NAME>
-		<STAGE>
-			<COMMAND>
-				<ACTION>ADD_TITLE</ACTION>
-				<NAME>Play</NAME>
-				<TEXT>2. Control</TEXT>
-			</COMMAND>
-		</STAGE> 
-		
-	<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>allPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
-					 <TEXT>Now I'm going to give you some control ...</TEXT>
-				</COMMAND> 
-			 </PRIORITY>
-			 <PRIORITY>
-				<COMMAND>
-					 <TARGET>allPlayers</TARGET><ACTION>SET_DRAW_TYPE</ACTION>
-					 <DRAW_TYPE>FLICKER</DRAW_TYPE>
-				</COMMAND>
-				<COMMAND>
-					 <TARGET>allPlayers</TARGET><ACTION>SET_SOUND_TYPE</ACTION>
-					 <SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
-				</COMMAND>
-			 </PRIORITY> 
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
-					<PARAM>pulseRate</PARAM>
-					<MIN_VAL>4</MIN_VAL><MAX_VAL>20</MAX_VAL><ABS_VAL>4</ABS_VAL>
-					<MAP_TYPE>1</MAP_TYPE>
-				</COMMAND>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
-					<PARAM>pan</PARAM>
-					<MIN_VAL>-0.75</MIN_VAL><MAX_VAL>0.75</MAX_VAL><ABS_VAL>0</ABS_VAL>
-					<MAP_TYPE>1</MAP_TYPE>
-				</COMMAND>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET><ACTION>SET_SOUND_PARAM</ACTION>
-					<PARAM>resFilFreq</PARAM>
-					<MIN_VAL>300</MIN_VAL><MAX_VAL>2000</MAX_VAL><ABS_VAL>500</ABS_VAL>
-					<MAP_TYPE>2</MAP_TYPE>
 				</COMMAND>
 			</PRIORITY>
 		</STAGE>
-		
-		<STAGE>
-				<COMMAND>
-					 <TARGET>A_1</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-				</COMMAND> 
-		</STAGE>
-		
 		<STAGE>
 			<COMMAND>
-				 <TARGET>A_2</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-			</COMMAND> 
-			<COMMAND>
-				<ACTION>END_TITLE</ACTION>
-				<NAME>Play</NAME>
-				<TEXT>2. Control</TEXT>
+				<TARGET>cTeam</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"I can build teams ..."</TEXT>
 			</COMMAND>
 		</STAGE>
-		
 		<STAGE>
 			<COMMAND>
-				 <TARGET>A_3</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-			</COMMAND> 
+				<TARGET>bTeam</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"We can build teams ..."</TEXT>
+			</COMMAND>
 		</STAGE>
-		
 		<STAGE>
+			<PRIORITY>
 				<COMMAND>
-					 <TARGET>A_4</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-				</COMMAND> 
+					<TARGET>allPlayers</TARGET>
+					<ACTION>SET_TEXT</ACTION>
+					<TEXT>"or single you"</TEXT>
+				</COMMAND>
+			</PRIORITY>
 		</STAGE>
-		
-		<STAGE>
-				<COMMAND>
-					 <TARGET>A_5</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-				</COMMAND> 
-		</STAGE>
-		
-		<STAGE>
-				<COMMAND>
-					 <TARGET>backPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>XY_ON_OFF</CONTROL_TYPE>
-				</COMMAND> 
-		</STAGE>
-		
 		<STAGE>
 			<COMMAND>
-				 <TARGET>oddPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-				 <CONTROL_TYPE>DRAG_ON_OFF</CONTROL_TYPE>
-			</COMMAND> 
-		</STAGE> 
-		
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>evenPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>DRAG_CONT</CONTROL_TYPE>
-				</COMMAND> 
-			 </PRIORITY>
+				<TARGET>aSingle</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"out"</TEXT>
+			</COMMAND>
 		</STAGE>
-		
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>oddPlayers</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-					 <TEXT>Thanks for helping me</TEXT>
-				</COMMAND> 
-			 </PRIORITY>
-		</STAGE>
-		
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>A_2</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-					 <TEXT>Thanks for helping me</TEXT>
-				</COMMAND> 
-			 </PRIORITY>
-		</STAGE>
-		
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>A_4</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-					 <TEXT>Thanks for helping me</TEXT>
-				</COMMAND> 
-			 </PRIORITY>
-		</STAGE>
-		
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>B_4</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-					 <TEXT>Thanks for helping me</TEXT>
-				</COMMAND> 
-			 </PRIORITY>
-		</STAGE>
-		
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					 <TARGET>B_2</TARGET><ACTION>SET_CONTROL</ACTION>
-					 <CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-					 <TEXT>Thanks for helping me</TEXT>
-				</COMMAND> 
-			 </PRIORITY>
-		</STAGE>
-		
 
-		
-	</GAME> 
-
+	</GAME>
 
 </CLAMOUR_MEDIA>

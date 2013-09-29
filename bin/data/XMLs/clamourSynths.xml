@@ -34,7 +34,7 @@
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0.2</ABS_VAL>
 			<WARP>lin</WARP>
-			<UNIT></UNIT>
+			<UNIT/>
 		</PARAM>
 		<PARAM>
 			<NAME>pan</NAME>
@@ -42,11 +42,11 @@
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
 			<WARP>lin</WARP>
-			<UNIT></UNIT>
+			<UNIT/>
 		</PARAM>
 
 	</SYNTH>
-	
+
 	<SYNTH>
 		<NAME>brownExploder</NAME>
 		<PARAM>
@@ -55,8 +55,8 @@
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
 			<WARP>lin</WARP>
-			<UNIT></UNIT>
-	
+			<UNIT/>
+
 		</PARAM>
 	</SYNTH>
 

@@ -271,3 +271,8 @@ envType baseZode::getEnvType(){return mEnvType;}
 void baseZode::setEnvType(string s){
     mEnvType = (s == "ASR")?CLAMOUR_ASR : CLAMOUR_AR;
 }
+void baseZode::setEnvType(envType t){
+
+    mEnvType = t;
+
+}

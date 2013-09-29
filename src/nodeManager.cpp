@@ -308,6 +308,21 @@ void nodeManager::setNodeSoundParam(vector<string> indexes, parameter &p)
 
 }
 
+void nodeManager::setNodes(vector<string> indexes, clamourNode &n){
+
+    for(int i = 0; i < indexes.size(); i ++)
+    {
+
+        mNodes[indexes[i]]->setSoundData(n.getSoundData());
+        mNodes[indexes[i]]->setDrawData(n.getDrawData());
+        mNodes[indexes[i]]->setEnvType(n.getEnvType());
+        mNodes[indexes[i]]->setAttSecs(n.getAttSecs());
+        mNodes[indexes[i]]->setDecSecs(n.getDecSecs());
+        mNodes[indexes[i]]->setCanSleep(n.getCanSleep());
+    }
+
+}
+
 
 
 

@@ -50,6 +50,7 @@ class nodeManager{
     void setNodeDrawParam(vector<string> indexes, parameter &p);
     void setNodeSound(vector<string> indexes, baseData &bd);
     void setNodeSoundParam(vector<string> indexes, parameter &p);
+    void setNodes(vector<string> indexes, clamourNode &n);
 
 
     private:

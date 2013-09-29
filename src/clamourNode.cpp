@@ -21,7 +21,7 @@ clamourNode::clamourNode(int ts, string tr)
     shiftAmount = 0.2;
     mChanged = CLAMOUR_NONE;
     isSleeping = true;
-    canSleep = false;
+    canSleep = true;
 
 };
 

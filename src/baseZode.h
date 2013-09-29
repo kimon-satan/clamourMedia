@@ -55,6 +55,7 @@ public:
 
     envType getEnvType();
     void setEnvType(string s);
+    void setEnvType(envType t);
 
 protected:
 
