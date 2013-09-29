@@ -1,4 +1,5 @@
 //
+
 //  nodeManager.cpp
 //  clamourMedia
 //
@@ -8,9 +9,10 @@
 
 #include "nodeManager.h"
 
+
+
 nodeManager::nodeManager()
 {
-
 
 
     //populate nodeArray
@@ -27,7 +29,6 @@ nodeManager::nodeManager()
 
         }
     }
-
 
 }
 
@@ -70,6 +71,7 @@ void nodeManager::updateNodes()
 
     it = mNodes.begin();
 
+
     while(it != mNodes.end()){
 
         it->second->update();
@@ -84,10 +86,11 @@ void nodeManager::updateNodes()
             it->second->updateSoundData();
         }
 
-
         ++it;
 
     }
+
+
 
 
 }
@@ -293,10 +296,6 @@ void nodeManager::setNodeSoundParam(vector<string> indexes, parameter &p)
 {
 
     //NB this method assumes all nodes are of the same soundType
-
-    parameter t = mNodes[indexes[0]]->getSoundData().getParameter(p.name); //a copy of the original
-    p.index = t.index; //copy these over
-    p.warp = t.warp;
 
     for(int i = 0; i < indexes.size(); i ++)
     {

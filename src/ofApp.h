@@ -60,6 +60,8 @@ private:
     vector<ofPtr<game> > mGames;
 
     ofPtr<game> mCurrentGame;
+
+    map<string, clamourNode> mNodePresets; //may ultimately need to go somewhere else (i.e. nodeManager);
     int mGameBrowseIndex;
 
     bool isMouseDown;

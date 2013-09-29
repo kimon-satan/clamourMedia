@@ -1,8 +1,7 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
+void ofApp::setup() {
 
     //ofSetLogLevel(OF_LOG_VERBOSE);
     ofSetVerticalSync(true);
@@ -14,10 +13,8 @@ void ofApp::setup()
 
     ofxFensterManager::get()->setupWindow(&mDisplay);
 
-    for(int i = 0; i < NUM_SEATS; i++)
-    {
-        for(int j = 0; j < NUM_ROWS; j++)
-        {
+    for(int i = 0; i < NUM_SEATS; i++) {
+        for(int j = 0; j < NUM_ROWS; j++) {
 
             string t_index = ofToString(char(65 + j)) + "_" + ofToString(i + 1);
             mPlayerIndexes.push_back(t_index);
@@ -60,8 +57,7 @@ void ofApp::setup()
 
 }
 
-void ofApp::setupGUI()
-{
+void ofApp::setupGUI() {
 
 
     ofxUIWidget * w;
@@ -145,8 +141,7 @@ void ofApp::setupGUI()
 
 }
 
-void ofApp::setupTextArea(ofxUIWidget * w)
-{
+void ofApp::setupTextArea(ofxUIWidget * w) {
 
     w->setColorBack(ofxUIColor(0));
     w->setColorFill(ofxUIColor(0,255,255));
@@ -155,38 +150,31 @@ void ofApp::setupTextArea(ofxUIWidget * w)
 
 }
 
-void ofApp::loadXML()
-{
+void ofApp::loadXML() {
 
     //much of this could be moved XmlLoader
     ofxXmlSettings XML;
 
-    if(XML.loadFile("XMLs/draft.xml"))
-    {
-        if(XML.pushTag("CLAMOUR_MEDIA"))
-        {
+    if(XML.loadFile("XMLs/draft.xml")) {
+        if(XML.pushTag("CLAMOUR_MEDIA")) {
             //static groups
 
             int numGroups = XML.getNumTags("GROUP");
 
-            for(int gp = 0; gp < numGroups; gp++)
-            {
+            for(int gp = 0; gp < numGroups; gp++) {
 
-                if(XML.pushTag("GROUP", gp))
-                {
+                if(XML.pushTag("GROUP", gp)) {
 
                     string action = XML.getValue("ACTION", "create");
 
-                    if(action == "create")
-                    {
+                    if(action == "create") {
 
                         int numSelect = XML.getNumTags("SELECTOR");
 
                         //only simple selectors for now ... would require a different XML interface
                         vector<selector> tSels;
 
-                        for(int sel = 0; sel < numSelect; sel++)
-                        {
+                        for(int sel = 0; sel < numSelect; sel++) {
                             selector t;
                             t.sType = XML.getValue("SELECTOR", "all", sel);
                             tSels.push_back(t);
@@ -202,30 +190,38 @@ void ofApp::loadXML()
 
             }
 
+            int numNPresets = XML.getNumTags("NODE_PRESET");
+
+            for(int np = 0; np < numNPresets; np ++) {
+
+                if(XML.pushTag("NODE_PRESET", np)) {
+
+                    clamourNode c;
+                    xmlLoader::loadNode(c, XML);
+                    c.setName(XML.getValue("NAME", "default"));
+                    presetStore::nodePresets[c.getName()] = c;
+                    XML.popTag();
+                }
+            }
+
             int numGames = XML.getNumTags("GAME");
 
-            for(int gm = 0; gm < numGames; gm++)
-            {
+            for(int gm = 0; gm < numGames; gm++) {
 
-                if(XML.pushTag("GAME", gm))
-                {
+                if(XML.pushTag("GAME", gm)) {
 
                     ofPtr<game> gm = ofPtr<game>(new game());
 
                     gm->setName(XML.getValue("NAME", "default"));
                     int numStages = XML.getNumTags("STAGE");
 
-                    for(int stage = 0; stage < numStages; stage ++)
-                    {
-                        if(XML.pushTag("STAGE", stage))
-                        {
+                    for(int stage = 0; stage < numStages; stage ++) {
+                        if(XML.pushTag("STAGE", stage)) {
                             int numPriority = XML.getNumTags("PRIORITY");
 
-                            for(int pty = 0; pty < numPriority; pty++)
-                            {
+                            for(int pty = 0; pty < numPriority; pty++) {
 
-                                if(XML.pushTag("PRIORITY", pty))
-                                {
+                                if(XML.pushTag("PRIORITY", pty)) {
 
                                     xmlLoader::loadCommands(gm, XML, stage, pty);
                                     XML.popTag(); //PRIORTY
@@ -234,8 +230,7 @@ void ofApp::loadXML()
 
                             }
 
-                            if(numPriority == 0 )
-                            {
+                            if(numPriority == 0 ) {
                                 xmlLoader::loadCommands(gm, XML, stage); //sometimes we don't need priorities
                             }
 
@@ -253,9 +248,7 @@ void ofApp::loadXML()
             XML.popTag(); //CLAMOUR_MEDIA
         }
 
-    }
-    else
-    {
+    } else {
         cout << "can't find file \n";
     }
 
@@ -263,8 +256,7 @@ void ofApp::loadXML()
 
 
 
-void ofApp::update()
-{
+void ofApp::update() {
 
     ofBackground(100);
 
@@ -292,14 +284,12 @@ void ofApp::update()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
-{
+void ofApp::draw() {
 
     gui->draw();
 }
 
-void ofApp::guiEvent(ofxUIEventArgs &e)
-{
+void ofApp::guiEvent(ofxUIEventArgs &e) {
 
     //this could also be made into OSC for remote control
 
@@ -310,8 +300,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e)
     if((e.widget->getKind() == OFX_UI_WIDGET_BUTTON || e.widget->getKind() == OFX_UI_WIDGET_LABELBUTTON)
             && ! isMouseDown)return;
 
-    if(name == "STAGE_PLUS")
-    {
+    if(name == "STAGE_PLUS") {
 
         if(!mCurrentGame)return;
 
@@ -320,40 +309,30 @@ void ofApp::guiEvent(ofxUIEventArgs &e)
         updateGUIElements();
 
 
-    }
-    else if(name == "GAME_PLUS")
-    {
+    } else if(name == "GAME_PLUS") {
 
         mGameBrowseIndex = min((int)mGames.size()-1, mGameBrowseIndex + 1);
         updateGUIElements();
 
-    }
-    else if(name == "GAME_MINUS")
-    {
+    } else if(name == "GAME_MINUS") {
 
         mGameBrowseIndex = max(0, mGameBrowseIndex - 1);
         updateGUIElements();
 
-    }
-    else if(name == "GAME_SELECT")
-    {
+    } else if(name == "GAME_SELECT") {
 
         mCurrentGame = mGames[mGameBrowseIndex];
         resetEverything();
         implementStage();
         updateGUIElements();
 
-    }
-    else if(name == "GAME_RESET")
-    {
+    } else if(name == "GAME_RESET") {
 
         resetEverything();
         implementStage();
         updateGUIElements();
 
-    }
-    else
-    {
+    } else {
 
 
 
@@ -363,8 +342,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e)
 
 }
 
-void ofApp::updateGUIElements()
-{
+void ofApp::updateGUIElements() {
 
     ofxUITextArea * t;
 
@@ -378,8 +356,7 @@ void ofApp::updateGUIElements()
 
 }
 
-void ofApp::resetEverything()
-{
+void ofApp::resetEverything() {
 
     mSplashManager->reset();
     if(mCurrentGame)mCurrentGame->reset();
@@ -388,26 +365,20 @@ void ofApp::resetEverything()
 
 }
 
-void ofApp::unpackClients(vector<string> &clients, command &cmd)
-{
+void ofApp::unpackClients(vector<string> &clients, command &cmd) {
 
-    for(int j = 0; j < cmd.targets.size(); j++)
-    {
+    for(int j = 0; j < cmd.targets.size(); j++) {
 
         ofPtr<group> tg;
         tg = mClientManager->getGroup(cmd.targets[j]);
 
-        if(tg)
-        {
+        if(tg) {
 
-            for(int k = 0; k < tg->indexes.size(); k++)
-            {
+            for(int k = 0; k < tg->indexes.size(); k++) {
                 clients.push_back(tg->indexes[k]);
             }
             // add all the clients
-        }
-        else
-        {
+        } else {
 
             //it must be an individual client
             clients.push_back(cmd.targets[j]);
@@ -427,84 +398,62 @@ void ofApp::unpackClients(vector<string> &clients, command &cmd)
 
 }
 
-void ofApp::implementStage()
-{
+void ofApp::implementStage() {
 
     vector<command> tComms = mCurrentGame->getStageCommands();
     //now apply the commands
 
-    for(int i = 0; i < tComms.size(); i++)
-    {
+    for(int i = 0; i < tComms.size(); i++) {
         vector<string> clients;
         unpackClients(clients, tComms[i]);
 
         //now carry out the command
 
-        if(tComms[i].mCommand == "SET_CONTROL")
-        {
+        if(tComms[i].mCommand == "SET_CONTROL") {
 
-            if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end())
-            {
+            if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end()) {
                 mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"], tComms[i].stringParams["TEXT"]);
-            }
-            else
-            {
+            } else {
                 mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"]);
             }
 
-        }
-        else if(tComms[i].mCommand == "SET_TEXT")
-        {
+        } else if(tComms[i].mCommand == "SET_TEXT") {
             mOscManager->setText(clients, tComms[i].stringParams["TEXT"]);
-        }
-        else if(tComms[i].mCommand == "SET_NODE_ENV")
-        {
-            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end())
-            {
+        } else if(tComms[i].mCommand == "SET_NODE_ENV") {
+            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end()) {
                 mNodeManager->setNodeAttSecs(clients,tComms[i].floatParams["ATTACK_SECS"]);
             }
-            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end())
-            {
+            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end()) {
                 mNodeManager->setNodeDecSecs(clients,tComms[i].floatParams["DECAY_SECS"]);
             }
 
             //TODO add parameter versions
 
-        }
-        else if(tComms[i].mCommand == "SET_NODE_DRAW")
-        {
-            if(tComms[i].params.size() > 0){
+        } else if(tComms[i].mCommand == "SET_NODE_DRAW") {
+            if(tComms[i].params.size() > 0) {
                 for(int pi = 0; pi < tComms[i].params.size(); pi ++)mNodeManager->setNodeDrawParam(clients, tComms[i].params[pi]);
-            }else{
+            } else {
                 mNodeManager->setNodeDraw(clients, tComms[i].mBaseData);
             }
-        }
-        else if(tComms[i].mCommand == "SET_NODE_SOUND")
-        {
-            if(tComms[i].params.size() > 0){
+        } else if(tComms[i].mCommand == "SET_NODE_SOUND") {
+            if(tComms[i].params.size() > 0) {
                 for(int pi = 0; pi < tComms[i].params.size(); pi ++)mNodeManager->setNodeSoundParam(clients, tComms[i].params[pi]);
-            }else{
+            } else {
                 mNodeManager->setNodeSound(clients, tComms[i].mBaseData);
             }
-        }
-         else if(tComms[i].mCommand == "SET_ZONE_DRAW")
-        {
-            if(tComms[i].params.size() > 0){
+        } else if(tComms[i].mCommand == "SET_ZONE_DRAW") {
+            if(tComms[i].params.size() > 0) {
                 for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneDrawParam(clients, tComms[i].params[pi]);
-            }else{
+            } else {
                 mZoneManager->setZoneDraw(clients, tComms[i].mBaseData);
             }
-        }
-        else if(tComms[i].mCommand == "SET_ZONE_SOUND")
-        {
-            if(tComms[i].params.size() > 0){
+        } else if(tComms[i].mCommand == "SET_ZONE_SOUND") {
+            if(tComms[i].params.size() > 0) {
                 for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneSoundParam(clients, tComms[i].params[pi]);
-            }else{
+            } else {
                 mZoneManager->setZoneSound(clients, tComms[i].mBaseData);
             }
-        }
-        else if(tComms[i].mCommand == "DISTRIBUTE_NODES")
-        {
+        } else if(tComms[i].mCommand == "DISTRIBUTE_NODES") {
 
             bool dimp, posp;
 
@@ -513,9 +462,7 @@ void ofApp::implementStage()
 
             mNodeManager->distributeNodes(clients, tComms[i].stringParams["PATTERN"], tComms[i].floatParams, dimp, posp);
 
-        }
-        else if(tComms[i].mCommand == "ADD_TITLE")
-        {
+        } else if(tComms[i].mCommand == "ADD_TITLE") {
 
             title t;
 
@@ -526,48 +473,34 @@ void ofApp::implementStage()
             mSplashManager->addTitle(tComms[i].stringParams["NAME"], t);
 
 
-        }
-        else if(tComms[i].mCommand == "END_TITLE")
-        {
+        } else if(tComms[i].mCommand == "END_TITLE") {
 
             mSplashManager->endTitle(tComms[i].stringParams["NAME"]);
 
-        }
-        else if(tComms[i].mCommand == "NEW_GROUP")
-        {
+        } else if(tComms[i].mCommand == "NEW_GROUP") {
 
-            if(tComms[i].selectors.size() == 0)
-            {
+            if(tComms[i].selectors.size() == 0) {
                 string s_string = tComms[i].stringParams["SELECTORS"];
                 vector<string> tSelNames = ofSplitString(s_string, ",");
 
-                for(int ts = 0; ts < tSelNames.size(); ts++)
-                {
+                for(int ts = 0; ts < tSelNames.size(); ts++) {
                     selector t;
                     t.sType = tSelNames[ts];
                     tComms[i].selectors.push_back(t);
                 }
             }
 
-            if(tComms[i].stringParams.find("RMV_FROM") != tComms[i].stringParams.end())
-            {
+            if(tComms[i].stringParams.find("RMV_FROM") != tComms[i].stringParams.end()) {
                 vector<string> rNames = ofSplitString(tComms[i].stringParams["RMV_FROM"], ",");
                 mClientManager->createGroup(clients, tComms[i].selectors, tComms[i].stringParams["NAME"], rNames);
-            }
-            else
-            {
+            } else {
                 mClientManager->createGroup(clients, tComms[i].selectors, tComms[i].stringParams["NAME"]);
             }
-        }
-        else if(tComms[i].mCommand == "SET_NODE"){
+        } else if(tComms[i].mCommand == "SET_NODE") {
             mNodeManager->setNodes(clients, tComms[i].mNode);
-        }
-        else if(tComms[i].mCommand == "CREATE_ZONE")
-        {
+        } else if(tComms[i].mCommand == "CREATE_ZONE") {
             mZoneManager->createZone(tComms[i].mZone);
-        }
-        else if(tComms[i].mCommand == "DESTROY_ZONE")
-        {
+        } else if(tComms[i].mCommand == "DESTROY_ZONE") {
             mZoneManager->destroyZone(tComms[i].stringParams["NAME"]);
         }
 
@@ -579,8 +512,7 @@ void ofApp::implementStage()
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
+void ofApp::keyPressed(int key) {
 
 
 
@@ -588,51 +520,43 @@ void ofApp::keyPressed(int key)
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key)
-{
+void ofApp::keyReleased(int key) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y )
-{
+void ofApp::mouseMoved(int x, int y ) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button)
-{
+void ofApp::mouseDragged(int x, int y, int button) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button)
-{
+void ofApp::mousePressed(int x, int y, int button) {
 
     isMouseDown = true;
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button)
-{
+void ofApp::mouseReleased(int x, int y, int button) {
 
     isMouseDown = false;
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h)
-{
+void ofApp::windowResized(int w, int h) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg)
-{
+void ofApp::gotMessage(ofMessage msg) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo)
-{
+void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }

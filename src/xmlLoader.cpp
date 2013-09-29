@@ -1,29 +1,24 @@
 #include "xmlLoader.h"
 
-void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty)
-{
+void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty) {
 
     int numCmds = XML.getNumTags("COMMAND");
 
-    for(int cmd = 0; cmd < numCmds; cmd++)
-    {
+    for(int cmd = 0; cmd < numCmds; cmd++) {
 
-        if(XML.pushTag("COMMAND", cmd))
-        {
+        if(XML.pushTag("COMMAND", cmd)) {
 
             command t_cmd;
 
             int numTargets = XML.getNumTags("TARGET");
 
-            for(int tgt = 0; tgt < numTargets; tgt++)
-            {
+            for(int tgt = 0; tgt < numTargets; tgt++) {
                 t_cmd.targets.push_back(XML.getValue("TARGET", "",tgt));
             }
 
             int numZTargets = XML.getNumTags("Z_TARGET");
 
-            for(int tgt = 0; tgt < numZTargets; tgt++)
-            {
+            for(int tgt = 0; tgt < numZTargets; tgt++) {
                 t_cmd.zTargets.push_back(XML.getValue("Z_TARGET", "",tgt));
             }
 
@@ -41,49 +36,41 @@ void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int
 
 }
 
-void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML)
-{
+void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
 
     //loads the action and paramters into the command data structure
 
     cmd.mCommand = XML.getValue("ACTION", "none");
 
-    if(cmd.mCommand == "CREATE_ZONE")
-    {
+    if(cmd.mCommand == "CREATE_ZONE") {
         xmlLoader::loadZone(cmd.mZone, XML);
         return;
     }
 
-    if(cmd.mCommand == "SET_NODE")
-    {
-        xmlLoader::loadNode(cmd.mNode, XML); //later an option
+    if(cmd.mCommand == "SET_NODE") {
+        if(XML.tagExists("PRESET")) {
+            cmd.mNode = presetStore::nodePresets[XML.getValue("PRESET", "default")];
+        }
+        xmlLoader::loadNode(cmd.mNode, XML);
         return;
     }
 
-    if(cmd.mCommand == "SET_NODE_DRAW" || cmd.mCommand == "SET_ZONE_DRAW")
-    {
+    if(cmd.mCommand == "SET_NODE_DRAW" || cmd.mCommand == "SET_ZONE_DRAW") {
 
-        if(XML.tagExists("DRAW_TYPE"))
-        {
+        if(XML.tagExists("DRAW_TYPE")) {
             xmlLoader::loadDraw(cmd.mBaseData, XML);
-        }
-        else
-        {
+        } else {
             xmlLoader::loadParams(cmd.params, XML);
         }
         return;
     }
 
 
-    if(cmd.mCommand == "SET_NODE_SOUND" || cmd.mCommand == "SET_ZONE_SOUND")
-    {
+    if(cmd.mCommand == "SET_NODE_SOUND" || cmd.mCommand == "SET_ZONE_SOUND") {
 
-        if(XML.tagExists("SOUND_TYPE"))
-        {
+        if(XML.tagExists("SOUND_TYPE")) {
             xmlLoader::loadSound(cmd.mBaseData, XML);
-        }
-        else
-        {
+        } else {
             xmlLoader::loadParams(cmd.params, XML);
         }
 
@@ -91,18 +78,15 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML)
 
     }
 
-    if(cmd.mCommand == "NEW_GROUP")
-    {
+    if(cmd.mCommand == "NEW_GROUP") {
 
         if(XML.tagExists("RMV_FROM"))cmd.stringParams["RMV_FROM"] = XML.getValue("RMV_FROM","");
 
         int numSelectors = XML.getNumTags("SELECTOR");
 
-        for(int i = 0; i < numSelectors; i ++)
-        {
+        for(int i = 0; i < numSelectors; i ++) {
 
-            if(XML.pushTag("SELECTOR", i))
-            {
+            if(XML.pushTag("SELECTOR", i)) {
 
                 selector ts;
 
@@ -140,8 +124,7 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML)
 
 }
 
-void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML)
-{
+void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
 
     z.setName(XML.getValue("NAME", "default"));
 
@@ -159,8 +142,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML)
     z.setDrawType(XML.getValue("DRAW_TYPE", "BASIC"));
     z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder"));
 
-    if(XML.pushTag("DRAW_PARAMS"))
-    {
+    if(XML.pushTag("DRAW_PARAMS")) {
 
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
@@ -168,8 +150,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML)
         XML.popTag();
     }
 
-    if(XML.pushTag("SOUND_PARAMS"))
-    {
+    if(XML.pushTag("SOUND_PARAMS")) {
 
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
@@ -178,16 +159,14 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML)
     }
 
 
-    if(XML.pushTag("ON_RULE"))
-    {
+    if(XML.pushTag("ON_RULE")) {
         zoneRule r;
         xmlLoader::loadRule(r, XML);
         z.setOnRule(r);
         XML.popTag();
     }
 
-    if(XML.pushTag("OFF_RULE"))
-    {
+    if(XML.pushTag("OFF_RULE")) {
         zoneRule r;
         xmlLoader::loadRule(r, XML);
         z.setOffRule(r);
@@ -196,10 +175,8 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML)
 
     int numReacts  = XML.getNumTags("REACT");
 
-    for(int rc = 0; rc < numReacts; rc ++)
-    {
-        if(XML.pushTag("REACT", rc))
-        {
+    for(int rc = 0; rc < numReacts; rc ++) {
+        if(XML.pushTag("REACT", rc)) {
             reaction r;
             xmlLoader::loadReaction(r, XML);
             z.addReaction(r);
@@ -211,8 +188,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML)
 
 }
 
-void xmlLoader::loadRule(zoneRule &r, ofxXmlSettings &XML)
-{
+void xmlLoader::loadRule(zoneRule &r, ofxXmlSettings &XML) {
 
     r.ruleType = XML.getValue("TYPE", "MIN_OCCUPANTS");
     r.gtOccupants = XML.getValue("GE", 1);
@@ -226,27 +202,24 @@ void xmlLoader::loadRule(zoneRule &r, ofxXmlSettings &XML)
 
 }
 
-void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML)
-{
+void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
 
     r.rType = XML.getValue("TYPE", "closeOutZone");
     r.trig = XML.getValue("TRIG", "ON");
 
 }
 
-void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML)
-{
+void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
 
-    n.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
-    n.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
-    n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+    if(XML.tagExists("ATTACK_SECS"))n.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
+    if(XML.tagExists("DECAY_SECS"))n.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
+    if(XML.tagExists("ENV_TYPE"))n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
 
-    n.setSoundType(XML.getValue("SOUND_TYPE",""));
-    n.setDrawType(XML.getValue("DRAW_TYPE", "default"));
-    n.setCanSleep(XML.getValue("CAN_SLEEP", true));
+    if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE",""));
+    if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "default"));
+    if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
 
-    if(XML.pushTag("DRAW_PARAMS"))
-    {
+    if(XML.pushTag("DRAW_PARAMS")) {
 
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
@@ -254,24 +227,23 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML)
         XML.popTag();
     }
 
-    if(XML.pushTag("SOUND_PARAMS"))
-    {
+    if(XML.pushTag("SOUND_PARAMS")) {
 
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
-        for(int i = 0; i < p.size(); i++)n.setSoundParameter(p[i]);
+        for(int i = 0; i < p.size(); i++) {
+            n.setSoundParameter(p[i]);
+        }
         XML.popTag();
     }
 
 
 }
 
-void xmlLoader::loadDraw(baseData &bd, ofxXmlSettings &XML)
-{
+void xmlLoader::loadDraw(baseData &bd, ofxXmlSettings &XML) {
 
     bd = drawDictionary::createDrawData(XML.getValue("DRAW_TYPE", "default"));
-    if(XML.pushTag("DRAW_PARAMS"))
-    {
+    if(XML.pushTag("DRAW_PARAMS")) {
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
         for(int i = 0; i < p.size(); i++)bd.setParameter(p[i]);
@@ -281,11 +253,9 @@ void xmlLoader::loadDraw(baseData &bd, ofxXmlSettings &XML)
 
 }
 
-void xmlLoader::loadSound(baseData &bd, ofxXmlSettings &XML)
-{
+void xmlLoader::loadSound(baseData &bd, ofxXmlSettings &XML) {
     bd = drawDictionary::createDrawData(XML.getValue("SOUND_TYPE", "default"));
-    if(XML.pushTag("SOUND_PARAMS"))
-    {
+    if(XML.pushTag("SOUND_PARAMS")) {
 
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
@@ -295,16 +265,13 @@ void xmlLoader::loadSound(baseData &bd, ofxXmlSettings &XML)
 
 }
 
-void xmlLoader::loadParams(vector<parameter> &params, ofxXmlSettings &XML)
-{
+void xmlLoader::loadParams(vector<parameter> &params, ofxXmlSettings &XML) {
 
     int numPs = XML.getNumTags("PARAM");
 
-    for(int i = 0; i < numPs; i++)
-    {
+    for(int i = 0; i < numPs; i++) {
 
-        if(XML.pushTag("PARAM", i))
-        {
+        if(XML.pushTag("PARAM", i)) {
             parameter p;
             xmlLoader::loadParam(p, XML);
             params.push_back(p);
@@ -316,8 +283,7 @@ void xmlLoader::loadParams(vector<parameter> &params, ofxXmlSettings &XML)
 
 }
 
-void xmlLoader::loadParam(parameter &p, ofxXmlSettings &XML)
-{
+void xmlLoader::loadParam(parameter &p, ofxXmlSettings &XML) {
 
     p.name = XML.getValue("NAME", "default");
     p.abs_val = XML.getValue("ABS_VAL", 0.5);

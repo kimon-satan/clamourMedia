@@ -174,6 +174,8 @@ void baseZode::setSoundData(baseData sd)
 void baseZode::setSoundParameter(parameter p){
 
     // init needed ?
+    p.index = soundData.getParameter(p.name).index;
+    p.warp = soundData.getParameter(p.name).warp;
     soundData.setParameter(p);
 
 }

@@ -53,6 +53,7 @@ class nodeManager{
     void setNodes(vector<string> indexes, clamourNode &n);
 
 
+
     private:
 
     map< string, ofPtr<clamourNode> > mNodes;

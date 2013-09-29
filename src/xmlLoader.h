@@ -6,7 +6,7 @@
 #include "drawDictionary.h"
 #include "soundDictionary.h"
 #include "game.h"
-
+#include "presetStore.h"
 
 class xmlLoader
 {
