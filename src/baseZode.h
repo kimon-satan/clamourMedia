@@ -57,6 +57,12 @@ public:
     void setEnvType(string s);
     void setEnvType(envType t);
 
+    void setOuterEdge(ofPath p);
+    ofPath getOuterEdge();
+
+    void setEdgeTemplate(ofPath p);
+    ofPath getEdgeTemplate();
+
 protected:
 
     string name;
@@ -71,6 +77,9 @@ protected:
     int totalAtt, totalDec, totalPost, attCount, decCount, postCount;
 	float envVal, postVal;
     parameter attSecs, decSecs, postSecs;
+
+    ofPath outerEdge;
+    ofPath edgeTemplate;
 
 
 private:

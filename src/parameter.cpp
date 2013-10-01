@@ -100,6 +100,9 @@ vector<float> baseData::getAbsVals(){
     return vals;
 }
 
+void baseData::setShapeType(string s){shapeType = s;}
+string baseData::getShapeType(){return shapeType;}
+
 
 /*-----------------------------------------------------------------------------------*/
 

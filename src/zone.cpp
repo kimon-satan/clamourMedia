@@ -3,7 +3,7 @@
 zone::zone()
 {
 //ctor
-    setShape_rel(ofVec2f(0.5,0.5),0.15);
+
     isClosedOut = false;
     isClosedIn = false;
 
@@ -37,45 +37,8 @@ map<string, ofPtr<clamourNode> > zone::getCaptureNodes()
     return mCaptureNodes;
 }
 
-void zone::setShape_abs(ofVec2f p, float r)
-{
-    pos_abs = p;
-    pos_rel = ofVec2f(p.x * (float)screenData::height/screenData::width, p.y);
-    radius = r;
-    shapeType = "circle";
-}
 
-void zone::setShape_abs(vector<ofVec2f> pps)
-{
-    polyPoints_abs = pps;
-    //todo: go through and convert points to relative
-    shapeType = "poly";
-}
 
-void zone::setShape_abs(ofRectangle r)
-{
-    rect_abs = r;
-    //todo: go through and convert dims to relative
-    shapeType = "rect";
-}
-
-void zone::setShape_rel(ofVec2f p, float r)
-{
-    pos_rel = p;
-    pos_abs = ofVec2f(p.x * (float)screenData::width/screenData::height, p.y);
-    radius = r;
-    shapeType = "circle";
-}
-
-void zone::setShape_rel(vector<ofVec2f> pps)
-{
-
-}
-
-void zone::setShape_rel(ofRectangle r)
-{
-
-}
 
 
 string zone::getShapeType()
@@ -93,24 +56,13 @@ float zone::getRadius()
     return radius;
 }
 
-vector<ofVec2f>zone::getPoly_abs()
-{
-    return polyPoints_abs;
-}
-
-ofRectangle zone::getRect_abs()
-{
-    return rect_abs;
-}
 
 void zone::recalcAbsDims()
 {
-
     //ultimately will depend on shapeType
-    if(shapeType == "circle")
-    {
-        pos_abs = ofVec2f(pos_rel.x * (float)screenData::width/screenData::height, pos_rel.y);
-    }
+    pos_abs = ofVec2f(pos_rel.x * (float)screenData::width/screenData::height, pos_rel.y);
+    outerEdge = edgeTemplate;
+    outerEdge.translate(ofPoint(pos_abs.x, pos_abs.y));
 
 }
 
@@ -168,6 +120,24 @@ void zone::addReaction(reaction e){
 void zone::setReactions(vector<reaction> r){
 
     mReactions = r;
+
+}
+
+void zone::setPos_abs(ofVec2f v)
+{
+
+    pos_abs = v;
+    float f = (float)screenData::height/(float)screenData::width;
+    pos_rel.set(v.x * f, v.y);
+
+}
+
+void zone::setPos_rel(ofVec2f v)
+{
+
+    pos_rel = v;
+    float f = (float)screenData::width/(float)screenData::height;
+    pos_abs.set(v.x * f, v.y);
 
 }
 

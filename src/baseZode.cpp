@@ -1,7 +1,6 @@
 #include "baseZode.h"
 
-baseZode::baseZode()
-{
+baseZode::baseZode() {
     isFired = false;
     isFiring = false;
     totalAtt = 0;
@@ -20,57 +19,42 @@ baseZode::baseZode()
 
 }
 
-baseZode::~baseZode()
-{
+baseZode::~baseZode() {
     //dtor
 }
 
-void baseZode::update()
-{
+void baseZode::update() {
 
     //no modification of isFired from here
 
-    if(mEnvType == CLAMOUR_ASR)
-    {
+    if(mEnvType == CLAMOUR_ASR) {
 
-        if(isFired)
-        {
+        if(isFired) {
 
             postVal = 0;
 
-            if(attCount > 0)
-            {
+            if(attCount > 0) {
                 attCount -= 1;
                 envVal = 1 - (float)attCount/(float)totalAtt;
-            }
-            else
-            {
+            } else {
                 envVal =1;
             }
 
-        }
-        else
-        {
+        } else {
 
-            if(decCount > 0)
-            {
+            if(decCount > 0) {
                 if(postCount > 0)postVal = 1;
                 decCount -= 1;
                 envVal = (float)decCount/(float)totalDec;
 
-            }
-            else
-            {
+            } else {
 
                 envVal = 0;
 
-                if(postCount > 0 )
-                {
+                if(postCount > 0 ) {
                     postCount -= 1;
                     postVal = (float)postCount/(float)totalPost;
-                }
-                else
-                {
+                } else {
                     postVal = 0;
                     isFiring = false; //NB isFiring ends at the end of the postCount
                 }
@@ -81,40 +65,29 @@ void baseZode::update()
 
         }
 
-    }
-    else if(mEnvType == CLAMOUR_AR)
-    {
+    } else if(mEnvType == CLAMOUR_AR) {
 
-        if(isFiring)
-        {
+        if(isFiring) {
 
-            if(attCount > 0)
-            {
+            if(attCount > 0) {
                 attCount -= 1;
                 envVal = 1 - (float)attCount/(float)totalAtt;
 
-            }
-            else if(decCount > 0)
-            {
+            } else if(decCount > 0) {
 
                 if(postCount > 0)postVal = 1;
                 decCount -= 1;
                 envVal = (float)decCount/(float)totalDec;
 
-            }
-            else
-            {
+            } else {
 
                 envVal = 0;
 
-                if(postCount > 0 )
-                {
+                if(postCount > 0 ) {
                     postCount -= 1;
                     postVal = (float)postCount/(float)totalPost;
 
-                }
-                else
-                {
+                } else {
                     postVal = 0;
                     isFiring = false;
                 }
@@ -125,8 +98,7 @@ void baseZode::update()
     }
 }
 
-void baseZode::react()
-{
+void baseZode::react() {
 
     //no modification of isFired from here !
     isFiring = true;
@@ -142,36 +114,32 @@ void baseZode::react()
 
 }
 
-void baseZode::setDrawType(string dt)
-{
+void baseZode::setDrawType(string dt) {
     drawData = drawDictionary::createDrawData(dt);
 }
 
-void baseZode::setDrawData(baseData bd){
+void baseZode::setDrawData(baseData bd) {
     drawData = bd;
 }
 
-void baseZode::setSoundType(string st){
+void baseZode::setSoundType(string st) {
     soundData = soundDictionary::createSoundData(st);
 }
 
-baseData baseZode::getDrawData()
-{
+baseData baseZode::getDrawData() {
     return drawData;
 }
 
-baseData baseZode::getSoundData()
-{
+baseData baseZode::getSoundData() {
     return soundData;
 }
 
-void baseZode::setSoundData(baseData sd)
-{
+void baseZode::setSoundData(baseData sd) {
     soundData = sd;
 
 }
 
-void baseZode::setSoundParameter(parameter p){
+void baseZode::setSoundParameter(parameter p) {
 
     // init needed ?
     p.index = soundData.getParameter(p.name).index;
@@ -180,7 +148,7 @@ void baseZode::setSoundParameter(parameter p){
 
 }
 
-void baseZode::setDrawParameter(parameter p){
+void baseZode::setDrawParameter(parameter p) {
 
     //init needed ?
     drawData.setParameter(p);
@@ -188,65 +156,55 @@ void baseZode::setDrawParameter(parameter p){
 }
 
 //does the zode have input to fire
-bool baseZode::getIsFired()
-{
+bool baseZode::getIsFired() {
     return isFired;
 }
-void baseZode::setIsFired(bool b)
-{
+void baseZode::setIsFired(bool b) {
     isFired = b;
 }
 
 //is the zode actually firing
-bool baseZode::getIsFiring()
-{
+bool baseZode::getIsFiring() {
     return isFiring;
 }
 
-void baseZode::setIsFiring(bool b)
-{
+void baseZode::setIsFiring(bool b) {
     isFiring = b;
 }
 
-changeType baseZode::getChanged()
-{
+changeType baseZode::getChanged() {
     return mChanged;
 }
 
-void baseZode::setChanged(changeType c)
-{
+void baseZode::setChanged(changeType c) {
     mChanged = c;
 }
 
-void baseZode::setName(string n)
-{
+void baseZode::setName(string n) {
     name = n;
 }
 
-string baseZode::getName()
-{
+string baseZode::getName() {
     return name;
 }
 
 
-float baseZode::getEnvVal()
-{
+float baseZode::getEnvVal() {
     return envVal;
 }
 
-float baseZode::getPostVal()
-{
+float baseZode::getPostVal() {
     return postVal;
 }
 
-void baseZode::setAttSecs(float f){
+void baseZode::setAttSecs(float f) {
 
     attSecs.abs_val = f;
     attSecs.map_type = CLAMOUR_MAP_FIXED;
 
 }
 
-void baseZode::setDecSecs(float f){
+void baseZode::setDecSecs(float f) {
 
     decSecs.abs_val = f;
     decSecs.map_type = CLAMOUR_MAP_FIXED;
@@ -254,27 +212,46 @@ void baseZode::setDecSecs(float f){
 }
 
 
-void baseZode::setAttSecs(parameter p){
+void baseZode::setAttSecs(parameter p) {
 
     attSecs = p;
 
 }
 
-void baseZode::setDecSecs(parameter p){
-
+void baseZode::setDecSecs(parameter p) {
     decSecs = p;
-
 }
 
-float baseZode::getAttSecs(){return attSecs.abs_val;}
-float baseZode::getDecSecs(){return decSecs.abs_val;}
+float baseZode::getAttSecs() {
+    return attSecs.abs_val;
+}
+float baseZode::getDecSecs() {
+    return decSecs.abs_val;
+}
 
-envType baseZode::getEnvType(){return mEnvType;}
-void baseZode::setEnvType(string s){
+envType baseZode::getEnvType() {
+    return mEnvType;
+}
+void baseZode::setEnvType(string s) {
     mEnvType = (s == "ASR")?CLAMOUR_ASR : CLAMOUR_AR;
 }
-void baseZode::setEnvType(envType t){
 
+void baseZode::setEnvType(envType t) {
     mEnvType = t;
+}
 
+void baseZode::setOuterEdge(ofPath p) {
+    outerEdge = p;
+}
+
+ofPath baseZode::getOuterEdge() {
+    return outerEdge;
+}
+
+void baseZode::setEdgeTemplate(ofPath p){
+    edgeTemplate = p;
+}
+
+ofPath baseZode::getEdgeTemplate() {
+    return edgeTemplate;
 }

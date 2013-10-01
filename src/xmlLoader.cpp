@@ -128,18 +128,20 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
 
     z.setName(XML.getValue("NAME", "default"));
 
-    //shapeType will be needed later
-    z.setShape_rel(ofVec2f(
-                       XML.getValue("X",0.0f),XML.getValue("Y",0.0f)
-                   ),
-                   XML.getValue("RADIUS", 0.1f));
+    z.setPos_rel(ofVec2f(XML.getValue("X", 0.5), XML.getValue("Y",0.5)));
+    ofPath p;
 
+    z.setDrawType(XML.getValue("DRAW_TYPE", "BASIC"));
+
+    pathFactory::createPath(p, z.getDrawData().getShapeType(),
+                            XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0), XML.getValue("SIZE", 0.1));
+    z.setEdgeTemplate(p);
 
     z.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
     z.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
     z.setEnvType(XML.getValue("ENV_TYPE", "AR"));
 
-    z.setDrawType(XML.getValue("DRAW_TYPE", "BASIC"));
+
     z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder"));
 
     if(XML.pushTag("DRAW_PARAMS")) {

@@ -22,6 +22,7 @@ baseData drawDictionary::createDrawData(string dt)
     if(dt == "DEBUG")drawDictionary::debugDrawData(data);
     if(dt == "FLICKER")drawDictionary::flickerDrawData(data);
     if(dt == "ROUND")drawDictionary::roundDrawData(data);
+    if(dt == "pauseButton")drawDictionary::pauseButtonData(data);
 
     return data;
 
@@ -46,5 +47,13 @@ void drawDictionary::roundDrawData(baseData &bd)
 
     bd.setName("ROUND");
     bd.setParameter(parameter("size", 3, 20, 5, CLAMOUR_MAP_FIXED));
+
+}
+
+void drawDictionary::pauseButtonData(baseData &bd)
+{
+
+    bd.setName("pauseButton");
+    bd.setShapeType("roundedRect");
 
 }

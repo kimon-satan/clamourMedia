@@ -55,10 +55,14 @@ public:
     void update(ofVec2f pos);
     string getName();
     void setName(string s);
+    void setShapeType(string s);
+    string getShapeType();
 
     vector<float> getAbsVals();
 
     virtual ~baseData(){};
+
+
 
 
 private:
@@ -66,6 +70,7 @@ private:
     string name;
     map<string, parameter> parameters;
     float warp(string type, float mnv, float mxv, float v);
+    string shapeType;
 
 
 };

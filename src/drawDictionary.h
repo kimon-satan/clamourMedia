@@ -23,6 +23,7 @@ class drawDictionary{
     static void debugDrawData(baseData &bd);
     static void flickerDrawData(baseData &bd);
     static void roundDrawData(baseData &bd);
+    static void pauseButtonData(baseData &bd);
 
 
 };

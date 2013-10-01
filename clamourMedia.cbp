@@ -6,7 +6,7 @@
 		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons\;src\;addons\ofxUI\src\;addons\ofxFenster\src\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOsc\libs\oscpack\src\ip\win32\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOsc\src\;addons\ofxXmlSettings\src\;addons\ofxXmlSettings\libs\;src\nodeClasses\;src\base\;src\zoneClasses\;" />
+		<Option virtualFolders="addons\;src\;addons\ofxUI\src\;addons\ofxFenster\src\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOsc\libs\oscpack\src\ip\win32\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOsc\src\;addons\ofxXmlSettings\src\;addons\ofxXmlSettings\libs\;src\nodeClasses\;src\base\;src\zoneClasses\;src\loading\;" />
 		<Build>
 			<Target title="release">
 				<Option output="bin/$(PROJECT_NAME)" prefix_auto="1" extension_auto="1" />
@@ -504,6 +504,12 @@
 		<Unit filename="src/parameter.h">
 			<Option virtualFolder="src/base/" />
 		</Unit>
+		<Unit filename="src/pathFactory.cpp">
+			<Option virtualFolder="src/loading/" />
+		</Unit>
+		<Unit filename="src/pathFactory.h">
+			<Option virtualFolder="src/loading/" />
+		</Unit>
 		<Unit filename="src/presetStore.cpp">
 			<Option virtualFolder="src/base/" />
 		</Unit>
@@ -535,10 +541,10 @@
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/xmlLoader.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/xmlLoader.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/zone.cpp">
 			<Option virtualFolder="src/zoneClasses/" />

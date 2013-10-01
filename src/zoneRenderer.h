@@ -11,10 +11,9 @@ public:
 
     void update();
     void draw(map<string, ofPtr<zone> > z);
+    void drawDebug(ofPtr<zone> z);
 
     //getters and setters
-
-    void setScreenDims(int width, int height);
 
     virtual ~zoneRenderer();
 

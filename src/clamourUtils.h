@@ -39,6 +39,8 @@ class clamourUtils{
     public:
 
     static int rowToInt(string r);
+    static bool pointInPath(ofPath p, ofVec2f v);
+    static ofPoint getInsideIntersect(ofPath p, ofPoint centroid, ofPoint invader);
 
 };
 

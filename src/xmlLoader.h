@@ -7,6 +7,7 @@
 #include "soundDictionary.h"
 #include "game.h"
 #include "presetStore.h"
+#include "pathFactory.h"
 
 class xmlLoader
 {

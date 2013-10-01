@@ -50,13 +50,11 @@ public:
 
     map<string, ofPtr<clamourNode> > getCaptureNodes();
 
-    void setShape_abs(ofVec2f p, float r); //a circle
-    void setShape_abs(vector<ofVec2f> pps); //a poly
-    void setShape_abs(ofRectangle r); //duh
+    void setPos_rel(ofVec2f p);
+    void setPos_abs(ofVec2f p);
 
+    void setShape_abs(ofVec2f p, float r); //a circle
     void setShape_rel(ofVec2f p, float r); //a circle
-    void setShape_rel(vector<ofVec2f> pps); //a poly
-    void setShape_rel(ofRectangle r); //duh
 
     void recalcAbsDims();
 
@@ -67,7 +65,6 @@ public:
 
     vector<ofVec2f> getPoly_abs();
     ofRectangle getRect_abs();
-
 
     void setIsClosedOut(bool b);
     bool getIsClosedOut();

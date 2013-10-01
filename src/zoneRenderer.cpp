@@ -14,21 +14,35 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z){
 
         ofSetColor(255);
 
-        ofVec2f p = it->second->getPos_abs() * screenData::height;
-        float r = it->second->getRadius() * screenData::height;
-
-        ofNoFill();
-        ofCircle(p,r);
-
-        if(it->second->getIsFiring()){
-            ofSetColor(it->second->getEnvVal() * 255.0);
-            ofFill();
-            ofCircle(p,r);
-        }
+        drawDebug(it->second);
 
         ++it;
     }
 
+
+}
+
+void zoneRenderer::drawDebug(ofPtr<zone> z){
+
+    ofPath p = z->getEdgeTemplate();
+    ofVec2f pos = z->getPos_abs();
+    pos *= screenData::height;
+
+    ofPushMatrix();
+
+    ofTranslate(pos.x, pos.y, 0);
+    ofScale(screenData::height, screenData::height,1.0);
+
+    if(z->getIsFiring()){
+        p.setFilled(true);
+        p.setColor(z->getEnvVal() * 255.0);
+        p.draw();
+    }
+        p.setFilled(false);
+        p.setStrokeColor(255);
+        p.draw();
+
+    ofPopMatrix();
 
 }
 

@@ -41,6 +41,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
                 if(n_it->second->getZonePair() == z_it->second){
                     //only for already captured nodes
                     containNode(n_it->second, z_it->second);
+                    continue; // mustn't allow other reactions
 
                 }
 
@@ -103,37 +104,31 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes)
 
 bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z){
 
-
-    if(z->getShapeType() == "circle"){
-
-        ofVec2f d = n->getMeanPos_abs() - z->getPos_abs();
-        return(d.length() < z->getRadius());
-
-    }
-
-    return false;
-
-
+    return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
 }
 
 void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z){
 
-    ofVec2f d = (n->getMeanPos_abs() - z->getPos_abs()).normalize();
+    //finding centroid is not solved here so this method only works if zones drawn from the center
 
-    //ultimately methods for other shapes too
-    n->setRawPos_abs(z->getPos_abs()+ d * z->getRadius());
+    ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getMeanPos_abs());
+    n->setRawPos_abs(p);
     n->modifyHistory();
 
 }
 
 void zoneManager::containNode(ofPtr<clamourNode> n, ofPtr<zone> z){
 
-    ofVec2f d = (n->getMeanPos_abs() - z->getPos_abs());
+    ofVec2f v(n->getMeanPos_abs() - z->getPos_abs());
 
-    float dist = min(d.length(), z->getRadius() * (float)0.95);
+    ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getMeanPos_abs());
+    ofVec2f d = (p - z->getPos_abs());
+    p -= d * 0.05; //move it slightly inside
 
-    n->setRawPos_abs(z->getPos_abs() + d.normalize() * dist);
-    n->modifyHistory();
+    if(d.length() * 0.95 < v.length()){ //only if necessary
+        n->setRawPos_abs(p);
+        n->modifyHistory();
+    }
 
 }
 
@@ -253,6 +248,7 @@ void zoneManager::createZone(string name)
     //perhaps pass the zone from the main app
     ofPtr<zone> z = ofPtr<zone>(new zone());
     mZones[name] = z;
+
 
 
 }
