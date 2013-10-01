@@ -24,6 +24,7 @@ class drawDictionary{
     static void flickerDrawData(baseData &bd);
     static void roundDrawData(baseData &bd);
     static void pauseButtonData(baseData &bd);
+    static void mousePointerData(baseData &bd);
 
 
 };

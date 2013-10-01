@@ -26,6 +26,8 @@ public:
     void updateHistory();
     void modifyHistory();
 
+    void updatePath();
+
     void setDrawType(string dt);
     void updateDrawData();
     void setSoundData(baseData sd);

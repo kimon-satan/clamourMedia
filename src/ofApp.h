@@ -38,9 +38,12 @@ private:
 
     void loadXML();
 
+    void implementZoneReactions();
+    void incrementStage();
+    void decrementStage();
     void implementStage();
-    void unpackClients(vector<string> &clients, command &cmd);
 
+    void unpackClients(vector<string> &clients, command &cmd);
     void guiEvent(ofxUIEventArgs &e);
 
     void resetEverything();

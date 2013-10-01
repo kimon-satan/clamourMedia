@@ -27,6 +27,8 @@ class xmlLoader
     static void loadSound(baseData &bd, ofxXmlSettings &XML);
     static void loadDraw(baseData &bd, ofxXmlSettings &XML);
 
+    static void loadZoneParams(command &cmd, ofxXmlSettings &XML);
+
 };
 
 #endif // XMLLOADER_H

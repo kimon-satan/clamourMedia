@@ -78,6 +78,11 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
 
     }
 
+    if(cmd.mCommand == "UPDATE_ZONE"){
+
+        xmlLoader::loadZoneParams(cmd, XML);
+    }
+
     if(cmd.mCommand == "NEW_GROUP") {
 
         if(XML.tagExists("RMV_FROM"))cmd.stringParams["RMV_FROM"] = XML.getValue("RMV_FROM","");
@@ -111,8 +116,12 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
     if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
     if(XML.tagExists("TEXT"))cmd.stringParams["TEXT"] = XML.getValue("TEXT","");
 
+    if(XML.tagExists("ENV_TYPE"))cmd.stringParams["ENV_TYPE"] = XML.getValue("ENV_TYPE","");
     if(XML.tagExists("ATTACK_SECS"))cmd.floatParams["ATTACK_SECS"] = XML.getValue("ATTACK_SECS", 0.0);
     if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
+    if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.0);
+    if(XML.tagExists("Y"))cmd.floatParams["Y"] = XML.getValue("Y", 0.0);
+    if(XML.tagExists("SIZE"))cmd.floatParams["SIZE"] = XML.getValue("SIZE", 0.0);
     if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
 
     if(XML.tagExists("PATTERN"))cmd.stringParams["PATTERN"] = XML.getValue("PATTERN", "default");
@@ -208,6 +217,7 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
 
     r.rType = XML.getValue("TYPE", "closeOutZone");
     r.trig = XML.getValue("TRIG", "ON");
+    if(XML.tagExists("PRESET"))r.stringParams["PRESET"] = XML.getValue("PRESET","default");
 
 }
 
@@ -218,8 +228,16 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("ENV_TYPE"))n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
 
     if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE",""));
-    if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "default"));
+    if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "DEBUG"));
     if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
+
+    ofPath p;
+
+    pathFactory::createPath(p, n.getDrawData().getShapeType(),
+                            XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0),
+                            n.getDrawData().getParameter("size").abs_val);
+
+    n.setEdgeTemplate(p);
 
     if(XML.pushTag("DRAW_PARAMS")) {
 
@@ -297,5 +315,29 @@ void xmlLoader::loadParam(parameter &p, ofxXmlSettings &XML) {
 
 }
 
+void xmlLoader::loadZoneParams(command &cmd, ofxXmlSettings &XML){
 
+    if(XML.pushTag("ON_RULE")) {
+        xmlLoader::loadRule(cmd.onRule, XML);
+        XML.popTag();
+    }
+
+    if(XML.pushTag("OFF_RULE")) {
+        xmlLoader::loadRule(cmd.offRule, XML);
+        XML.popTag();
+    }
+
+    int numReacts  = XML.getNumTags("REACT");
+
+    for(int rc = 0; rc < numReacts; rc ++) {
+        if(XML.pushTag("REACT", rc)) {
+            reaction r;
+            xmlLoader::loadReaction(r, XML);
+            cmd.reactions.push_back(r);
+            XML.popTag();
+        }
+    }
+
+
+}
 

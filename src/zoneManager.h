@@ -2,6 +2,8 @@
 #define ZONEMANAGER_H
 
 #include "zone.h"
+#include "presetStore.h"
+#include "nodeManager.h"
 
 class zoneManager
 {
@@ -29,6 +31,15 @@ class zoneManager
         void setZoneSoundParam(vector<string> indexes, parameter &p);
         void setZoneSound(vector<string> indexes, baseData &bd);
 
+        void setZoneOnRule(vector<string> indexes,zoneRule zr);
+        void setZoneOffRule(vector<string> indexes,zoneRule zr);
+        void setZoneReactions(vector<string> indexes, vector<reaction> r);
+        void setZoneEnv(vector<string> indexes, string et, float att, float dec);
+        void setZonePosition(vector<string> indexes, float x,  float y);
+        void setZoneSize(vector<string> indexes, float ts);
+
+        vector<string> getAppReactions();
+
 
     private:
 
@@ -47,6 +58,8 @@ class zoneManager
         void implementReactions(ofPtr<zone> z, bool isOn);
 
         map <string, ofPtr<zone> > mZones;
+
+        vector<string> appReactions;
 
 
 };

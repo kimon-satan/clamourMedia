@@ -27,9 +27,10 @@ struct reaction{
     //these relate to aspects which effect other nodes, zones, stages etc;
     string rType;
 
-    //closeOutZone, openOutZone, closeInZone, openInZone
-
+    //closeOutZone, openOutZone, closeInZone, openInZone, incrementStage
     string trig; //ON, OFF, ON_OFF
+
+    map<string, string> stringParams;
 
     vector<clamourNode> prevNodeStates; // easier just to store the whole node
 

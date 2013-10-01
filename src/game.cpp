@@ -14,14 +14,14 @@ game::game(){
 
     currentStage = 0;
     numStages = 0;
-    
+
 }
 
 
 
 
 void game::addCommand(command c){
-    
+
     mCommands.push_back(c);
     calcNumStages();
 
@@ -34,18 +34,24 @@ void game::reset(){
 }
 
 void game::incrementStage(){
-    
+
     currentStage = min(numStages- 1, currentStage + 1);
-    
+
+}
+
+void game::decrementStage(){
+
+    currentStage = max(0, currentStage - 1);
+
 }
 
 void game::calcNumStages(){
 
     //update the number of stages for the new command
     for(int i = 0; i < mCommands.size(); i++){
-    
+
         if(mCommands[i].stage + 1 > numStages)numStages = mCommands[i].stage + 1;
-        
+
     }
 
 }
@@ -62,10 +68,10 @@ vector<command> game::getStageCommands(){
     for(int i = 0; i < mCommands.size(); i ++){
         if(mCommands[i].stage == currentStage)c.push_back(mCommands[i]);
     }
-    
+
     sort(c.begin(), c.end(), sortByPriority);
-    
-    
+
+
     return c;
 }
 

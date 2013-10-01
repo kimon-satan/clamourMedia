@@ -52,7 +52,7 @@ class nodeManager{
     void setNodeSoundParam(vector<string> indexes, parameter &p);
     void setNodes(vector<string> indexes, clamourNode &n);
 
-
+    static void setNode(ofPtr<clamourNode> target, clamourNode &temp);
 
     private:
 

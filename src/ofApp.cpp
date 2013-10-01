@@ -10,7 +10,6 @@ void ofApp::setup() {
     ofSetWindowPosition(800, 100);
     ofSetWindowTitle("CLAMOUR CONTROL");
 
-
     ofxFensterManager::get()->setupWindow(&mDisplay);
 
     for(int i = 0; i < NUM_SEATS; i++) {
@@ -31,7 +30,6 @@ void ofApp::setup() {
     mOscManager->setNodeManager(mNodeManager);
     mOscManager->setClientManager(mClientManager);
 
-
     mDisplay.setNodeManager(mNodeManager);
 
     mZoneManager = ofPtr<zoneManager>(new zoneManager());
@@ -41,8 +39,6 @@ void ofApp::setup() {
     mSplashManager = ofPtr<splashManager>(new splashManager());
     mDisplay.setSplashManager(mSplashManager);
 
-
-
     isMouseDown = false;
 
     mOscManager->sendInit();
@@ -50,6 +46,7 @@ void ofApp::setup() {
     loadXML();
     mCurrentGame = mGames[0];
     implementStage();
+    mOscManager->sendBundle();
 
     mGameBrowseIndex = 0;
 
@@ -260,6 +257,8 @@ void ofApp::update() {
 
     ofBackground(100);
 
+    implementZoneReactions(); //stuff from the previous frame
+
     //get incoming from Meteor
     mOscManager->updateInMessages();
 
@@ -302,12 +301,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e) {
 
     if(name == "STAGE_PLUS") {
 
-        if(!mCurrentGame)return;
-
-        mCurrentGame->incrementStage();
-        implementStage();
-        updateGUIElements();
-
+        incrementStage();
 
     } else if(name == "GAME_PLUS") {
 
@@ -398,6 +392,51 @@ void ofApp::unpackClients(vector<string> &clients, command &cmd) {
 
 }
 
+void ofApp::implementZoneReactions() {
+
+    vector<string> r = mZoneManager->getAppReactions();
+    sort(r.begin(), r.end());
+    vector<string>::iterator it = unique(r.begin(), r.end());
+    if(it != r.end())r.erase(it);
+
+    it = r.begin();
+
+    while(it != r.end()) {
+        if(*it == "incrementStage") {
+            incrementStage();
+            break;
+        } else if(*it == "repeatStage") {
+            implementStage();
+            break;
+        } else if(*it == "decrementStage"){
+            decrementStage();
+            break;
+        }
+        ++it;
+    }
+
+}
+
+void ofApp::incrementStage() {
+
+    if(!mCurrentGame)return;
+    mCurrentGame->incrementStage();
+    implementStage();
+    updateGUIElements();
+
+}
+
+void ofApp::decrementStage() {
+
+    if(!mCurrentGame)return;
+    mCurrentGame->decrementStage();
+    implementStage();
+    updateGUIElements();
+
+}
+
+
+
 void ofApp::implementStage() {
 
     vector<command> tComms = mCurrentGame->getStageCommands();
@@ -405,6 +444,7 @@ void ofApp::implementStage() {
 
     for(int i = 0; i < tComms.size(); i++) {
         vector<string> clients;
+
         unpackClients(clients, tComms[i]);
 
         //now carry out the command
@@ -420,6 +460,7 @@ void ofApp::implementStage() {
         } else if(tComms[i].mCommand == "SET_TEXT") {
             mOscManager->setText(clients, tComms[i].stringParams["TEXT"]);
         } else if(tComms[i].mCommand == "SET_NODE_ENV") {
+
             if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end()) {
                 mNodeManager->setNodeAttSecs(clients,tComms[i].floatParams["ATTACK_SECS"]);
             }
@@ -443,16 +484,23 @@ void ofApp::implementStage() {
             }
         } else if(tComms[i].mCommand == "SET_ZONE_DRAW") {
             if(tComms[i].params.size() > 0) {
-                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneDrawParam(clients, tComms[i].params[pi]);
+                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneDrawParam(tComms[i].zTargets, tComms[i].params[pi]);
             } else {
                 mZoneManager->setZoneDraw(clients, tComms[i].mBaseData);
             }
         } else if(tComms[i].mCommand == "SET_ZONE_SOUND") {
             if(tComms[i].params.size() > 0) {
-                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneSoundParam(clients, tComms[i].params[pi]);
+                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneSoundParam(tComms[i].zTargets, tComms[i].params[pi]);
             } else {
                 mZoneManager->setZoneSound(clients, tComms[i].mBaseData);
             }
+
+        }else if(tComms[i].mCommand == "UPDATE_ZONE") {
+
+
+            if(tComms[i].reactions.size() > 0)mZoneManager->setZoneReactions(tComms[i].zTargets, tComms[i].reactions);
+
+
         } else if(tComms[i].mCommand == "DISTRIBUTE_NODES") {
 
             bool dimp, posp;

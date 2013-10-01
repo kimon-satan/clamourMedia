@@ -41,6 +41,11 @@ struct command{
 
     vector<parameter> params; //for changing individual parameters
 
+    vector<reaction> reactions;
+
+    zoneRule onRule, offRule;
+
+
 
 };
 
@@ -55,6 +60,7 @@ class game{
     void addCommand(command c);
     void reset();
     void incrementStage();
+    void decrementStage();
 
 
     //getters and setters

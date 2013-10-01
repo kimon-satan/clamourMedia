@@ -77,6 +77,13 @@ void clamourNode::modifyHistory(){
 
 }
 
+void clamourNode::updatePath(){
+
+    outerEdge = edgeTemplate;
+    outerEdge.translate(meanPos_abs);
+
+}
+
 void clamourNode::setDrawType(string dt)
 {
     //an override of baseZode
