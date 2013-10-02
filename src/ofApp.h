@@ -10,6 +10,7 @@
 #include "oscManager.h"
 #include "xmlLoader.h"
 
+#define CLAMOUR_VERBOSE true;
 
 
 class ofApp : public ofBaseApp
@@ -38,12 +39,16 @@ private:
 
     void loadXML();
 
+    void implementSchedCommands();
     void implementZoneReactions();
     void incrementStage();
     void decrementStage();
-    void implementStage();
+
+    void implementStage(bool isRepeat = false);
+    void implementCommand(command & cmd);
 
     void unpackClients(vector<string> &clients, command &cmd);
+    void scheduleCommands(command &cmd);
     void guiEvent(ofxUIEventArgs &e);
 
     void resetEverything();

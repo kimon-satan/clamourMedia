@@ -21,13 +21,26 @@ struct command{
         priority = 0;
         stage = 0;
         mCommand = "";
+        isSchedulable = true;
+        isRepeatable = true;
+        schedType = "none";
+        interval = 0;
+        execAt = 0;
+        interval_secs = 0;
+
     };
 
     vector<string> targets;
     vector<string> zTargets;
     vector<selector> selectors;
-    int stage;
-    int priority;
+
+    int stage, priority;
+    int interval, execAt;
+    float interval_secs;
+
+    string schedType;
+
+    bool isSchedulable, isRepeatable;
 
     string mCommand;
     map <string , float> floatParams;
@@ -68,8 +81,11 @@ class game{
     string getName();
     int getCurrentStage();
     int getNumStages();
+    int getFurthestStage();
 
     vector<command> getStageCommands();
+    vector<command> getSchedCommands();
+    void addSchedCommand(command c);
 
 
     private:
@@ -77,8 +93,9 @@ class game{
     void calcNumStages();
 
     string name;
-    int currentStage, numStages;
+    int currentStage, numStages, furthestStage;
     vector<command> mCommands;
+    vector<command> mSchedCommands;
 
 };
 

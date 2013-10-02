@@ -25,6 +25,11 @@ void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int
             t_cmd.stage = stage;
             t_cmd.priority = pty;
 
+            if(XML.tagExists("REPEAT"))t_cmd.isRepeatable = XML.getValue("REPEAT", true);
+            if(XML.tagExists("SCHED"))t_cmd.isSchedulable = XML.getValue("SCHED", true);
+            if(XML.tagExists("SCHED_TYPE"))t_cmd.schedType = XML.getValue("SCHED_TYPE", "none");
+            if(XML.tagExists("INTERVAL_SECS"))t_cmd.interval_secs = XML.getValue("INTERVAL_SECS", 0.0);
+
             parseActions(t_cmd, XML);
 
             gm->addCommand(t_cmd);

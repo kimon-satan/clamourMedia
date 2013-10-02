@@ -258,6 +258,7 @@ void ofApp::update() {
     ofBackground(100);
 
     implementZoneReactions(); //stuff from the previous frame
+    implementSchedCommands();
 
     //get incoming from Meteor
     mOscManager->updateInMessages();
@@ -392,6 +393,17 @@ void ofApp::unpackClients(vector<string> &clients, command &cmd) {
 
 }
 
+void ofApp::implementSchedCommands() {
+
+    if(mCurrentGame) {
+        vector<command> cmds = mCurrentGame->getSchedCommands();
+        for(int i = 0; i < cmds.size(); i++){
+            implementCommand(cmds[i]);
+        }
+    }
+
+}
+
 void ofApp::implementZoneReactions() {
 
     vector<string> r = mZoneManager->getAppReactions();
@@ -406,9 +418,9 @@ void ofApp::implementZoneReactions() {
             incrementStage();
             break;
         } else if(*it == "repeatStage") {
-            implementStage();
+            implementStage(true);
             break;
-        } else if(*it == "decrementStage"){
+        } else if(*it == "decrementStage") {
             decrementStage();
             break;
         }
@@ -421,7 +433,8 @@ void ofApp::incrementStage() {
 
     if(!mCurrentGame)return;
     mCurrentGame->incrementStage();
-    implementStage();
+    bool isRepeat = !(mCurrentGame->getCurrentStage() >=  mCurrentGame->getFurthestStage());
+    implementStage(isRepeat); //sometimes a repeat - how can this be worked out  ? // game stores highest stage reached
     updateGUIElements();
 
 }
@@ -430,134 +443,174 @@ void ofApp::decrementStage() {
 
     if(!mCurrentGame)return;
     mCurrentGame->decrementStage();
-    implementStage();
+    implementStage(true);
     updateGUIElements();
 
 }
 
-
-
-void ofApp::implementStage() {
+void ofApp::implementStage(bool isRepeat) {
 
     vector<command> tComms = mCurrentGame->getStageCommands();
+
     //now apply the commands
 
     for(int i = 0; i < tComms.size(); i++) {
-        vector<string> clients;
 
-        unpackClients(clients, tComms[i]);
-
-        //now carry out the command
-
-        if(tComms[i].mCommand == "SET_CONTROL") {
-
-            if(tComms[i].stringParams.find("TEXT") != tComms[i].stringParams.end()) {
-                mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"], tComms[i].stringParams["TEXT"]);
-            } else {
-                mOscManager->setControl(clients, tComms[i].stringParams["CONTROL_TYPE"]);
-            }
-
-        } else if(tComms[i].mCommand == "SET_TEXT") {
-            mOscManager->setText(clients, tComms[i].stringParams["TEXT"]);
-        } else if(tComms[i].mCommand == "SET_NODE_ENV") {
-
-            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end()) {
-                mNodeManager->setNodeAttSecs(clients,tComms[i].floatParams["ATTACK_SECS"]);
-            }
-            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end()) {
-                mNodeManager->setNodeDecSecs(clients,tComms[i].floatParams["DECAY_SECS"]);
-            }
-
-            //TODO add parameter versions
-
-        } else if(tComms[i].mCommand == "SET_NODE_DRAW") {
-            if(tComms[i].params.size() > 0) {
-                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mNodeManager->setNodeDrawParam(clients, tComms[i].params[pi]);
-            } else {
-                mNodeManager->setNodeDraw(clients, tComms[i].mBaseData);
-            }
-        } else if(tComms[i].mCommand == "SET_NODE_SOUND") {
-            if(tComms[i].params.size() > 0) {
-                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mNodeManager->setNodeSoundParam(clients, tComms[i].params[pi]);
-            } else {
-                mNodeManager->setNodeSound(clients, tComms[i].mBaseData);
-            }
-        } else if(tComms[i].mCommand == "SET_ZONE_DRAW") {
-            if(tComms[i].params.size() > 0) {
-                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneDrawParam(tComms[i].zTargets, tComms[i].params[pi]);
-            } else {
-                mZoneManager->setZoneDraw(clients, tComms[i].mBaseData);
-            }
-        } else if(tComms[i].mCommand == "SET_ZONE_SOUND") {
-            if(tComms[i].params.size() > 0) {
-                for(int pi = 0; pi < tComms[i].params.size(); pi ++)mZoneManager->setZoneSoundParam(tComms[i].zTargets, tComms[i].params[pi]);
-            } else {
-                mZoneManager->setZoneSound(clients, tComms[i].mBaseData);
-            }
-
-        }else if(tComms[i].mCommand == "UPDATE_ZONE") {
-
-
-            if(tComms[i].reactions.size() > 0)mZoneManager->setZoneReactions(tComms[i].zTargets, tComms[i].reactions);
-
-
-        } else if(tComms[i].mCommand == "DISTRIBUTE_NODES") {
-
-            bool dimp, posp;
-
-            dimp = (tComms[i].intParams.find("DIM_P") != tComms[i].intParams.end());
-            posp = (tComms[i].intParams.find("POS_P") != tComms[i].intParams.end());
-
-            mNodeManager->distributeNodes(clients, tComms[i].stringParams["PATTERN"], tComms[i].floatParams, dimp, posp);
-
-        } else if(tComms[i].mCommand == "ADD_TITLE") {
-
-            title t;
-
-            t.text = tComms[i].stringParams["TEXT"];
-            if(tComms[i].floatParams.find("ATTACK_SECS") != tComms[i].floatParams.end())t.att_secs = tComms[i].floatParams["ATTACK_SECS"];
-            if(tComms[i].floatParams.find("DECAY_SECS") != tComms[i].floatParams.end())t.att_secs = tComms[i].floatParams["DECAY_SECS"];
-
-            mSplashManager->addTitle(tComms[i].stringParams["NAME"], t);
-
-
-        } else if(tComms[i].mCommand == "END_TITLE") {
-
-            mSplashManager->endTitle(tComms[i].stringParams["NAME"]);
-
-        } else if(tComms[i].mCommand == "NEW_GROUP") {
-
-            if(tComms[i].selectors.size() == 0) {
-                string s_string = tComms[i].stringParams["SELECTORS"];
-                vector<string> tSelNames = ofSplitString(s_string, ",");
-
-                for(int ts = 0; ts < tSelNames.size(); ts++) {
-                    selector t;
-                    t.sType = tSelNames[ts];
-                    tComms[i].selectors.push_back(t);
-                }
-            }
-
-            if(tComms[i].stringParams.find("RMV_FROM") != tComms[i].stringParams.end()) {
-                vector<string> rNames = ofSplitString(tComms[i].stringParams["RMV_FROM"], ",");
-                mClientManager->createGroup(clients, tComms[i].selectors, tComms[i].stringParams["NAME"], rNames);
-            } else {
-                mClientManager->createGroup(clients, tComms[i].selectors, tComms[i].stringParams["NAME"]);
-            }
-        } else if(tComms[i].mCommand == "SET_NODE") {
-            mNodeManager->setNodes(clients, tComms[i].mNode);
-        } else if(tComms[i].mCommand == "CREATE_ZONE") {
-            mZoneManager->createZone(tComms[i].mZone);
-        } else if(tComms[i].mCommand == "DESTROY_ZONE") {
-            mZoneManager->destroyZone(tComms[i].stringParams["NAME"]);
+        if(isRepeat && !tComms[i].isRepeatable) {
+            continue; //skip non-repeatable commands on repeats !
+        } else {
+            implementCommand(tComms[i]);
         }
 
+    }
 
+}
 
+void ofApp::scheduleCommands(command &cmd) {
+
+    //special commands to count num of times and create accels etc will go here
+
+    //calculate the next scheduled time for the command
+    cmd.interval = cmd.interval_secs * ofGetFrameRate();
+    cmd.execAt = cmd.interval + ofGetFrameNum();
+    mCurrentGame->addSchedCommand(cmd);
+
+    vector<command> tComms = mCurrentGame->getStageCommands();
+
+    //find all other schedulable commands from the same stage
+    //copy over scheduled exec time
+    //push_back to schedlist
+
+    for(int i = 0; i < tComms.size(); i++) {
+        if(tComms[i].isSchedulable && tComms[i].schedType == "none") {
+            tComms[i].execAt = cmd.execAt;
+            mCurrentGame->addSchedCommand(cmd);
+        }
     }
 
 
 }
+
+void ofApp::implementCommand(command &cmd) {
+
+    if(cmd.schedType != "none")scheduleCommands(cmd);
+
+   // if(CLAMOUR_VERBOSE == true)cout << cmd.mCommand << endl;
+
+    vector<string> clients;
+
+    unpackClients(clients, cmd);
+
+    //now carry out the command
+
+    if(cmd.mCommand == "SET_CONTROL") {
+
+        if(cmd.stringParams.find("TEXT") != cmd.stringParams.end()) {
+            mOscManager->setControl(clients, cmd.stringParams["CONTROL_TYPE"], cmd.stringParams["TEXT"]);
+        } else {
+            mOscManager->setControl(clients, cmd.stringParams["CONTROL_TYPE"]);
+        }
+
+    } else if(cmd.mCommand == "SET_TEXT") {
+        mOscManager->setText(clients, cmd.stringParams["TEXT"]);
+    } else if(cmd.mCommand == "SET_NODE_ENV") {
+
+        if(cmd.floatParams.find("ATTACK_SECS") != cmd.floatParams.end()) {
+            mNodeManager->setNodeAttSecs(clients,cmd.floatParams["ATTACK_SECS"]);
+        }
+        if(cmd.floatParams.find("DECAY_SECS") != cmd.floatParams.end()) {
+            mNodeManager->setNodeDecSecs(clients,cmd.floatParams["DECAY_SECS"]);
+        }
+
+        //TODO add parameter versions
+
+    } else if(cmd.mCommand == "SET_NODE_DRAW") {
+        if(cmd.params.size() > 0) {
+            for(int pi = 0; pi < cmd.params.size(); pi ++)mNodeManager->setNodeDrawParam(clients, cmd.params[pi]);
+        } else {
+            mNodeManager->setNodeDraw(clients, cmd.mBaseData);
+        }
+    } else if(cmd.mCommand == "SET_NODE_SOUND") {
+        if(cmd.params.size() > 0) {
+            for(int pi = 0; pi < cmd.params.size(); pi ++)mNodeManager->setNodeSoundParam(clients, cmd.params[pi]);
+        } else {
+            mNodeManager->setNodeSound(clients, cmd.mBaseData);
+        }
+    } else if(cmd.mCommand == "SET_ZONE_DRAW") {
+        if(cmd.params.size() > 0) {
+            for(int pi = 0; pi < cmd.params.size(); pi ++)mZoneManager->setZoneDrawParam(cmd.zTargets, cmd.params[pi]);
+        } else {
+            mZoneManager->setZoneDraw(clients, cmd.mBaseData);
+        }
+    } else if(cmd.mCommand == "SET_ZONE_SOUND") {
+        if(cmd.params.size() > 0) {
+            for(int pi = 0; pi < cmd.params.size(); pi ++)mZoneManager->setZoneSoundParam(cmd.zTargets, cmd.params[pi]);
+        } else {
+            mZoneManager->setZoneSound(clients, cmd.mBaseData);
+        }
+
+    } else if(cmd.mCommand == "UPDATE_ZONE") {
+
+
+        if(cmd.reactions.size() > 0)mZoneManager->setZoneReactions(cmd.zTargets, cmd.reactions);
+
+
+    } else if(cmd.mCommand == "DISTRIBUTE_NODES") {
+
+        bool dimp, posp;
+
+        dimp = (cmd.intParams.find("DIM_P") != cmd.intParams.end());
+        posp = (cmd.intParams.find("POS_P") != cmd.intParams.end());
+
+        mNodeManager->distributeNodes(clients, cmd.stringParams["PATTERN"], cmd.floatParams, dimp, posp);
+
+    } else if(cmd.mCommand == "ADD_TITLE") {
+
+        title t;
+
+        t.text = cmd.stringParams["TEXT"];
+        if(cmd.floatParams.find("ATTACK_SECS") != cmd.floatParams.end())t.att_secs = cmd.floatParams["ATTACK_SECS"];
+        if(cmd.floatParams.find("DECAY_SECS") != cmd.floatParams.end())t.att_secs = cmd.floatParams["DECAY_SECS"];
+
+        mSplashManager->addTitle(cmd.stringParams["NAME"], t);
+
+
+    } else if(cmd.mCommand == "END_TITLE") {
+
+        mSplashManager->endTitle(cmd.stringParams["NAME"]);
+
+    } else if(cmd.mCommand == "NEW_GROUP") {
+
+        if(cmd.selectors.size() == 0) {
+            string s_string = cmd.stringParams["SELECTORS"];
+            vector<string> tSelNames = ofSplitString(s_string, ",");
+
+            for(int ts = 0; ts < tSelNames.size(); ts++) {
+                selector t;
+                t.sType = tSelNames[ts];
+                cmd.selectors.push_back(t);
+            }
+        }
+
+        if(cmd.stringParams.find("RMV_FROM") != cmd.stringParams.end()) {
+            vector<string> rNames = ofSplitString(cmd.stringParams["RMV_FROM"], ",");
+            mClientManager->createGroup(clients, cmd.selectors, cmd.stringParams["NAME"], rNames);
+        } else {
+            mClientManager->createGroup(clients, cmd.selectors, cmd.stringParams["NAME"]);
+        }
+    } else if(cmd.mCommand == "SET_NODE") {
+        mNodeManager->setNodes(clients, cmd.mNode);
+    } else if(cmd.mCommand == "CREATE_ZONE") {
+        mZoneManager->createZone(cmd.mZone);
+    } else if(cmd.mCommand == "DESTROY_ZONE") {
+        mZoneManager->destroyZone(cmd.stringParams["NAME"]);
+    }
+
+
+
+
+}
+
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {

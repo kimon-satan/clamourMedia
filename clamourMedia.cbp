@@ -466,10 +466,10 @@
 			<Option virtualFolder="src/base/" />
 		</Unit>
 		<Unit filename="src/game.cpp">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/game.h">
-			<Option virtualFolder="src/" />
+			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />
