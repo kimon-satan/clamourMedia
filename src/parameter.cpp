@@ -71,6 +71,7 @@ string baseData::getName(){return name;}
 
 void baseData::setName(string s){name = s;}
 
+
 float baseData::warp(string type, float v, float mnv, float mxv){
 
 

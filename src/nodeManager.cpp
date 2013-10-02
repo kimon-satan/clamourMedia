@@ -77,6 +77,8 @@ void nodeManager::updateNodes() {
             it->second->updateHistory();
             it->second->updateDrawData();
             it->second->updateSoundData();
+            it->second->updateRotHistory();
+            it->second->updatePath();
         }
 
         ++it;
@@ -295,6 +297,7 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
     target->setDecSecs(temp.getDecSecs());
     target->setCanSleep(temp.getCanSleep());
     target->setEdgeTemplate(temp.getEdgeTemplate());
+    target->setIsRotate(temp.getIsRotate());
 
 }
 

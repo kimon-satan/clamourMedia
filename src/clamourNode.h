@@ -54,7 +54,12 @@ public:
     bool getIsDragOn();
     void setIsDragOn(bool b);
 
+    void setIsRotate(bool b);
+    bool getIsRotate();
+
     void clearHistory();
+    vector<ofVec2f> getHistory();
+    void updateRotHistory();
 
     ofPtr<zone> getZonePair();
     void setZonePair(ofPtr<zone> p);
@@ -83,8 +88,11 @@ private:
     ofVec2f shiftStart;
     float shiftAmount;
     bool isDragOn;
+    float avRot;
+    bool isRotate;
 
     vector<ofVec2f> history;
+    vector<ofVec2f> rotHist;
     ofPtr<zone> zonePair;
 
 

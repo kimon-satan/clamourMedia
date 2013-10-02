@@ -22,6 +22,7 @@ clamourNode::clamourNode(int ts, string tr)
     mChanged = CLAMOUR_NONE;
     isSleeping = true;
     canSleep = true;
+    isRotate = false;
 
 };
 
@@ -52,6 +53,7 @@ void clamourNode::updateHistory()
 
 
 
+
 }
 
 void clamourNode::modifyHistory(){
@@ -77,10 +79,46 @@ void clamourNode::modifyHistory(){
 
 }
 
+vector<ofVec2f> clamourNode::getHistory(){
+    return history;
+}
+
+void clamourNode::updateRotHistory(){
+
+    float ang = 0;
+
+    if(history.size() > 2){
+        ofVec2f v = history[history.size()-1] - meanPos_rel;
+        if(v.length() > 0.001){
+            rotHist.push_back(v);
+        }else{
+            (rotHist.size() > 0)? rotHist.push_back(rotHist[rotHist.size()-1]): rotHist.push_back(ofVec2f(0,-1)) ;
+        }
+
+    }else{
+       (rotHist.size() > 0)? rotHist.push_back(rotHist[rotHist.size()-1]): rotHist.push_back(ofVec2f(0,-1)) ;
+    }
+
+    if(rotHist.size() > 20)rotHist.erase(rotHist.begin());
+
+    ofVec2f av(0,0);
+
+    for(int i =0; i < rotHist.size(); i++){
+        av += rotHist[i];
+    }
+
+    av /= (int)rotHist.size();
+
+    av.y *= -1;
+    avRot = av.angle(ofVec2f(0,1));
+
+}
+
 void clamourNode::updatePath(){
 
     outerEdge = edgeTemplate;
-    outerEdge.translate(meanPos_abs);
+   if(isRotate)outerEdge.rotate(avRot ,ofVec3f(0,0,1));
+    outerEdge.translate(getMeanPos_abs());
 
 }
 
@@ -229,4 +267,7 @@ bool clamourNode::getCanSleep(){
 void clamourNode::setCanSleep(bool b){
     canSleep = b;
 }
+
+void clamourNode::setIsRotate(bool b){ isRotate = b;}
+bool clamourNode::getIsRotate(){return isRotate;}
 

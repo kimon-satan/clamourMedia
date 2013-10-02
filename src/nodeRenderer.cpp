@@ -85,24 +85,30 @@ void nodeRenderer::drawRound(ofPtr<clamourNode> n, baseData &bd) {
 
 void nodeRenderer::drawPointer(ofPtr<clamourNode> n, baseData &bd) {
 
-    ofPath p = n->getEdgeTemplate();
-    ofVec2f pos = n->getMeanPos_abs();
-    pos *= screenData::height;
-
+    ofPath p = n->getOuterEdge();
 
     ofPushMatrix();
 
-    ofTranslate(pos.x, pos.y, 0);
     ofScale(screenData::height, screenData::height,1.0);
 
-    p.setFilled(true);
-    p.setColor(255);
-    p.draw();
+    if(n->getIsFiring()){
 
-    p.setFilled(false);
-    p.setStrokeColor(0);
-    p.draw();
+
+
+    }else{
+
+        p.setFilled(true);
+        p.setColor(255);
+        p.draw();
+
+        p.setFilled(false);
+        p.setStrokeColor(0);
+        p.draw();
+
+    }
 
     ofPopMatrix();
+
+
 
 }

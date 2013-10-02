@@ -63,6 +63,6 @@ void drawDictionary::mousePointerData(baseData &bd){
 
     bd.setName("mousePointer");
     bd.setShapeType("mousePointer");
-    bd.setParameter(parameter("size", 0, 1, 0.05, CLAMOUR_MAP_FIXED)); //perhaps size should go as a main parameter ?
+    bd.setParameter(parameter("flicker", 0, 1, 0, CLAMOUR_MAP_FIXED));
 
 }

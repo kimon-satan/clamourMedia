@@ -24,13 +24,10 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z){
 
 void zoneRenderer::drawDebug(ofPtr<zone> z){
 
-    ofPath p = z->getEdgeTemplate();
-    ofVec2f pos = z->getPos_abs();
-    pos *= screenData::height;
+    ofPath p = z->getOuterEdge();
 
     ofPushMatrix();
 
-    ofTranslate(pos.x, pos.y, 0);
     ofScale(screenData::height, screenData::height,1.0);
 
     if(z->getIsFiring()){
