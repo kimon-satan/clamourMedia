@@ -48,7 +48,7 @@ private:
     void implementCommand(command & cmd);
 
     void unpackClients(vector<string> &clients, command &cmd);
-    void scheduleCommands(command &cmd);
+    void scheduleCommands(command &cmd, vector<string> & clients);
     void guiEvent(ofxUIEventArgs &e);
 
     void resetEverything();

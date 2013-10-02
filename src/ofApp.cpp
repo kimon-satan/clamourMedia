@@ -466,25 +466,44 @@ void ofApp::implementStage(bool isRepeat) {
 
 }
 
-void ofApp::scheduleCommands(command &cmd) {
+void ofApp::scheduleCommands(command &cmd, vector<string> & clients) {
 
-    //special commands to count num of times and create accels etc will go here
+    bool isSched = true;
 
-    //calculate the next scheduled time for the command
-    cmd.interval = cmd.interval_secs * ofGetFrameRate();
-    cmd.execAt = cmd.interval + ofGetFrameNum();
-    mCurrentGame->addSchedCommand(cmd);
+    if(cmd.schedType == "doNum"){
+        if(cmd.execNum == cmd.totExecs - 1)isSched = false;
+    }
 
-    vector<command> tComms = mCurrentGame->getStageCommands();
+    if(cmd.schedType == "eachTarget"){
+        if(cmd.execNum == clients.size() - 1)isSched = false;
+        string s = clients[cmd.execNum];
+        clients.clear();
+        clients.push_back(s);
+    }
 
-    //find all other schedulable commands from the same stage
-    //copy over scheduled exec time
-    //push_back to schedlist
 
-    for(int i = 0; i < tComms.size(); i++) {
-        if(tComms[i].isSchedulable && tComms[i].schedType == "none") {
-            tComms[i].execAt = cmd.execAt;
-            mCurrentGame->addSchedCommand(cmd);
+    if(isSched){
+        //calculate the next scheduled time for the command
+        cmd.interval = cmd.interval_secs * ofGetFrameRate();
+        cmd.execAt = cmd.interval + ofGetFrameNum();
+        cmd.execNum += 1;
+        mCurrentGame->addSchedCommand(cmd);
+
+        //special commands to count num of times and create accels etc will go here
+        if(cmd.schedType == "accel")cmd.interval_secs = max(0.1, cmd.interval_secs * 0.95);
+        if(cmd.schedType == "decel")cmd.interval_secs = max(0.1, cmd.interval_secs * 1.05);
+
+        vector<command> tComms = mCurrentGame->getStageCommands();
+
+        //find all other schedulable commands from the same stage
+        //copy over scheduled exec time
+        //push_back to schedlist
+
+        for(int i = 0; i < tComms.size(); i++) {
+            if(tComms[i].isSchedulable && tComms[i].schedType == "none") {
+                tComms[i].execAt = cmd.execAt;
+                mCurrentGame->addSchedCommand(tComms[i]);
+            }
         }
     }
 
@@ -493,13 +512,13 @@ void ofApp::scheduleCommands(command &cmd) {
 
 void ofApp::implementCommand(command &cmd) {
 
-    if(cmd.schedType != "none")scheduleCommands(cmd);
 
    // if(CLAMOUR_VERBOSE == true)cout << cmd.mCommand << endl;
 
     vector<string> clients;
-
     unpackClients(clients, cmd);
+
+    if(cmd.schedType != "none")scheduleCommands(cmd, clients);
 
     //now carry out the command
 

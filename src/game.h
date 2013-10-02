@@ -26,6 +26,8 @@ struct command{
         schedType = "none";
         interval = 0;
         execAt = 0;
+        execNum = 0;
+        totExecs = 0;
         interval_secs = 0;
 
     };
@@ -35,7 +37,7 @@ struct command{
     vector<selector> selectors;
 
     int stage, priority;
-    int interval, execAt;
+    int interval, execAt, execNum, totExecs;
     float interval_secs;
 
     string schedType;

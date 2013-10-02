@@ -29,6 +29,7 @@ void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int
             if(XML.tagExists("SCHED"))t_cmd.isSchedulable = XML.getValue("SCHED", true);
             if(XML.tagExists("SCHED_TYPE"))t_cmd.schedType = XML.getValue("SCHED_TYPE", "none");
             if(XML.tagExists("INTERVAL_SECS"))t_cmd.interval_secs = XML.getValue("INTERVAL_SECS", 0.0);
+            if(XML.tagExists("TOT_EXECS"))t_cmd.totExecs = XML.getValue("TOT_EXECS", 1);
 
             parseActions(t_cmd, XML);
 
