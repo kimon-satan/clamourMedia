@@ -120,7 +120,7 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
         }
 
         if(numSelectors == 0)if(XML.tagExists("SELECTORS"))cmd.stringParams["SELECTORS"] = XML.getValue("SELECTORS","");
-        return;
+
     }
 
     if(cmd.mCommand == "START_SYNTH"){

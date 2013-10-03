@@ -102,3 +102,7 @@ void game::addSchedCommand(command c){
 
     mSchedCommands.push_back(c);
 }
+
+void game::clearSchedCommands(){
+    mSchedCommands.clear();
+}

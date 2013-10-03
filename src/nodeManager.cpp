@@ -160,9 +160,14 @@ void nodeManager::switchOffNode(string t_index) {
 
     if(mNodes[t_index]->getIsFired()) {
         mNodes[t_index]->setIsFired(false);
+        if(mNodes[t_index]->getCanSleep())mNodes[t_index]->setIsSleeping(true);
         if(mNodes[t_index]->getEnvType() == CLAMOUR_ASR)mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
         mNodes[t_index]->clearHistory();
+    }else{
+        if(mNodes[t_index]->getIsSleeping())mNodes[t_index]->setIsSleeping(true);
     }
+
+
 
 }
 

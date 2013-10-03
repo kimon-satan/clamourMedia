@@ -88,6 +88,7 @@ class game{
     vector<command> getStageCommands();
     vector<command> getSchedCommands();
     void addSchedCommand(command c);
+    void clearSchedCommands();
 
 
     private:

@@ -317,7 +317,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e) {
     } else if(name == "GAME_SELECT") {
 
         mCurrentGame = mGames[mGameBrowseIndex];
-        resetEverything();
+        //resetEverything(); //don't need this
         implementStage();
         updateGUIElements();
 
@@ -432,6 +432,10 @@ void ofApp::implementZoneReactions() {
 void ofApp::incrementStage() {
 
     if(!mCurrentGame)return;
+
+   /* if(mCurrentGame->getCurrentStage()
+    mGameBrowseIndex = min((int)mGames.size()-1, mGameBrowseIndex + 1);*/
+
     mCurrentGame->incrementStage();
     bool isRepeat = !(mCurrentGame->getCurrentStage() >=  mCurrentGame->getFurthestStage());
     implementStage(isRepeat); //sometimes a repeat - how can this be worked out  ? // game stores highest stage reached
@@ -627,6 +631,8 @@ void ofApp::implementCommand(command &cmd) {
         mSplashManager->addSynth(cmd.sTargets, cmd.mSynth);
     } else if(cmd.mCommand == "STOP_SYNTH") {
         mSplashManager->endSynth(cmd.sTargets);
+    } else if(cmd.mCommand == "CLEAR_SCHED"){
+        mCurrentGame->clearSchedCommands();
     }
 
 

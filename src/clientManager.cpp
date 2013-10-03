@@ -143,6 +143,7 @@ void clientManager::selectClients(vector<selector> selectors, ofPtr<group> grp) 
 
             } else {
                 t_indexes = grp->indexes;
+
             }
 
         }

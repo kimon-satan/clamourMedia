@@ -20,27 +20,42 @@
 
 	<GROUP>
 		<NAME>leftPlayers</NAME>
-		<SELECTOR><S_S_TYPE>le_seat</S_S_TYPE><SEAT>2</SEAT></SELECTOR>
+		<SELECTOR><S_TYPE>le_seat</S_TYPE><SEAT>2</SEAT></SELECTOR>
 	</GROUP>
 
 	<GROUP>
 		<NAME>rightPlayers</NAME>
-		<SELECTOR><S_S_TYPE>ge_seat</S_S_TYPE><SEAT>3</SEAT></SELECTOR>
+		<SELECTOR><S_TYPE>ge_seat</S_TYPE><SEAT>3</SEAT></SELECTOR>
 	</GROUP>
 
 	<GROUP>
 		<NAME>backPlayers</NAME>
-		<SELECTOR><S_S_TYPE>ge_row</S_S_TYPE><ROW>B</ROW></SELECTOR>
+		<SELECTOR><S_TYPE>ge_row</S_TYPE><ROW>B</ROW></SELECTOR>
 	</GROUP>
 
 	<GROUP>
 		<NAME>frontPlayers</NAME>
-		<SELECTOR><S_S_TYPE>le_row</S_S_TYPE><ROW>A</ROW></SELECTOR>
+		<SELECTOR><S_TYPE>le_row</S_TYPE><ROW>A</ROW></SELECTOR>
 	</GROUP>
+	
+	
+	<GROUP>
+		<NAME>testPlayers</NAME>
+		<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>4</NUM_P></SELECTOR>
+	</GROUP>
+	
 
+	
+	<NODE_PRESET>
+		<NAME>defaultNode</NAME>
+		<CAN_SLEEP>1</CAN_SLEEP>
+		<DRAW_TYPE>none</DRAW_TYPE>
+		<SOUND_TYPE>none</SOUND_TYPE>
+	</NODE_PRESET>
+	
 	<NODE_PRESET>
 		<NAME>flickerPulse</NAME>
-		<CAN_SLEEP>true</CAN_SLEEP>
+		<CAN_SLEEP>1</CAN_SLEEP>
 		<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
 		<DRAW_TYPE>FLICKER</DRAW_TYPE><SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
 		<DRAW_PARAMS>
@@ -66,7 +81,7 @@
 
 	<NODE_PRESET>
 		<NAME>pointerPulse</NAME>
-		<CAN_SLEEP>true</CAN_SLEEP>
+		<CAN_SLEEP>0</CAN_SLEEP>
 		<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
 		<ROTATE>1</ROTATE>
 		<DRAW_TYPE>mousePointer</DRAW_TYPE><SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
@@ -121,7 +136,7 @@
 					<TARGET>allPlayers</TARGET>
 					<ACTION>SET_NODE</ACTION>
 					<PRESET>pointerPulse</PRESET>
-					<CAN_SLEEP>0</CAN_SLEEP>
+					
 					<REPEAT>0</REPEAT>
 					<SCHED>0</SCHED>
 				</COMMAND>
@@ -138,9 +153,9 @@
 				<COMMAND>
 					<TARGET>allPlayers</TARGET>
 					<ACTION>DISTRIBUTE_NODES</ACTION>
-					<PATTERN>CIRCUM</PATTERN>
+					<PATTERN>RANDOM_CIRCLE</PATTERN>
 					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
-					<SCHED>0</SCHED>
+					<SCHED_TYPE>loop</SCHED_TYPE><INTERVAL_SECS>1.0</INTERVAL_SECS>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
@@ -252,13 +267,15 @@
 
 	<GAME>
 		<NAME>clamour_part_1</NAME>
-
 		<STAGE>
 			<COMMAND>
-				<ACTION>ADD_TITLE</ACTION>
-				<TEXT>Clamour</TEXT>
-				<NAME>clamour</NAME>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_NODE</ACTION>
+				<PRESET>defaultNode</PRESET>
+				<CAN_SLEEP>1</CAN_SLEEP>
 			</COMMAND>
+		</STAGE>
+		<STAGE>
 			<COMMAND>
 				<ACTION>START_SYNTH</ACTION>
 				<S_TARGET>testOm</S_TARGET>
@@ -266,6 +283,14 @@
 				<ENV_TYPE>ASR</ENV_TYPE>
 				<ATTACK_SECS>10</ATTACK_SECS>
 				<DECAY_SECS>0.01</DECAY_SECS>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>ADD_TITLE</ACTION>
+				<TEXT>Clamour</TEXT>
+				<NAME>clamour</NAME>
+				<ATTACK_SECS>5</ATTACK_SECS>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
@@ -280,14 +305,7 @@
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
 				<ACTION>SET_TEXT</ACTION>
-				<TEXT>to this Clamour playtest</TEXT>
-			</COMMAND>
-		</STAGE>
-		<STAGE>
-			<COMMAND>
-				<TARGET>allPlayers</TARGET>
-				<ACTION>SET_TEXT</ACTION>
-				<TEXT>Let's begin</TEXT>
+				<TEXT>Welcome</TEXT>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
@@ -295,6 +313,27 @@
 				<TARGET>allPlayers</TARGET>
 				<ACTION>SET_CONTROL</ACTION>
 				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>to this first performance of Clamour ...</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>A piece for cinema and mobile phones</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>A piece performed by you !</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
 				<TEXT>I'd like to test how synchronous you and your mobile devices are.</TEXT>
 			</COMMAND>
 		</STAGE>
@@ -336,7 +375,13 @@
 				<TEXT>"Yes"</TEXT>
 			</COMMAND>
 		</STAGE>
-
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>That was great !</TEXT>
+			</COMMAND>
+		</STAGE>
 		<STAGE>
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
@@ -344,22 +389,15 @@
 				<TEXT>"Thankyou"</TEXT>
 			</COMMAND>
 		</STAGE>
-
+		<!-- you might be wondering audio -->
 		<STAGE>
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
 				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"Now tell me"</TEXT>
+				<TEXT>"Well ?"</TEXT>
 			</COMMAND>
 		</STAGE>
-		<STAGE>
-			<COMMAND>
-				<TARGET>allPlayers</TARGET>
-				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"What is this all about ?"</TEXT>
-			</COMMAND>
-		</STAGE>
-
+		<!-- I'm interested in exploring -->
 		<STAGE>
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
@@ -378,69 +416,30 @@
 			<COMMAND>
 				<TARGET>oddPlayers</TARGET>
 				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"or will our cooperation fail"</TEXT>
+				<TEXT>"or will cooperation fail"</TEXT>
 			</COMMAND>
 			<COMMAND>
 				<TARGET>evenPlayers</TARGET>
 				<ACTION>SET_TEXT</ACTION>
 				<TEXT>"or will we fall apart"</TEXT>
 			</COMMAND>
-
-			<!--create another random group-->
 		</STAGE>
+		<!-- I have created a system -->
+		<!-- I can divide you -->
+	
 		<STAGE>
 			<COMMAND>
-				<TARGET>allPlayers</TARGET>
+				<TARGET>leftPlayers</TARGET>
 				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"At the moment, you are in control"</TEXT>
+				<TEXT>"into left"</TEXT>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
 			<COMMAND>
-				<TARGET>allPlayers</TARGET>
+				<TARGET>rightPlayers</TARGET>
 				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"You can divide us"</TEXT>
+				<TEXT>"and right"</TEXT>
 			</COMMAND>
-		</STAGE>
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET>
-					<ACTION>NEW_GROUP</ACTION>
-					<SELECTOR>
-						<S_TYPE>ge_seat</S_TYPE>
-						<SEAT>6</SEAT>
-					</SELECTOR>
-					<NAME>electraLeft</NAME>
-				</COMMAND>
-			</PRIORITY>
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>electraLeft</TARGET>
-					<ACTION>SET_TEXT</ACTION>
-					<TEXT>"Into left"</TEXT>
-				</COMMAND>
-			</PRIORITY>
-		</STAGE>
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET>
-					<ACTION>NEW_GROUP</ACTION>
-					<SELECTOR>
-						<S_TYPE>le_seat</S_TYPE>
-						<SEAT>5</SEAT>
-					</SELECTOR>
-					<NAME>electraRight</NAME>
-				</COMMAND>
-			</PRIORITY>
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>electraRight</TARGET>
-					<ACTION>SET_TEXT</ACTION>
-					<TEXT>"and right"</TEXT>
-				</COMMAND>
-			</PRIORITY>
 		</STAGE>
 		<STAGE>
 			<COMMAND>
@@ -456,46 +455,66 @@
 				<TEXT>"or back"</TEXT>
 			</COMMAND>
 		</STAGE>
-
+		<!--- I can make teams -->
 		<STAGE>
+			<!-- currently done for few players -->
 			<PRIORITY>
 				<COMMAND>
-					<TARGET>allPlayers</TARGET>
+					<TARGET>leftPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
+					<!--<SELECTOR>online</SELECTOR>-->
 					<SELECTOR>
-						<S_TYPE>le_row</S_TYPE>
-						<ROW>D</ROW>
-					</SELECTOR>
-					<SELECTOR>
-						<S_TYPE>ge_seat</S_TYPE>
-						<SEAT>10</SEAT>
+						<S_TYPE>random</S_TYPE>
+						<NUM_P>2</NUM_P>
 					</SELECTOR>
 					<NAME>aTeam</NAME>
 				</COMMAND>
 				<COMMAND>
-					<TARGET>allPlayers</TARGET>
+					<TARGET>rightPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
+					<!--<SELECTOR>online</SELECTOR>-->
 					<SELECTOR>
-						<S_TYPE>le_row</S_TYPE>
-						<ROW>G</ROW>
-					</SELECTOR>
-					<SELECTOR>
-						<S_TYPE>ge_row</S_TYPE>
-						<ROW>F</ROW>
+						<S_TYPE>random</S_TYPE>
+						<NUM_P>2</NUM_P>
 					</SELECTOR>
 					<NAME>bTeam</NAME>
 				</COMMAND>
 				<COMMAND>
-					<TARGET>backPlayers</TARGET>
+					<TARGET>allPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
-					<SELECTOR>online</SELECTOR>
+					<!--<SELECTOR>online</SELECTOR>-->
 					<SELECTOR>
 						<S_TYPE>random</S_TYPE>
-						<NUM_P>8</NUM_P>
+						<NUM_P>4</NUM_P>
 					</SELECTOR>
 					<NAME>cTeam</NAME>
 				</COMMAND>
-
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>aTeam</TARGET>
+					<ACTION>SET_TEXT</ACTION>
+					<TEXT>"Like this"</TEXT>
+				</COMMAND>
+			</PRIORITY>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>bTeam</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"or this"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>cTeam</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"like this"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<!-- alternatively I can single you -->
+		<STAGE>
+			<PRIORITY>
 				<COMMAND>
 					<TARGET>allPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
@@ -505,43 +524,23 @@
 			</PRIORITY>
 			<PRIORITY>
 				<COMMAND>
-					<TARGET>aTeam</TARGET>
+					<TARGET>aSingle</TARGET>
 					<ACTION>SET_TEXT</ACTION>
-					<TEXT>"You can build teams ..."</TEXT>
+					<TEXT>"out"</TEXT>
+					<SCHED_TYPE>loop</SCHED_TYPE><INTERVAL_SECS>1.0</INTERVAL_SECS>
 				</COMMAND>
 			</PRIORITY>
 		</STAGE>
 		<STAGE>
-			<COMMAND>
-				<TARGET>cTeam</TARGET>
-				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"I can build teams ..."</TEXT>
-			</COMMAND>
+			<PRIORITY><COMMAND><ACTION>CLEAR_SCHED</ACTION></COMMAND></PRIORITY>
+			<PRIORITY><COMMAND><ACTION>SET_TEXT</ACTION><TEXT>""</TEXT></COMMAND></PRIORITY>
 		</STAGE>
-		<STAGE>
-			<COMMAND>
-				<TARGET>bTeam</TARGET>
-				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"We can build teams ..."</TEXT>
-			</COMMAND>
-		</STAGE>
-		<STAGE>
-			<PRIORITY>
-				<COMMAND>
-					<TARGET>allPlayers</TARGET>
-					<ACTION>SET_TEXT</ACTION>
-					<TEXT>"or single you"</TEXT>
-				</COMMAND>
-			</PRIORITY>
-		</STAGE>
-		<STAGE>
-			<COMMAND>
-				<TARGET>aSingle</TARGET>
-				<ACTION>SET_TEXT</ACTION>
-				<TEXT>"out"</TEXT>
-			</COMMAND>
-		</STAGE>
-
 	</GAME>
-
+	
+	<GAME>
+		<NAME>clamour_part_2</NAME>
+		<!-- I imagine you're probab;y thinking -->
+		<STAGE>
+		</STAGE>
+	</GAME>
 </CLAMOUR_MEDIA>
