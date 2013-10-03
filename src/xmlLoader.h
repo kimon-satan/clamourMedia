@@ -9,13 +9,13 @@
 #include "presetStore.h"
 #include "pathFactory.h"
 
-class xmlLoader
-{
-    public:
+class xmlLoader {
+public:
 
     static void loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int pty = 0);
     static void parseActions(command &cmd, ofxXmlSettings &XML);
     static void loadZone(zone &z, ofxXmlSettings &XML);
+    static void loadSynth(baseZode &z, ofxXmlSettings &XML);
     static void loadRule(zoneRule &r, ofxXmlSettings &XML);
     static void loadReaction(reaction &r, ofxXmlSettings &XML);
 

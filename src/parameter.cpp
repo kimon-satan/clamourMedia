@@ -8,6 +8,9 @@
 
 #include "parameter.h"
 
+baseData::baseData(){
+    soundFile = "none";
+}
 
 void baseData::init(ofVec2f pos){
 
@@ -103,6 +106,9 @@ vector<float> baseData::getAbsVals(){
 
 void baseData::setShapeType(string s){shapeType = s;}
 string baseData::getShapeType(){return shapeType;}
+
+void baseData::setSoundFile(string s){soundFile = s;}
+string baseData::getSoundFile(){return soundFile;}
 
 
 /*-----------------------------------------------------------------------------------*/

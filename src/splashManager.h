@@ -2,6 +2,7 @@
 #define SPLASHMANAGER_H
 
 #include "title.h"
+#include "baseZode.h"
 #include "ofMain.h"
 
 class splashManager
@@ -16,11 +17,16 @@ public:
     void reset();
     vector<ofPtr<title> > getOnTitles();
 
+    void addSynth(vector<string> sTargets, baseZode s);
+    void endSynth(vector<string> sTargets);
+    map<string, ofPtr<baseZode> > getSynths();
+
 protected:
 private:
 
     map<string, ofPtr<title> > mTitles;
     vector<ofPtr<title> > onTitles;
+    map<string, ofPtr<baseZode> > mSynths;
 
 
 };

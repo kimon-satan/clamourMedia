@@ -57,6 +57,9 @@ public:
     void setEnvType(string s);
     void setEnvType(envType t);
 
+    void setSoundFile(string s);
+    string getSoundFile();
+
     void setOuterEdge(ofPath p);
     ofPath getOuterEdge();
 

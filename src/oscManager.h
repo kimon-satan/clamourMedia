@@ -13,6 +13,7 @@
 #include "nodeManager.h"
 #include "clientManager.h"
 #include "zoneManager.h"
+#include "splashManager.h"
 
 #define METEOR_IN_PORT 41234
 #define METEOR_OUT_PORT 42345
@@ -40,6 +41,7 @@ class oscManager{
     void setNodeManager(ofPtr<nodeManager> p);
     void setClientManager(ofPtr<clientManager> p);
     void setZoneManager(ofPtr<zoneManager> p);
+    void setSplashManager(ofPtr<splashManager> p);
 
     void setControl(vector<string> clients, string control);
     void setControl(vector<string> clients, string control, string text);
@@ -51,8 +53,8 @@ class oscManager{
 
     void sendInit();
 
-    void stopSynth(ofPtr<clamourNode> n);
-    void updateSynth(ofPtr<clamourNode> n);
+    void stopSynth(ofPtr<baseZode> n);
+    void updateSynth(ofPtr<baseZode> n);
 
     void startSynth(ofPtr<baseZode> z);
 
@@ -73,6 +75,7 @@ class oscManager{
     ofPtr<nodeManager> pNodeManager;
     ofPtr<clientManager> pClientManager;
     ofPtr<zoneManager> pZoneManager;
+    ofPtr<splashManager> pSplashManager;
 
     vector<vector<string> > msg_strings;
     vector<int> msg_string_count;

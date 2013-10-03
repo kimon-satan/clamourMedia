@@ -38,6 +38,7 @@ void ofApp::setup() {
 
     mSplashManager = ofPtr<splashManager>(new splashManager());
     mDisplay.setSplashManager(mSplashManager);
+    mOscManager->setSplashManager(mSplashManager);
 
     isMouseDown = false;
 
@@ -162,25 +163,25 @@ void ofApp::loadXML() {
 
                 if(XML.pushTag("GROUP", gp)) {
 
-                    string action = XML.getValue("ACTION", "create");
+                    int numSelect = XML.getNumTags("SELECTOR");
 
-                    if(action == "create") {
+                    vector<selector> tSels;
 
-                        int numSelect = XML.getNumTags("SELECTOR");
+                    for(int sel = 0; sel < numSelect; sel++) {
 
-                        //only simple selectors for now ... would require a different XML interface
-                        vector<selector> tSels;
+                        if(XML.pushTag("SELECTOR", sel)){
+                            selector ts;
 
-                        for(int sel = 0; sel < numSelect; sel++) {
-                            selector t;
-                            t.sType = XML.getValue("SELECTOR", "all", sel);
-                            tSels.push_back(t);
+                            ts.sType = XML.getValue("S_TYPE","none");
+                            ts.row = XML.getValue("ROW", "A");
+                            ts.seat = XML.getValue("SEAT", 1);
+                            ts.numPlayers = XML.getValue("NUM_P",1);
+                            tSels.push_back(ts);
+                            XML.popTag();
                         }
-
-
-                        mClientManager->createGroup(tSels, XML.getValue("NAME","default"));
-
                     }
+
+                    mClientManager->createGroup(tSels, XML.getValue("NAME","default"));
 
                     XML.popTag(); //GROUP
                 }
@@ -301,7 +302,6 @@ void ofApp::guiEvent(ofxUIEventArgs &e) {
             && ! isMouseDown)return;
 
     if(name == "STAGE_PLUS") {
-
         incrementStage();
 
     } else if(name == "GAME_PLUS") {
@@ -397,7 +397,7 @@ void ofApp::implementSchedCommands() {
 
     if(mCurrentGame) {
         vector<command> cmds = mCurrentGame->getSchedCommands();
-        for(int i = 0; i < cmds.size(); i++){
+        for(int i = 0; i < cmds.size(); i++) {
             implementCommand(cmds[i]);
         }
     }
@@ -470,11 +470,11 @@ void ofApp::scheduleCommands(command &cmd, vector<string> & clients) {
 
     bool isSched = true;
 
-    if(cmd.schedType == "doNum"){
+    if(cmd.schedType == "doNum") {
         if(cmd.execNum == cmd.totExecs - 1)isSched = false;
     }
 
-    if(cmd.schedType == "eachTarget"){
+    if(cmd.schedType == "eachTarget") {
         if(cmd.execNum == clients.size() - 1)isSched = false;
         string s = clients[cmd.execNum];
         clients.clear();
@@ -482,7 +482,7 @@ void ofApp::scheduleCommands(command &cmd, vector<string> & clients) {
     }
 
 
-    if(isSched){
+    if(isSched) {
         //calculate the next scheduled time for the command
         cmd.interval = cmd.interval_secs * ofGetFrameRate();
         cmd.execAt = cmd.interval + ofGetFrameNum();
@@ -513,7 +513,7 @@ void ofApp::scheduleCommands(command &cmd, vector<string> & clients) {
 void ofApp::implementCommand(command &cmd) {
 
 
-   // if(CLAMOUR_VERBOSE == true)cout << cmd.mCommand << endl;
+    // if(CLAMOUR_VERBOSE == true)cout << cmd.mCommand << endl;
 
     vector<string> clients;
     unpackClients(clients, cmd);
@@ -623,6 +623,10 @@ void ofApp::implementCommand(command &cmd) {
         mZoneManager->createZone(cmd.mZone);
     } else if(cmd.mCommand == "DESTROY_ZONE") {
         mZoneManager->destroyZone(cmd.stringParams["NAME"]);
+    } else if(cmd.mCommand == "START_SYNTH") {
+        mSplashManager->addSynth(cmd.sTargets, cmd.mSynth);
+    } else if(cmd.mCommand == "STOP_SYNTH") {
+        mSplashManager->endSynth(cmd.sTargets);
     }
 
 

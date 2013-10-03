@@ -44,7 +44,7 @@ class baseData{
 
 public:
 
-    baseData(){};
+    baseData();
 
     parameter getParameter(string name);
 
@@ -57,6 +57,8 @@ public:
     void setName(string s);
     void setShapeType(string s);
     string getShapeType();
+    void setSoundFile(string s);
+    string getSoundFile();
 
     vector<float> getAbsVals();
 
@@ -71,7 +73,7 @@ private:
     map<string, parameter> parameters;
     float warp(string type, float mnv, float mxv, float v);
     string shapeType;
-
+    string soundFile;
 
 
 };

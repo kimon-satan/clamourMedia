@@ -22,6 +22,12 @@ void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int
                 t_cmd.zTargets.push_back(XML.getValue("Z_TARGET", "",tgt));
             }
 
+            int numSTargets = XML.getNumTags("S_TARGET");
+
+            for(int tgt = 0; tgt < numSTargets; tgt++) {
+                t_cmd.sTargets.push_back(XML.getValue("S_TARGET", "",tgt));
+            }
+
             t_cmd.stage = stage;
             t_cmd.priority = pty;
 
@@ -117,6 +123,12 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
         return;
     }
 
+    if(cmd.mCommand == "START_SYNTH"){
+
+        xmlLoader::loadSynth(cmd.mSynth, XML);
+
+    }
+
     //more general stuff
 
     if(XML.tagExists("CONTROL_TYPE"))cmd.stringParams["CONTROL_TYPE"] = XML.getValue("CONTROL_TYPE","");
@@ -169,6 +181,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
 
     if(XML.pushTag("SOUND_PARAMS")) {
 
+        if(XML.tagExists("FILE"))z.setSoundFile(XML.getValue("FILE", "default"));
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
         for(int i = 0; i < p.size(); i++)z.setSoundParameter(p[i]);
@@ -256,6 +269,30 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
 
     if(XML.pushTag("SOUND_PARAMS")) {
 
+        if(XML.tagExists("FILE"))n.setSoundFile(XML.getValue("FILE", "default"));
+        vector<parameter> p;
+        xmlLoader::loadParams( p ,XML);
+        for(int i = 0; i < p.size(); i++) {
+            n.setSoundParameter(p[i]);
+        }
+        XML.popTag();
+    }
+
+
+}
+
+void xmlLoader::loadSynth(baseZode &n, ofxXmlSettings &XML) {
+
+    if(XML.tagExists("ATTACK_SECS"))n.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
+    if(XML.tagExists("DECAY_SECS"))n.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
+    if(XML.tagExists("ENV_TYPE"))n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+
+    if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE",""));
+
+    if(XML.pushTag("SOUND_PARAMS")) {
+
+        if(XML.tagExists("FILE"))n.setSoundFile(XML.getValue("FILE", "default"));
+
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
         for(int i = 0; i < p.size(); i++) {
@@ -283,7 +320,7 @@ void xmlLoader::loadDraw(baseData &bd, ofxXmlSettings &XML) {
 void xmlLoader::loadSound(baseData &bd, ofxXmlSettings &XML) {
     bd = drawDictionary::createDrawData(XML.getValue("SOUND_TYPE", "default"));
     if(XML.pushTag("SOUND_PARAMS")) {
-
+        if(XML.tagExists("FILE"))bd.setSoundFile(XML.getValue("FILE", "default"));
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
         for(int i = 0; i < p.size(); i++)bd.setParameter(p[i]);

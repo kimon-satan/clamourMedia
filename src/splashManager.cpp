@@ -40,6 +40,20 @@ void splashManager::update(){
         }
     }
 
+    map< string, ofPtr<baseZode> >::iterator s_it;
+    s_it = mSynths.begin();
+
+    while(s_it != mSynths.end()){
+        if (!s_it->second->getIsFiring() && s_it->second->getChanged() == CLAMOUR_NONE) {
+            map<string, ofPtr<baseZode> >::iterator toErase = s_it;
+            ++s_it;
+            mSynths.erase(toErase);
+        }else{
+            ++s_it;
+        }
+    }
+
+
 }
 
 
@@ -56,10 +70,50 @@ void splashManager::endTitle(string s){
 }
 
 
+void splashManager::addSynth(vector<string> s, baseZode bz){
+    cout << "add \n";
+//init might be needed to call later
+
+    for(int i = 0; i < s.size(); i++){
+        ofPtr<baseZode> ts = ofPtr<baseZode>(new baseZode(bz));
+        ts->setName(s[i]);
+        ts->setIsFired(true);
+        ts->setIsFiring(true);
+        ts->setChanged(CLAMOUR_ON_OFF);
+        mSynths[ts->getName()] = ts;
+    }
+
+}
+
+map<string, ofPtr<baseZode> > splashManager:: getSynths(){
+
+    return mSynths;
+}
+
+void splashManager::endSynth(vector<string> s){
+
+    for(int i = 0; i < s.size(); i++){
+        mSynths[s[i]]->setIsFired(false);
+        mSynths[s[i]]->setIsFiring(false);
+        mSynths[s[i]]->setChanged(CLAMOUR_ON_OFF);
+    }
+
+}
+
 void splashManager::reset(){
 
     mTitles.clear();
     onTitles.clear();
+
+    map<string , ofPtr<baseZode> >::iterator it;
+
+    for(it = mSynths.begin(); it != mSynths.end(); it++){
+        it->second->setIsFired(false);
+        it->second->setIsFiring(false);
+        it->second->setChanged(CLAMOUR_ON_OFF);
+    }
+
+
 
 }
 

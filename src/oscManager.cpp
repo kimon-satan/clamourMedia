@@ -9,15 +9,13 @@
 #include "oscManager.h"
 
 
-oscManager::oscManager()
-{
+oscManager::oscManager() {
 
     receiver.setup(METEOR_IN_PORT);
     sender.setup("192.168.2.200", METEOR_OUT_PORT);
     SCsender.setup("localhost", SC_OUT_PORT);
 
-    for(int i = 0; i < 3; i ++)
-    {
+    for(int i = 0; i < 3; i ++) {
         vector<string> s;
         msg_strings.push_back(s);
         msg_string_count.push_back(0);
@@ -25,17 +23,14 @@ oscManager::oscManager()
 
 }
 
-void oscManager::updateInMessages()
-{
+void oscManager::updateInMessages() {
 
-    for(int i = 0; i < 3; i ++)
-    {
+    for(int i = 0; i < 3; i ++) {
         msg_string_count[i] = 0;
     }
 
     // check for waiting messages
-    while(receiver.hasWaitingMessages())
-    {
+    while(receiver.hasWaitingMessages()) {
 
         ofxOscMessage m;
         receiver.getNextMessage(&m);
@@ -47,8 +42,7 @@ void oscManager::updateInMessages()
         string t_index;
 
 
-        if(s[1] == "node")
-        {
+        if(s[1] == "node") {
 
             string row = m.getArgAsString(0);
             int seat = (int)m.getArgAsFloat(1);
@@ -58,23 +52,18 @@ void oscManager::updateInMessages()
         }
 
 
-        if(m.getAddress() == "/node/position")
-        {
+        if(m.getAddress() == "/node/position") {
 
             float x = m.getArgAsFloat(3);
             float y = m.getArgAsFloat(4);
             string movType = m.getArgAsString(5);
             ofPtr<clamourNode> n = pNodeManager->getNode(t_index);
 
-            if(n->getIsFiring())
-            {
+            if(n->getIsFiring()) {
 
-                if(movType == "drag" || movType == "drag_c")
-                {
+                if(movType == "drag" || movType == "drag_c") {
                     pNodeManager->shiftNodePosition(t_index, x, y);
-                }
-                else
-                {
+                } else {
                     pNodeManager->updateNodePosition(t_index, x, y);
 
                 }
@@ -84,9 +73,7 @@ void oscManager::updateInMessages()
 
 
 
-        }
-        else if(m.getAddress() == "/node/on")
-        {
+        } else if(m.getAddress() == "/node/on") {
 
             //exclude messages from
 
@@ -94,24 +81,19 @@ void oscManager::updateInMessages()
             float y = m.getArgAsFloat(4);
             string movType = m.getArgAsString(5);
 
-            if(movType == "drag")
-            {
+            if(movType == "drag") {
 
                 pNodeManager->switchOnNode(t_index);
                 pNodeManager->beginShift(t_index, x, y);
 
-            }
-            else
-            {
+            } else {
 
                 //normal xy stuff
                 pNodeManager->switchOnNode(t_index, x, y);
             }
 
 
-        }
-        else if(m.getAddress() == "/node/startDrag")
-        {
+        } else if(m.getAddress() == "/node/startDrag") {
 
             //for when node is permanently on
             float x = m.getArgAsFloat(3);
@@ -120,28 +102,21 @@ void oscManager::updateInMessages()
 
             pNodeManager->beginShift(t_index, x, y);
 
-        }
-        else if(m.getAddress() == "/node/endDrag")
-        {
+        } else if(m.getAddress() == "/node/endDrag") {
 
             //when node is permanently on
             pNodeManager->getNode(t_index)->setIsDragOn(false);
 
-        }
-        else if(m.getAddress() == "/node/off")
-        {
+        } else if(m.getAddress() == "/node/off") {
 
             pNodeManager->getNode(t_index)->setIsDragOn(false); //prevents shifting call before on call
             pNodeManager->switchOffNode(t_index);
 
-        }
-        else if(m.getAddress() == "/update/onlineUsers")
-        {
+        } else if(m.getAddress() == "/update/onlineUsers") {
 
             vector<string> v;
 
-            for(int i = 0; i < m.getNumArgs(); i++)
-            {
+            for(int i = 0; i < m.getNumArgs(); i++) {
                 v.push_back(m.getArgAsString(i));
             }
 
@@ -162,8 +137,7 @@ void oscManager::updateInMessages()
 
 }
 
-void oscManager::updateOutMessages()
-{
+void oscManager::updateOutMessages() {
 
     //stop the synths for recently turned off nodes
     map<string, ofPtr<clamourNode> > t_nodes = pNodeManager->getNodes();
@@ -171,35 +145,25 @@ void oscManager::updateOutMessages()
 
     it = t_nodes.begin();
 
-    while(it != t_nodes.end())
-    {
-        if(it->second->getChanged() == CLAMOUR_ON_OFF)
-        {
+    while(it != t_nodes.end()) {
+        if(it->second->getChanged() == CLAMOUR_ON_OFF) {
 
 
-            if(it->second->getIsFired())
-            {
+            if(it->second->getIsFired()) {
                 startSynth(it->second);
-            }
-            else
-            {
+            } else {
                 stopSynth(it->second);
             }
 
 
-        }
-        else if(it->second->getChanged() == CLAMOUR_SOUND)
-        {
+        } else if(it->second->getChanged() == CLAMOUR_SOUND) {
 
-            if(it->second->getIsFiring())
-            {
+            if(it->second->getIsFiring()) {
                 stopSynth(it->second);
                 startSynth(it->second);
             }
 
-        }
-        else if(it->second->getChanged() == CLAMOUR_POSITION)
-        {
+        } else if(it->second->getChanged() == CLAMOUR_POSITION) {
 
             updateSynth(it->second);
 
@@ -210,52 +174,75 @@ void oscManager::updateOutMessages()
         ++it;
     }
 
-    if(pZoneManager->getZones().size() == 0)return; //no zones to update
+    if(pZoneManager->getZones().size() > 0) {
 
-    map<string, ofPtr<zone> > t_zones = pZoneManager->getZones();
-    map<string, ofPtr<zone> >::iterator zit = t_zones.begin();
+        map<string, ofPtr<zone> > t_zones = pZoneManager->getZones();
+        map<string, ofPtr<zone> >::iterator zit = t_zones.begin();
 
-    while(zit != t_zones.end())
-    {
+        while(zit != t_zones.end()) {
 
-        if(zit->second->getChanged() == CLAMOUR_ON_OFF)
-        {
+            if(zit->second->getChanged() == CLAMOUR_ON_OFF) {
 
-            zit->second->setChanged(CLAMOUR_NONE);
+                zit->second->setChanged(CLAMOUR_NONE);
 
-            if(zit->second->getIsFiring())
-            {
+                if(zit->second->getIsFiring()) {
 
-                //send an osc to supercollider
-                startSynth(zit->second);
+                    //send an osc to supercollider
+                    startSynth(zit->second);
+
+                } else {
+
+                    //send a stop osc
+                }
+
 
             }
-            else
-            {
 
+            ++zit;
+        }
+    }
+
+    map<string, ofPtr<baseZode> > t_synths = pSplashManager->getSynths();
+    map<string, ofPtr<baseZode> >::iterator sit = t_synths.begin();
+
+
+
+    while(sit != t_synths.end()) {
+
+        if(sit->second->getChanged() == CLAMOUR_ON_OFF) {
+            sit->second->setChanged(CLAMOUR_NONE);
+
+            if(sit->second->getIsFiring()) {
+
+                //send an osc to supercollider
+                startSynth(sit->second);
+                if(sit->second->getEnvType() == CLAMOUR_AR) {
+                    sit->second->setIsFiring(false);
+                }
+
+            } else {
+                stopSynth(sit->second);
+                sit->second->setIsFiring(false);
                 //send a stop osc
             }
 
 
         }
 
-        ++zit;
+        ++sit;
     }
 
 }
 
-void oscManager::sendBundle()
-{
+void oscManager::sendBundle() {
 
     //send the client's outbundle to Meteor if it has messages waiting
 
     map<string, ofxOscBundle>::iterator osc_it;
 
-    for(osc_it = outBundle.begin(); osc_it != outBundle.end(); osc_it++)
-    {
+    for(osc_it = outBundle.begin(); osc_it != outBundle.end(); osc_it++) {
 
-        if(osc_it->second.getMessageCount() > 0)
-        {
+        if(osc_it->second.getMessageCount() > 0) {
             sender.sendBundle(osc_it->second);
             osc_it->second.clear();
         }
@@ -264,8 +251,7 @@ void oscManager::sendBundle()
 }
 
 
-void oscManager::logMessages(ofxOscMessage m, int mt)
-{
+void oscManager::logMessages(ofxOscMessage m, int mt) {
 
     if(msg_string_count[mt] >= NUM_MSG_STRINGS)return; //for when there's loads of messages
 
@@ -273,25 +259,17 @@ void oscManager::logMessages(ofxOscMessage m, int mt)
     msg_string = m.getAddress();
     msg_string += ": ";
 
-    for(int i = 0; i < m.getNumArgs(); i++)
-    {
+    for(int i = 0; i < m.getNumArgs(); i++) {
 
 
         // display the argument - make sure we get the right type
-        if(m.getArgType(i) == OFXOSC_TYPE_INT32)
-        {
+        if(m.getArgType(i) == OFXOSC_TYPE_INT32) {
             msg_string += ofToString(m.getArgAsInt32(i));
-        }
-        else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT)
-        {
+        } else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT) {
             msg_string += ofToString(m.getArgAsFloat(i));
-        }
-        else if(m.getArgType(i) == OFXOSC_TYPE_STRING)
-        {
+        } else if(m.getArgType(i) == OFXOSC_TYPE_STRING) {
             msg_string += m.getArgAsString(i);
-        }
-        else
-        {
+        } else {
             msg_string += "unknown";
         }
 
@@ -309,28 +287,28 @@ void oscManager::logMessages(ofxOscMessage m, int mt)
 }
 
 
-void oscManager::setNodeManager(ofPtr<nodeManager> p)
-{
+void oscManager::setNodeManager(ofPtr<nodeManager> p) {
     pNodeManager = p;
 }
 
-void oscManager::setClientManager(ofPtr<clientManager> p)
-{
+void oscManager::setClientManager(ofPtr<clientManager> p) {
     pClientManager =p;
 }
 
-void oscManager::setZoneManager(ofPtr<zoneManager> p){
+void oscManager::setZoneManager(ofPtr<zoneManager> p) {
     pZoneManager = p;
 
 }
 
-string oscManager::getMsgString(int mt)
-{
+void oscManager::setSplashManager(ofPtr<splashManager> p) {
+    pSplashManager = p;
+}
+
+string oscManager::getMsgString(int mt) {
 
     string s;
 
-    for(int i = 0; i < msg_strings[mt].size(); i++)
-    {
+    for(int i = 0; i < msg_strings[mt].size(); i++) {
 
         s += msg_strings[mt][i];
         s += "\n\n";
@@ -346,25 +324,20 @@ string oscManager::getMsgString(int mt)
 //messages to Meteor need to bundled because of concurrency
 
 
-void oscManager::setControl(vector<string> clients, string control)
-{
+void oscManager::setControl(vector<string> clients, string control) {
 
     pClientManager->setCtrlIndexes(clients, 5);
 
 
 
-    for(int i = 0; i < clients.size(); i++)
-    {
+    for(int i = 0; i < clients.size(); i++) {
 
         //makes more sense in ofApp
         pNodeManager->wakeupNode(clients[i]);
 
-        if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT")
-        {
+        if(control == "XY_CONT" || control == "DRAG_CONT" || control == "JOY_CONT") {
             pNodeManager->switchOnNode(clients[i]);
-        }
-        else
-        {
+        } else {
             pNodeManager->switchOffNode(clients[i]);
         }
 
@@ -385,14 +358,12 @@ void oscManager::setControl(vector<string> clients, string control)
 
 }
 
-void oscManager::setControl(vector<string> clients, string control, string text)
-{
+void oscManager::setControl(vector<string> clients, string control, string text) {
 
     pClientManager->setCtrlIndexes(clients, 5);
     pNodeManager->switchOffNodes(clients); //this is definitely a text control
 
-    for(int i = 0; i < clients.size(); i++)
-    {
+    for(int i = 0; i < clients.size(); i++) {
 
         ofxOscMessage m;
 
@@ -411,12 +382,10 @@ void oscManager::setControl(vector<string> clients, string control, string text)
 }
 
 
-void oscManager::setText(vector<string> clients, string text)
-{
+void oscManager::setText(vector<string> clients, string text) {
 
 
-    for(int i = 0; i < clients.size(); i++)
-    {
+    for(int i = 0; i < clients.size(); i++) {
         ofxOscMessage m;
 
         m.setAddress("/newText");
@@ -433,15 +402,11 @@ void oscManager::setText(vector<string> clients, string text)
 
 }
 
-void oscManager::addToBundle(string index, ofxOscMessage m)
-{
+void oscManager::addToBundle(string index, ofxOscMessage m) {
 
-    if(outBundle.find(index) != outBundle.end())
-    {
+    if(outBundle.find(index) != outBundle.end()) {
         outBundle[index].addMessage(m);
-    }
-    else
-    {
+    } else {
         ofxOscBundle b;
         outBundle[index] = b;
         outBundle[index].addMessage(m);
@@ -455,8 +420,7 @@ void oscManager::addToBundle(string index, ofxOscMessage m)
 
 //------------------------------SuperCollider Messages---------------------------------//
 
-void oscManager::sendInit()
-{
+void oscManager::sendInit() {
 
     ofxOscMessage m;
     m.setAddress("/init");
@@ -466,8 +430,7 @@ void oscManager::sendInit()
 
 }
 
-void oscManager::startSynth(ofPtr<baseZode> n)
-{
+void oscManager::startSynth(ofPtr<baseZode> n) {
 
     baseData sd = n->getSoundData();
 
@@ -485,10 +448,11 @@ void oscManager::startSynth(ofPtr<baseZode> n)
 
     vector<float> vals = sd.getAbsVals();
 
-    for(int i = 0; i < vals.size(); i++)
-    {
+    for(int i = 0; i < vals.size(); i++) {
         m.addFloatArg(vals[i]);
     }
+
+    m.addStringArg(sd.getSoundFile());
 
     SCsender.sendMessage(m);
     logMessages(m, CLAMOUR_MSG_SC_OUT);
@@ -497,8 +461,7 @@ void oscManager::startSynth(ofPtr<baseZode> n)
 
 
 
-void oscManager::updateSynth(ofPtr<clamourNode> n)
-{
+void oscManager::updateSynth(ofPtr<baseZode> n) {
 
     ofxOscMessage m;
     m.setAddress("/updateSynth");
@@ -510,8 +473,7 @@ void oscManager::updateSynth(ofPtr<clamourNode> n)
 
     vector<float> vals = sd.getAbsVals();
 
-    for(int i = 0; i < vals.size(); i++)
-    {
+    for(int i = 0; i < vals.size(); i++) {
         m.addFloatArg(vals[i]);
     }
 
@@ -522,8 +484,7 @@ void oscManager::updateSynth(ofPtr<clamourNode> n)
 
 }
 
-void oscManager::stopSynth(ofPtr<clamourNode> n)
-{
+void oscManager::stopSynth(ofPtr<baseZode> n) {
 
     ofxOscMessage m;
     m.setAddress("/stopSynth");

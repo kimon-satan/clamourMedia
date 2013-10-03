@@ -1,49 +1,41 @@
 <CLAMOUR_MEDIA>
 
-
-
 	<!---CONSTANT GROUPS NOT RELYING ON ONLINE OR NOT -->
-
+	
+	<!--- 10 player * two rows setup -->
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>allPlayers</NAME>
-		<SELECTOR>all</SELECTOR>
+		<SELECTOR><S_TYPE>all</S_TYPE></SELECTOR>
 	</GROUP>
 
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>oddPlayers</NAME>
-		<SELECTOR>odd</SELECTOR>
+		<SELECTOR><S_TYPE>odd</S_TYPE></SELECTOR>
 	</GROUP>
 
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>evenPlayers</NAME>
-		<SELECTOR>even</SELECTOR>
+		<SELECTOR><S_TYPE>even</S_TYPE></SELECTOR>
 	</GROUP>
 
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>leftPlayers</NAME>
-		<SELECTOR>left</SELECTOR>
+		<SELECTOR><S_S_TYPE>le_seat</S_S_TYPE><SEAT>2</SEAT></SELECTOR>
 	</GROUP>
 
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>rightPlayers</NAME>
-		<SELECTOR>right</SELECTOR>
+		<SELECTOR><S_S_TYPE>ge_seat</S_S_TYPE><SEAT>3</SEAT></SELECTOR>
 	</GROUP>
 
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>backPlayers</NAME>
-		<SELECTOR>back</SELECTOR>
+		<SELECTOR><S_S_TYPE>ge_row</S_S_TYPE><ROW>B</ROW></SELECTOR>
 	</GROUP>
 
 	<GROUP>
-		<ACTION>create</ACTION>
 		<NAME>frontPlayers</NAME>
-		<SELECTOR>front</SELECTOR>
+		<SELECTOR><S_S_TYPE>le_row</S_S_TYPE><ROW>A</ROW></SELECTOR>
 	</GROUP>
 
 	<NODE_PRESET>
@@ -158,7 +150,6 @@
 					<X>0.5</X><Y>0.5</Y><SIZE>0.25</SIZE>
 					<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
 					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
-					<REACT><TYPE>repeatStage</TYPE><TRIG>ON</TRIG></REACT>
 					<SOUND_TYPE>brownExploder</SOUND_TYPE>
 					<DRAW_TYPE>pauseButton</DRAW_TYPE>
 					<REPEAT>0</REPEAT>
@@ -172,14 +163,38 @@
 				<ACTION>DISTRIBUTE_NODES</ACTION>
 				<PATTERN>RANDOM_CIRCLE</PATTERN>
 				<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.35</RADIUS>
-				<SCHED_TYPE>doNum</SCHED_TYPE><TOT_EXECS>5</TOT_EXECS><INTERVAL_SECS>1</INTERVAL_SECS>
+				
+			</COMMAND>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>testOm</S_TARGET>
+				<SOUND_TYPE>om</SOUND_TYPE>
+				<ENV_TYPE>ASR</ENV_TYPE>
+				<ATTACK_SECS>10</ATTACK_SECS>
+				<DECAY_SECS>0.01</DECAY_SECS>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
 			<COMMAND>
-				<ACTION>UPDATE_ZONE</ACTION>
-				<Z_TARGET>debug1</Z_TARGET>
-				<REACT><TYPE>decrementStage</TYPE><TRIG>ON</TRIG></REACT>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>testOm2</S_TARGET>
+				<SOUND_TYPE>om</SOUND_TYPE>
+				<ENV_TYPE>ASR</ENV_TYPE>
+				<ATTACK_SECS>10</ATTACK_SECS>
+				<DECAY_SECS>0.01</DECAY_SECS>
+				<SOUND_PARAMS>
+					<PARAM>
+						<NAME>freq</NAME><ABS_VAL>40</ABS_VAL>
+					</PARAM>
+				
+				</SOUND_PARAMS>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+			<S_TARGET>testOm</S_TARGET>
+			<S_TARGET>testOm2</S_TARGET>
+			<ACTION>STOP_SYNTH</ACTION>
 			</COMMAND>
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
@@ -188,7 +203,17 @@
 				<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
 			</COMMAND>
 		</STAGE>
-		
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>test</S_TARGET>
+				<FILE>test.wav</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+				<ENV_TYPE>AR</ENV_TYPE>
+				<ATTACK_SECS>0.01</ATTACK_SECS>
+				<DECAY_SECS>0.01</DECAY_SECS>
+			</COMMAND>
+		</STAGE>
 		
 		<STAGE>
 			<COMMAND>
@@ -226,25 +251,29 @@
 	</GAME>
 
 	<GAME>
-		<NAME>synchrony</NAME>
+		<NAME>clamour_part_1</NAME>
 
 		<STAGE>
 			<COMMAND>
 				<ACTION>ADD_TITLE</ACTION>
-				<TEXT>Clamour Playtest</TEXT>
+				<TEXT>Clamour</TEXT>
 				<NAME>clamour</NAME>
+			</COMMAND>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>testOm</S_TARGET>
+				<SOUND_TYPE>om</SOUND_TYPE>
+				<ENV_TYPE>ASR</ENV_TYPE>
+				<ATTACK_SECS>10</ATTACK_SECS>
+				<DECAY_SECS>0.01</DECAY_SECS>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
 			<COMMAND>
-				<ACTION>END_TITLE</ACTION>
-				<NAME>clamour</NAME>
-			</COMMAND>
-			<COMMAND>
 				<TARGET>allPlayers</TARGET>
 				<ACTION>SET_CONTROL</ACTION>
 				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-				<TEXT>Welcome !</TEXT>
+				<TEXT>Hello !</TEXT>
 			</COMMAND>
 		</STAGE>
 		<STAGE>

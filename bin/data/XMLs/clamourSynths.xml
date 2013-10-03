@@ -60,5 +60,79 @@
 		</PARAM>
 	</SYNTH>
 
+	<SYNTH>
+		<NAME>om</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>freq</NAME>
+			<MIN_VAL>10</MIN_VAL>
+			<MAX_VAL>500</MAX_VAL>
+			<ABS_VAL>25</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>wmod</NAME>
+			<MIN_VAL>0.15</MIN_VAL>
+			<MAX_VAL>0.25</MAX_VAL>
+			<ABS_VAL>0.2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>resamp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>monoPlayer</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>rate</NAME>
+			<MIN_VAL>-5</MIN_VAL>
+			<MAX_VAL>5</MAX_VAL>
+			<ABS_VAL>1</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
+
 </CLAMOUR_SYNTHS>
 

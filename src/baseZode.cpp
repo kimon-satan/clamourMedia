@@ -240,6 +240,13 @@ void baseZode::setEnvType(envType t) {
     mEnvType = t;
 }
 
+void baseZode::setSoundFile(string s) {
+    soundData.setSoundFile(s);
+}
+string baseZode::getSoundFile() {
+    return soundData.getSoundFile();
+}
+
 void baseZode::setOuterEdge(ofPath p) {
     outerEdge = p;
 }
@@ -248,7 +255,7 @@ ofPath baseZode::getOuterEdge() {
     return outerEdge;
 }
 
-void baseZode::setEdgeTemplate(ofPath p){
+void baseZode::setEdgeTemplate(ofPath p) {
     edgeTemplate = p;
 }
 

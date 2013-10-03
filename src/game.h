@@ -34,6 +34,7 @@ struct command{
 
     vector<string> targets;
     vector<string> zTargets;
+    vector<string> sTargets;
     vector<selector> selectors;
 
     int stage, priority;
@@ -49,6 +50,7 @@ struct command{
     map <string , int> intParams;
     map <string, string> stringParams;
 
+    baseZode mSynth;
     zone mZone;
     clamourNode mNode;
 
@@ -59,8 +61,6 @@ struct command{
     vector<reaction> reactions;
 
     zoneRule onRule, offRule;
-
-
 
 };
 
