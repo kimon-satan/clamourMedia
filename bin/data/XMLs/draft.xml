@@ -80,10 +80,10 @@
 	</NODE_PRESET>
 
 	<NODE_PRESET>
-		<NAME>pointerPulse</NAME>
+		<NAME>simplePointer</NAME>
 		<CAN_SLEEP>0</CAN_SLEEP>
 		<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
-		<ROTATE>1</ROTATE>
+		<ROTATE>0</ROTATE>
 		<DRAW_TYPE>mousePointer</DRAW_TYPE><SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
 		<DRAW_PARAMS>
 			<PARAM>
@@ -112,11 +112,7 @@
 	<GAME>
 		<NAME>debug</NAME>
 		<STAGE>
-			<COMMAND>
-				<ACTION>ADD_TITLE</ACTION>
-				<NAME>debug</NAME>
-				<TEXT>DEBUG</TEXT>
-			</COMMAND>
+			
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
 				<ACTION>SET_CONTROL</ACTION>
@@ -125,13 +121,19 @@
 			</COMMAND>
 		</STAGE>
 		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>test</S_TARGET>
+				<FILE>test.wav</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+				<ENV_TYPE>AR</ENV_TYPE>
+				<ATTACK_SECS>0.01</ATTACK_SECS>
+				<DECAY_SECS>0.01</DECAY_SECS>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
 			<PRIORITY>
-				<COMMAND>
-					<ACTION>END_TITLE</ACTION>
-					<NAME>debug</NAME>
-					<REPEAT>0</REPEAT>
-					<SCHED>0</SCHED>
-				</COMMAND>
+			
 				<COMMAND>
 					<TARGET>allPlayers</TARGET>
 					<ACTION>SET_NODE</ACTION>
@@ -218,17 +220,7 @@
 				<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
 			</COMMAND>
 		</STAGE>
-		<STAGE>
-			<COMMAND>
-				<ACTION>START_SYNTH</ACTION>
-				<S_TARGET>test</S_TARGET>
-				<FILE>test.wav</FILE>
-				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
-				<ENV_TYPE>AR</ENV_TYPE>
-				<ATTACK_SECS>0.01</ATTACK_SECS>
-				<DECAY_SECS>0.01</DECAY_SECS>
-			</COMMAND>
-		</STAGE>
+	
 		
 		<STAGE>
 			<COMMAND>
@@ -278,11 +270,14 @@
 		<STAGE>
 			<COMMAND>
 				<ACTION>START_SYNTH</ACTION>
-				<S_TARGET>testOm</S_TARGET>
+				<S_TARGET>om25</S_TARGET>
 				<SOUND_TYPE>om</SOUND_TYPE>
 				<ENV_TYPE>ASR</ENV_TYPE>
 				<ATTACK_SECS>10</ATTACK_SECS>
 				<DECAY_SECS>0.01</DECAY_SECS>
+				<SOUND_PARAMS>
+					<PARAM><NAME>amp</NAME><ABS_VAL>0.65</ABS_VAL></PARAM>
+				</SOUND_PARAMS>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
@@ -389,7 +384,15 @@
 				<TEXT>"Thankyou"</TEXT>
 			</COMMAND>
 		</STAGE>
-		<!-- you might be wondering audio -->
+		
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>youMight</S_TARGET>
+				<FILE>youMight</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
 		<STAGE>
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
@@ -397,7 +400,14 @@
 				<TEXT>"Well ?"</TEXT>
 			</COMMAND>
 		</STAGE>
-		<!-- I'm interested in exploring -->
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>imInterested</S_TARGET>
+				<FILE>imInterested</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
 		<STAGE>
 			<COMMAND>
 				<TARGET>allPlayers</TARGET>
@@ -424,8 +434,23 @@
 				<TEXT>"or will we fall apart"</TEXT>
 			</COMMAND>
 		</STAGE>
-		<!-- I have created a system -->
-		<!-- I can divide you -->
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>iHaveCreated</S_TARGET>
+				<FILE>iHaveCreated</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>iCanDivide</S_TARGET>
+				<FILE>iCanDivide</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		
 	
 		<STAGE>
 			<COMMAND>
@@ -455,14 +480,21 @@
 				<TEXT>"or back"</TEXT>
 			</COMMAND>
 		</STAGE>
-		<!--- I can make teams -->
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>iCanMake</S_TARGET>
+				<FILE>iCanMake</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
 		<STAGE>
 			<!-- currently done for few players -->
 			<PRIORITY>
 				<COMMAND>
 					<TARGET>leftPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
-					<!--<SELECTOR>online</SELECTOR>-->
+					<SELECTOR>online</SELECTOR>
 					<SELECTOR>
 						<S_TYPE>random</S_TYPE>
 						<NUM_P>2</NUM_P>
@@ -472,7 +504,7 @@
 				<COMMAND>
 					<TARGET>rightPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
-					<!--<SELECTOR>online</SELECTOR>-->
+					<SELECTOR>online</SELECTOR>
 					<SELECTOR>
 						<S_TYPE>random</S_TYPE>
 						<NUM_P>2</NUM_P>
@@ -482,7 +514,7 @@
 				<COMMAND>
 					<TARGET>allPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
-					<!--<SELECTOR>online</SELECTOR>-->
+					<SELECTOR>online</SELECTOR>
 					<SELECTOR>
 						<S_TYPE>random</S_TYPE>
 						<NUM_P>4</NUM_P>
@@ -512,13 +544,24 @@
 				<TEXT>"like this"</TEXT>
 			</COMMAND>
 		</STAGE>
-		<!-- alternatively I can single you -->
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>alternatively</S_TARGET>
+				<FILE>alternatively</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
 		<STAGE>
 			<PRIORITY>
 				<COMMAND>
 					<TARGET>allPlayers</TARGET>
 					<ACTION>NEW_GROUP</ACTION>
-					<SELECTORS>online,single</SELECTORS>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<SELECTOR>
+						<S_TYPE>random</S_TYPE>
+						<NUM_P>1</NUM_P>
+					</SELECTOR>
 					<NAME>aSingle</NAME>
 				</COMMAND>
 			</PRIORITY>
@@ -539,8 +582,279 @@
 	
 	<GAME>
 		<NAME>clamour_part_2</NAME>
-		<!-- I imagine you're probab;y thinking -->
+		
 		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>iImagine</S_TARGET>
+				<FILE>iImagine</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
 		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>leftPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"these thoughts that I'm speaking"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>rightPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"are your thoughts and not mine"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>yesThats</S_TARGET>
+				<FILE>yesThats</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>frontPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"in this piece"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>backPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"it is you who are performing"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>thisPiece</S_TARGET>
+				<FILE>thisPiece</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<NAME>individual</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>individual</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>online</S_TYPE><RMV_FROM>individual</RMV_FROM></SELECTOR>
+					<NAME>inControl</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>4</NUM_P></SELECTOR>
+					<NAME>standOut</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>1</NUM_P></SELECTOR>
+					<NAME>anonymous</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>allPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>2</NUM_P></SELECTOR>
+					<NAME>noticed</NAME>
+				</COMMAND>
+			</PRIORITY>
+			
+			
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>standOut</TARGET>
+					<ACTION>SET_TEXT</ACTION>
+					<TEXT>"to stand out"</TEXT>
+				</COMMAND>
+			</PRIORITY>
+			
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"to blend in"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>noticed</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"to be noticed"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>anonymous</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"to be anonymous"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>individual</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"to be individual"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>inControl</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"to be in control"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>thisPiece2</S_TARGET>
+				<FILE>thisPiece2</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_TEXT</ACTION>
+				<TEXT>"and how we act together"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>exactly</S_TARGET>
+				<FILE>exactly</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		
+	</GAME>
+	<GAME>
+		<NAME>clamour_part_3</NAME>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>nowLetMe</S_TARGET>
+				<FILE>nowLetMe</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+			<COMMAND>
+				<ACTION>END_TITLE</ACTION>
+				<NAME>clamour</NAME>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>orRather</S_TARGET>
+				<FILE>orRather</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>wellOne</S_TARGET>
+				<FILE>wellOne</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					<ACTION>NEW_GROUP</ACTION>
+					<TARGET>allPlayers</TARGET>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<NAME>speakingPlayers</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<ACTION>NEW_GROUP</ACTION>
+					<TARGET>allPlayers</TARGET>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>1</NUM_P></SELECTOR>
+					<NAME>pointingPlayers</NAME>
+					<RMV_FROM>speakingPlayers</RMV_FROM>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<ACTION>SET_NODE</ACTION>
+					<TARGET>pointingPlayers</TARGET>
+					<PRESET>simplePointer</PRESET>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<ACTION>DISTRIBUTE_NODES</ACTION>
+					<TARGET>pointingPlayers</TARGET>
+					<PATTERN>RANDOM_CIRCLE</PATTERN>
+					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<ACTION>SET_CONTROL</ACTION><TARGET>speakingPlayers</TARGET>
+					<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+					<TEXT>test</TEXT>
+				</COMMAND>
+				<COMMAND>
+					<ACTION>SET_CONTROL</ACTION><TARGET>pointingPlayers</TARGET>
+					<CONTROL_TYPE>DRAG_ON_OFF</CONTROL_TYPE>
+				</COMMAND>
+				
+			</PRIORITY>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>oneOfYou</S_TARGET>
+				<FILE>oneOfYou</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>aSymbol</S_TARGET>
+				<FILE>aSymbol</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>START_SYNTH</ACTION>
+				<S_TARGET>forExample</S_TARGET>
+				<FILE>forExample</FILE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+			</COMMAND>
+		</STAGE>
+	
 	</GAME>
 </CLAMOUR_MEDIA>

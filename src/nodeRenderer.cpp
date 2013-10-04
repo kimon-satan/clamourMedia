@@ -91,21 +91,15 @@ void nodeRenderer::drawPointer(ofPtr<clamourNode> n, baseData &bd) {
 
     ofScale(screenData::height, screenData::height,1.0);
 
-    if(n->getIsFiring()){
+    p.setFilled(true);
+    p.setColor(255);
+    p.draw();
+
+    p.setFilled(false);
+    p.setStrokeColor(0);
+    p.draw();
 
 
-
-    }else{
-
-        p.setFilled(true);
-        p.setColor(255);
-        p.draw();
-
-        p.setFilled(false);
-        p.setStrokeColor(0);
-        p.draw();
-
-    }
 
     ofPopMatrix();
 

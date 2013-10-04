@@ -283,15 +283,14 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
 
 void xmlLoader::loadSynth(baseZode &n, ofxXmlSettings &XML) {
 
-    if(XML.tagExists("ATTACK_SECS"))n.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
-    if(XML.tagExists("DECAY_SECS"))n.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
-    if(XML.tagExists("ENV_TYPE"))n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+    n.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
+    n.setDecSecs(XML.getValue("DECAY_SECS", 0.01));  //
+    n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
 
     if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE",""));
+    if(XML.tagExists("FILE"))n.setSoundFile(XML.getValue("FILE", "default"));
 
     if(XML.pushTag("SOUND_PARAMS")) {
-
-        if(XML.tagExists("FILE"))n.setSoundFile(XML.getValue("FILE", "default"));
 
         vector<parameter> p;
         xmlLoader::loadParams( p ,XML);
