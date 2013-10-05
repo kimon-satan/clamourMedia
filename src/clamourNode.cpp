@@ -26,6 +26,13 @@ clamourNode::clamourNode(int ts, string tr)
 
 };
 
+void clamourNode::init(){
+
+    soundData.init(meanPos_rel);
+    drawData.init(meanPos_rel);
+
+}
+
 void clamourNode::updateHistory()
 {
 
@@ -147,6 +154,42 @@ void clamourNode::updateSoundData()
 {
 
     soundData.update(meanPos_rel); //used for mappings
+
+}
+
+void clamourNode::reconcileSlaves(){
+
+    vector<string> ds = drawData.getSlaves();
+
+    for(int i = 0; i < ds.size(); i++){
+
+        parameter dp = drawData.getParameter(ds[i]);
+        parameter sp = soundData.getParameter(dp.slave);
+
+        // do the mapping here
+        dp.abs_val = ofMap(sp.abs_val, sp.min_val, sp.max_val, dp.min_val, dp.max_val);
+
+        // now put it back again
+        drawData.setParameter(dp);
+
+    }
+
+
+    vector<string> sd = soundData.getSlaves();
+
+
+    for(int i = 0; i < sd.size(); i++){
+
+
+        parameter sp = soundData.getParameter(sd[i]);
+        parameter dp = drawData.getParameter(sp.slave);
+
+        // do the mapping here
+        sp.abs_val = ofMap(dp.abs_val, dp.min_val, dp.max_val, sp.min_val, sp.max_val);
+        // now put it back again
+        soundData.setParameter(sp);
+
+    }
 
 }
 

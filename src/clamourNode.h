@@ -33,7 +33,9 @@ public:
     void setSoundData(baseData sd);
     void updateSoundData();
     void resetShift(float x, float y);
+    void reconcileSlaves();
 
+    void init();
 
     //getters and setters
     int getSeat();

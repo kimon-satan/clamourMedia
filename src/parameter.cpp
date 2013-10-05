@@ -67,7 +67,24 @@ parameter baseData::getParameter(string name){
 void baseData::setParameter(parameter p){
 
     parameters[p.name] = p;
+    if(p.map_type == CLAMOUR_MAP_SLAVE){
 
+        if(find(slaveParameters.begin(),slaveParameters.end(), p.name) != slaveParameters.end()){
+
+        }else{
+            slaveParameters.push_back(p.name);
+        }
+
+    }else{
+        vector<string>::iterator it = remove(slaveParameters.begin(), slaveParameters.end(), p.name);
+        if(it != slaveParameters.end())slaveParameters.erase(it);
+    }
+
+}
+
+vector<string> baseData::getSlaves(){
+
+    return slaveParameters;
 }
 
 

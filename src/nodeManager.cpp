@@ -77,6 +77,7 @@ void nodeManager::updateNodes() {
             it->second->updateHistory();
             it->second->updateDrawData();
             it->second->updateSoundData();
+            it->second->reconcileSlaves();
             it->second->updateRotHistory();
             it->second->updatePath();
         }
@@ -306,13 +307,29 @@ void nodeManager::setNodes(vector<string> indexes, clamourNode &n) {
 void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
 
     target->setSoundData(temp.getSoundData());
+    target->setChanged(CLAMOUR_SOUND);
+
     target->setDrawData(temp.getDrawData());
     target->setEnvType(temp.getEnvType());
     target->setAttSecs(temp.getAttSecs());
     target->setDecSecs(temp.getDecSecs());
     target->setCanSleep(temp.getCanSleep());
-    target->setEdgeTemplate(temp.getEdgeTemplate());
     target->setIsRotate(temp.getIsRotate());
+    target->init();
+
+    //now create an edgeTemplate
+
+    if(target->getDrawData().getName() != "none"){
+
+        ofPath p;
+        pathFactory::createPath(p, target->getDrawData().getShapeType(),
+                                1.0,1.0,
+                                target->getDrawData().getParameter("size").abs_val);
+
+        target->setEdgeTemplate(p);
+    }
+
+
 
 }
 

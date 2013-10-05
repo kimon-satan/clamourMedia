@@ -23,7 +23,7 @@ baseData drawDictionary::createDrawData(string dt)
     if(dt == "FLICKER")drawDictionary::flickerDrawData(data);
     if(dt == "ROUND")drawDictionary::roundDrawData(data);
     if(dt == "pauseButton")drawDictionary::pauseButtonData(data);
-    if(dt == "mousePointer")drawDictionary::mousePointerData(data);
+    if(dt == "simplePointer")drawDictionary::simplePointerData(data);
 
 
     return data;
@@ -65,11 +65,20 @@ void drawDictionary::pauseButtonData(baseData &bd)
 }
 
 
-void drawDictionary::mousePointerData(baseData &bd){
+void drawDictionary::simplePointerData(baseData &bd){
 
-    bd.setName("mousePointer");
-    bd.setShapeType("mousePointer");
-    bd.setParameter(parameter("flicker", 0, 1, 0, CLAMOUR_MAP_FIXED));
+    bd.setName("simplePointer");
+    bd.setShapeType("mousePointer"); //may make more sense as separate parameter
+
     bd.setParameter(parameter("size", 0, 1, 0.06, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("colH", 0, 1, 1, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("colS", 0, 1, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("bFire", 0, 1, 1, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("bOff", 0, 1, 1, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("pulse", 0, 1, 0.1, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("flicker", 0, 1, -1, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("shudder", 0, 1.0, 0.1, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("wobble", 0, 1.0, 0.05, CLAMOUR_MAP_FIXED));
+
 
 }

@@ -32,7 +32,7 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes) {
             }
             if(bd.getName() == "FLICKER")drawFlicker(it->second, bd);
             if(bd.getName() == "ROUND")drawRound(it->second, bd);
-            if(bd.getName() == "mousePointer")drawPointer(it->second, bd);
+            if(bd.getName() == "simplePointer")simplePointer(it->second, bd);
         }
 
     }
@@ -83,16 +83,38 @@ void nodeRenderer::drawRound(ofPtr<clamourNode> n, baseData &bd) {
 
 }
 
-void nodeRenderer::drawPointer(ofPtr<clamourNode> n, baseData &bd) {
+void nodeRenderer::simplePointer(ofPtr<clamourNode> n, baseData &bd) {
 
-    ofPath p = n->getOuterEdge();
+    if(n->getIsFiring() && ofRandomf() < bd.getParameter("flicker").abs_val)return;
+
+    ofPath p = n->getEdgeTemplate();
 
     ofPushMatrix();
 
     ofScale(screenData::height, screenData::height,1.0);
+    ofTranslate(n->getMeanPos_abs());
+
+    float h = bd.getParameter("colH").abs_val * 255;
+    float s = bd.getParameter("colS").abs_val * 255;
+    float bF = bd.getParameter("bFire").abs_val * 255;
+    float b = bd.getParameter("bOff").abs_val * 255;
+    int pulse = bd.getParameter("pulse").abs_val * ofGetFrameRate();
+
+    ofColor c;
+
+    if(n->getIsFiring()){
+        (ofGetFrameNum()%pulse == 0) ? c.setHsb(h,s,bF) : c.setHsb(h,s,b);
+
+        float s = bd.getParameter("size").abs_val * bd.getParameter("shudder").abs_val * n->getEnvVal();
+        ofTranslate(ofRandomf() * s, ofRandomf() * s, 0);
+        float w = bd.getParameter("wobble").abs_val * 180 * n->getEnvVal();
+        ofRotateZ(ofRandomf() * w);
+    }else{
+        c.setHsb(h,s,b);
+    }
 
     p.setFilled(true);
-    p.setColor(255);
+    p.setColor(c);
     p.draw();
 
     p.setFilled(false);
@@ -100,6 +122,5 @@ void nodeRenderer::drawPointer(ofPtr<clamourNode> n, baseData &bd) {
     p.draw();
 
     ofPopMatrix();
-
 
 }

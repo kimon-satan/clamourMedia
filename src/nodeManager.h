@@ -11,6 +11,7 @@
 
 #include "ofMain.h"
 #include "clamourNode.h"
+#include "pathFactory.h"
 
 class nodeManager{
 

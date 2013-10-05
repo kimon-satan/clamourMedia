@@ -491,7 +491,6 @@ void oscManager::updateSynth(ofPtr<baseZode> n) {
 void oscManager::stopSynth(ofPtr<baseZode> n) {
 
     baseData sd = n->getSoundData();
-    if(sd.getName() == "none")return;
 
     ofxOscMessage m;
     m.setAddress("/stopSynth");

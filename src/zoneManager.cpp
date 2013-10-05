@@ -207,6 +207,7 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
     vector<reaction> r = z->getReactions(); //TODO copy the reactions out and replace them at the end of this method
     // ptrs don't work here
     vector<reaction>::iterator it = r.begin();
+    map<string, ofPtr<clamourNode> > cap = z->getCaptureNodes();
 
     while(it != r.end()) {
 
@@ -234,7 +235,7 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
             appReactions.push_back("decrementStage");
         } else if(it->rType == "transformNode") {
             //potentially could need on/off for data storage
-            map<string, ofPtr<clamourNode> > cap = z->getCaptureNodes();
+
             map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
             clamourNode temp = presetStore::nodePresets[it->stringParams["PRESET"]];
 
@@ -243,6 +244,32 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
                 c_it->second->updatePath();
                 ++ c_it;
             }
+        } else if(it->rType == "scaleNode"){
+
+            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+
+            while(c_it != cap.end()) {
+
+                parameter p = c_it->second->getDrawData().getParameter("size");
+
+                p.abs_val *= it->floatParams["SCALE"];
+                c_it->second->setDrawParameter(p);
+                ofPath pt = c_it->second->getEdgeTemplate();
+                pt.scale(it->floatParams["SCALE"], it->floatParams["SCALE"]);
+                c_it->second->setEdgeTemplate(pt);
+                c_it->second->updatePath();
+                ++ c_it;
+            }
+        }else if(it->rType == "scaleShift"){
+
+            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+
+            while(c_it != cap.end()) {
+                float shift = c_it->second->getShiftAmount() * it->floatParams["SCALE"];
+                c_it->second->setShiftAmount(shift);
+                ++c_it;
+            }
+
         }
 
         ++it;

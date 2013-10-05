@@ -237,6 +237,7 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
     r.rType = XML.getValue("TYPE", "closeOutZone");
     r.trig = XML.getValue("TRIG", "ON");
     if(XML.tagExists("PRESET"))r.stringParams["PRESET"] = XML.getValue("PRESET","default");
+    if(XML.tagExists("SCALE"))r.floatParams["SCALE"] = XML.getValue("SCALE", 1.0);
 
 }
 
@@ -250,6 +251,8 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "none"));
     if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
     if(XML.tagExists("ROTATE"))n.setIsRotate(XML.getValue("ROTATE", true));
+
+    if(XML.tagExists("SHIFT"))n.setShiftAmount(XML.getValue("SHIFT", 0.2));
 
     if(XML.pushTag("DRAW_PARAMS")) {
 
@@ -359,11 +362,14 @@ void xmlLoader::loadParam(parameter &p, ofxXmlSettings &XML) {
     p.abs_val = XML.getValue("ABS_VAL", 0.5);
     p.min_val = XML.getValue("MIN_VAL", 0.0);
     p.max_val = XML.getValue("MAX_VAL", 1.0);
-    p.map_type = mapType(XML.getValue("MAP_TYPE", CLAMOUR_MAP_FIXED));
+    p.map_type = clamourUtils::stringToMapType(XML.getValue("MAP_TYPE", "fixed"));
+    p.slave =  XML.getValue("SLAVE", "");
 
     if(XML.tagExists("WARP"))p.warp = XML.getValue("WARP", "lin");
 
 }
+
+
 
 void xmlLoader::loadZoneParams(command &cmd, ofxXmlSettings &XML){
 

@@ -24,7 +24,7 @@ class nodeRenderer{
     //drawing types
     void drawFlicker(ofPtr<clamourNode> n, baseData &bd);
     void drawRound(ofPtr<clamourNode> n, baseData &bd);
-    void drawPointer(ofPtr<clamourNode> n, baseData &bd);
+    void simplePointer(ofPtr<clamourNode> n, baseData &bd);
 
     private:
 

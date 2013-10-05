@@ -31,6 +31,7 @@ struct reaction{
     string trig; //ON, OFF, ON_OFF
 
     map<string, string> stringParams;
+    map<string, float> floatParams;
 
     vector<clamourNode> prevNodeStates; // easier just to store the whole node
 

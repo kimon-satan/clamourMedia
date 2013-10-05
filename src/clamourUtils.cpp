@@ -25,6 +25,17 @@ bool clamourUtils::pointInPath(ofPath p, ofVec2f  v){
 
 }
 
+mapType clamourUtils::stringToMapType(string s){
+
+    if(s == "fixed")return CLAMOUR_MAP_FIXED;
+    if(s == "x")return CLAMOUR_MAP_X;
+    if(s == "y")return CLAMOUR_MAP_Y;
+    if(s == "rand")return CLAMOUR_MAP_RAND;
+    if(s == "slave")return CLAMOUR_MAP_SLAVE;
+
+    return CLAMOUR_MAP_FIXED;
+}
+
 ofPoint clamourUtils::getInsideIntersect(ofPath p, ofPoint centroid, ofPoint invader){
 
     //finding centroid is not solved here so this method only works if zones drawn from the center

@@ -10,16 +10,8 @@
 #define __clamourMedia__paramater__
 
 #include"ofMain.h"
+#include "clamourUtils.h"
 
-enum mapType{
-
-    CLAMOUR_MAP_FIXED,
-    CLAMOUR_MAP_X,
-    CLAMOUR_MAP_Y,
-    CLAMOUR_MAP_RAND,
-    CLAMOUR_MAP_COUNT
-
-};
 
 
 class parameter{
@@ -35,6 +27,7 @@ public:
     mapType map_type;
     string name;
     string warp;
+    string slave;
     int index;
 
 };
@@ -53,6 +46,8 @@ public:
 
     void setParameter(parameter p);
     void update(ofVec2f pos);
+
+    vector<string> getSlaves();
     string getName();
     void setName(string s);
     void setShapeType(string s);
@@ -73,6 +68,7 @@ private:
     map<string, parameter> parameters;
     float warp(string type, float mnv, float mxv, float v);
     string shapeType;
+    vector<string> slaveParameters;
     string soundFile;
 
 
