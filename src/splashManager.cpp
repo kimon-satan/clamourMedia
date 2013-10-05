@@ -65,13 +65,15 @@ void splashManager::addTitle(string s, title t){
 
 void splashManager::endTitle(string s){
 
-    mTitles[s]->isFadeOut = true;
+    if(mTitles.find(s) != mTitles.end()){
+        mTitles[s]->isFadeOut = true;
+    }
 
 }
 
 
 void splashManager::addSynth(vector<string> s, baseZode bz){
-    cout << "add \n";
+
 //init might be needed to call later
 
     for(int i = 0; i < s.size(); i++){

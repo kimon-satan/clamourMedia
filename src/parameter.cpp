@@ -10,6 +10,7 @@
 
 baseData::baseData(){
     soundFile = "none";
+    name = "none";
 }
 
 void baseData::init(ofVec2f pos){

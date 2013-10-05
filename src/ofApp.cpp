@@ -106,8 +106,13 @@ void ofApp::setupGUI() {
     lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "STAGE_PLUS", true ,25));
     lb->setLabelText("+");
 
+
+    lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "STAGE_REPLAY", true ,80));
+    lb->setLabelText("REPLAY");
+
     lb = (ofxUILabelButton *)gui->addWidgetRight(new ofxUILabelButton( "GAME_RESET", true ,70));
     lb->setLabelText("RESET");
+
 
 
     gui->addWidgetDown(new ofxUILabel("Meteor OSC IN: ", OFX_UI_FONT_SMALL));
@@ -317,6 +322,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e) {
     } else if(name == "GAME_SELECT") {
 
         mCurrentGame = mGames[mGameBrowseIndex];
+        mCurrentGame->reset();
         //resetEverything(); //don't need this
         implementStage();
         updateGUIElements();
@@ -327,9 +333,9 @@ void ofApp::guiEvent(ofxUIEventArgs &e) {
         implementStage();
         updateGUIElements();
 
-    } else {
+    } else if(name == "STAGE_REPLAY") {
 
-
+        implementStage();
 
     }
 
@@ -604,14 +610,19 @@ void ofApp::implementCommand(command &cmd) {
 
     } else if(cmd.mCommand == "NEW_GROUP") {
 
-        if(cmd.selectors.size() == 0) {
-            string s_string = cmd.stringParams["SELECTORS"];
-            vector<string> tSelNames = ofSplitString(s_string, ",");
+        //FIX_ME regular selectors could just be pushed back
 
-            for(int ts = 0; ts < tSelNames.size(); ts++) {
-                selector t;
-                t.sType = tSelNames[ts];
-                cmd.selectors.push_back(t);
+        if(cmd.selectors.size() == 0) {
+
+            if(cmd.stringParams.find("SELECTORS") != cmd.stringParams.end()){
+                string s_string = cmd.stringParams["SELECTORS"];
+                vector<string> tSelNames = ofSplitString(s_string, ",");
+
+                for(int ts = 0; ts < tSelNames.size(); ts++) {
+                    selector t;
+                    t.sType = tSelNames[ts];
+                    cmd.selectors.push_back(t);
+                }
             }
         }
 

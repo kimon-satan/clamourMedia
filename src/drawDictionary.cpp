@@ -19,19 +19,24 @@ baseData drawDictionary::createDrawData(string dt)
 
     baseData data;
 
-    if(dt == "DEBUG")drawDictionary::debugDrawData(data);
+    if(dt == "debugZone")drawDictionary::debugZone(data);
     if(dt == "FLICKER")drawDictionary::flickerDrawData(data);
     if(dt == "ROUND")drawDictionary::roundDrawData(data);
     if(dt == "pauseButton")drawDictionary::pauseButtonData(data);
     if(dt == "mousePointer")drawDictionary::mousePointerData(data);
 
+
     return data;
 
 }
 
+void drawDictionary::debugZone(baseData &bd){
+    bd.setName("debug");
+    bd.setShapeType("roundedRect");
+}
 
-void drawDictionary::debugDrawData(baseData &bd){
-    bd.setName("DEBUG");
+void drawDictionary::debugNode(baseData &bd){
+    bd.setName("debug");
 }
 
 void drawDictionary::flickerDrawData(baseData &bd)
@@ -59,10 +64,12 @@ void drawDictionary::pauseButtonData(baseData &bd)
 
 }
 
+
 void drawDictionary::mousePointerData(baseData &bd){
 
     bd.setName("mousePointer");
     bd.setShapeType("mousePointer");
     bd.setParameter(parameter("flicker", 0, 1, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("size", 0, 1, 0.06, CLAMOUR_MAP_FIXED));
 
 }

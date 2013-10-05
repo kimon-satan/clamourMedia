@@ -158,7 +158,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
     z.setPos_rel(ofVec2f(XML.getValue("X", 0.5), XML.getValue("Y",0.5)));
     ofPath p;
 
-    z.setDrawType(XML.getValue("DRAW_TYPE", "BASIC"));
+    z.setDrawType(XML.getValue("DRAW_TYPE", "debugZone"));
 
     pathFactory::createPath(p, z.getDrawData().getShapeType(),
                             XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0), XML.getValue("SIZE", 0.1));
@@ -246,18 +246,10 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("DECAY_SECS"))n.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
     if(XML.tagExists("ENV_TYPE"))n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
 
-    if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE",""));
-    if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "DEBUG"));
+    if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE","none"));
+    if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "none"));
     if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
     if(XML.tagExists("ROTATE"))n.setIsRotate(XML.getValue("ROTATE", true));
-
-    ofPath p;
-
-    pathFactory::createPath(p, n.getDrawData().getShapeType(),
-                            XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0),
-                            n.getDrawData().getParameter("size").abs_val);
-
-    n.setEdgeTemplate(p);
 
     if(XML.pushTag("DRAW_PARAMS")) {
 
@@ -266,6 +258,21 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
         for(int i = 0; i < p.size(); i++)n.setDrawParameter(p[i]);
         XML.popTag();
     }
+
+
+    if(n.getDrawData().getName() != "none"){
+        //if statement needed here too
+        ofPath p;
+
+        pathFactory::createPath(p, n.getDrawData().getShapeType(),
+                                XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0),
+                                n.getDrawData().getParameter("size").abs_val);
+
+        n.setEdgeTemplate(p);
+    }
+
+
+
 
     if(XML.pushTag("SOUND_PARAMS")) {
 

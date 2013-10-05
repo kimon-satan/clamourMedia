@@ -99,10 +99,7 @@ void nodeRenderer::drawPointer(ofPtr<clamourNode> n, baseData &bd) {
     p.setStrokeColor(0);
     p.draw();
 
-
-
     ofPopMatrix();
-
 
 
 }

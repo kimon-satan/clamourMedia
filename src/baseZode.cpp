@@ -1,6 +1,7 @@
 #include "baseZode.h"
 
 baseZode::baseZode() {
+
     isFired = false;
     isFiring = false;
     totalAtt = 0;
@@ -115,7 +116,11 @@ void baseZode::react() {
 }
 
 void baseZode::setDrawType(string dt) {
-    drawData = drawDictionary::createDrawData(dt);
+    if(dt != "none"){
+        drawData = drawDictionary::createDrawData(dt);
+    }else{
+        drawData.setName(dt);
+    }
 }
 
 void baseZode::setDrawData(baseData bd) {
@@ -123,7 +128,12 @@ void baseZode::setDrawData(baseData bd) {
 }
 
 void baseZode::setSoundType(string st) {
-    soundData = soundDictionary::createSoundData(st);
+
+    if(st != "none"){
+        soundData = soundDictionary::createSoundData(st);
+    }else{
+        soundData.setName(st);
+    }
 }
 
 baseData baseZode::getDrawData() {

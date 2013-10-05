@@ -20,17 +20,19 @@
 
 	<GROUP>
 		<NAME>leftPlayers</NAME>
-		<SELECTOR><S_TYPE>le_seat</S_TYPE><SEAT>2</SEAT></SELECTOR>
+		<SELECTOR><S_TYPE>le_seat</S_TYPE><SEAT>4</SEAT></SELECTOR>
 	</GROUP>
 
 	<GROUP>
 		<NAME>rightPlayers</NAME>
-		<SELECTOR><S_TYPE>ge_seat</S_TYPE><SEAT>3</SEAT></SELECTOR>
+		<SELECTOR><S_TYPE>ge_seat</S_TYPE><SEAT>5</SEAT></SELECTOR>
+		<SELECTOR><S_TYPE>le_seat</S_TYPE><SEAT>8</SEAT></SELECTOR>
 	</GROUP>
 
 	<GROUP>
 		<NAME>backPlayers</NAME>
 		<SELECTOR><S_TYPE>ge_row</S_TYPE><ROW>B</ROW></SELECTOR>
+		<SELECTOR><S_TYPE>le_row</S_TYPE><ROW>B</ROW></SELECTOR>
 	</GROUP>
 
 	<GROUP>
@@ -38,11 +40,6 @@
 		<SELECTOR><S_TYPE>le_row</S_TYPE><ROW>A</ROW></SELECTOR>
 	</GROUP>
 	
-	
-	<GROUP>
-		<NAME>testPlayers</NAME>
-		<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>4</NUM_P></SELECTOR>
-	</GROUP>
 	
 
 	
@@ -84,28 +81,36 @@
 		<CAN_SLEEP>0</CAN_SLEEP>
 		<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
 		<ROTATE>0</ROTATE>
-		<DRAW_TYPE>mousePointer</DRAW_TYPE><SOUND_TYPE>pulseGlitcher</SOUND_TYPE>
+		<DRAW_TYPE>mousePointer</DRAW_TYPE><SOUND_TYPE>none</SOUND_TYPE>
 		<DRAW_PARAMS>
 			<PARAM>
-				<NAME>size</NAME><ABS_VAL>0.04</ABS_VAL>
+				<NAME>size</NAME><ABS_VAL>0.06</ABS_VAL>
 			</PARAM>
 		</DRAW_PARAMS>
-		<SOUND_PARAMS>
+	</NODE_PRESET>
+	
+	<NODE_PRESET>
+		<NAME>simplePointerSmall</NAME>
+		<CAN_SLEEP>0</CAN_SLEEP>
+		<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
+		<ROTATE>0</ROTATE>
+		<DRAW_TYPE>mousePointer</DRAW_TYPE><SOUND_TYPE>none</SOUND_TYPE>
+		<DRAW_PARAMS>
 			<PARAM>
-				<NAME>pulseRate</NAME><MIN_VAL>4</MIN_VAL><MAX_VAL>20</MAX_VAL><ABS_VAL>4</ABS_VAL>
-				<MAP_TYPE>1</MAP_TYPE>
+				<NAME>size</NAME><ABS_VAL>0.02</ABS_VAL>
 			</PARAM>
-			<PARAM>
-				<NAME>pan</NAME><MIN_VAL>-0.75</MIN_VAL><MAX_VAL>0.75</MAX_VAL><ABS_VAL>0</ABS_VAL>
-				<MAP_TYPE>1</MAP_TYPE>
-			</PARAM>
-			<PARAM>
-				<NAME>resFilFreq</NAME><MIN_VAL>300</MIN_VAL><MAX_VAL>2000</MAX_VAL><ABS_VAL>500</ABS_VAL>
-				<MAP_TYPE>2</MAP_TYPE>
-			</PARAM>
-		</SOUND_PARAMS>
+		</DRAW_PARAMS>
 	</NODE_PRESET>
 
+	<NODE_PRESET>
+		<NAME>emptyNode</NAME>
+		<CAN_SLEEP>1</CAN_SLEEP>
+		<ENV_TYPE>ASR</ENV_TYPE><ATTACK_SECS>0.25</ATTACK_SECS><DECAY_SECS>0.01</DECAY_SECS>
+		<ROTATE>0</ROTATE>
+		<DRAW_TYPE>none</DRAW_TYPE><SOUND_TYPE>none</SOUND_TYPE>
+	</NODE_PRESET>
+
+	
 	<!--    GAMES DEFINED HERE  -->
 
 
@@ -236,6 +241,14 @@
 		<NAME>login</NAME>
 		<STAGE>
 			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>Please wait for the playtest to begin ...</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
 				<ACTION>ADD_TITLE</ACTION>
 				<NAME>logon</NAME>
 				<TEXT>Logon at :- 192.168.2.2:3000</TEXT>
@@ -245,14 +258,6 @@
 			<COMMAND>
 				<ACTION>END_TITLE</ACTION>
 				<NAME>logon</NAME>
-			</COMMAND>
-		</STAGE>
-		<STAGE>
-			<COMMAND>
-				<TARGET>allPlayers</TARGET>
-				<ACTION>SET_CONTROL</ACTION>
-				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
-				<TEXT>Please wait for the playtest to begin ...</TEXT>
 			</COMMAND>
 		</STAGE>
 	</GAME>
@@ -805,20 +810,26 @@
 					<TARGET>pointingPlayers</TARGET>
 					<PRESET>simplePointer</PRESET>
 				</COMMAND>
+				<COMMAND>
+					<ACTION>SET_NODE</ACTION>
+					<TARGET>speakingPlayers</TARGET>
+					<PRESET>emptyNode</PRESET>
+					<CAN_SLEEP>1</CAN_SLEEP>
+				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
 				<COMMAND>
 					<ACTION>DISTRIBUTE_NODES</ACTION>
 					<TARGET>pointingPlayers</TARGET>
-					<PATTERN>RANDOM_CIRCLE</PATTERN>
-					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
+					<PATTERN>XY</PATTERN>
+					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
 				<COMMAND>
 					<ACTION>SET_CONTROL</ACTION><TARGET>speakingPlayers</TARGET>
 					<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
-					<TEXT>test</TEXT>
+					<TEXT></TEXT>
 				</COMMAND>
 				<COMMAND>
 					<ACTION>SET_CONTROL</ACTION><TARGET>pointingPlayers</TARGET>
@@ -836,17 +847,122 @@
 			</COMMAND>
 		</STAGE>
 		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>speakingPlayers</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<NAME>temp</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>temp</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>3</NUM_P></SELECTOR>
+					<NAME>grp1</NAME>
+					<RMV_FROM>temp</RMV_FROM>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>temp</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>3</NUM_P></SELECTOR>
+					<NAME>grp2</NAME>
+					<RMV_FROM>temp</RMV_FROM>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>temp</TARGET>
+					<ACTION>NEW_GROUP</ACTION>
+					<SELECTOR><S_TYPE>random</S_TYPE><NUM_P>3</NUM_P></SELECTOR>
+					<NAME>grp3</NAME>
+					<RMV_FROM>temp</RMV_FROM>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>speakingPlayers</TARGET>
+					<ACTION>SET_TEXT</ACTION>
+					<TEXT>"a pointer !"</TEXT>
+				</COMMAND>
+			</PRIORITY>
+		</STAGE>
+		<STAGE>
 			<COMMAND>
+				<TARGET>grp1</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>"trusted conveyor of our virtual presence"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>grp2</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>"our digital personification"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>grp3</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>"the most conicise avatar"</TEXT>
 			</COMMAND>
 		</STAGE>
 		<STAGE>
 			<COMMAND>
 				<ACTION>START_SYNTH</ACTION>
-				<S_TARGET>aSymbol</S_TARGET>
-				<FILE>aSymbol</FILE>
+				<S_TARGET>oneOfYou</S_TARGET>
+				<FILE>oneOfYou</FILE>
 				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
 			</COMMAND>
 		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>SET_TEXT</ACTION>
+				<TARGET>speakingPlayers</TARGET>
+				<TEXT>"An icon which projects"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>grp1</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>"predictability"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>grp2</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>"consistency"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>grp3</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG_TEXT</CONTROL_TYPE>
+				<TEXT>"reliability"</TEXT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<TARGET>speakingPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>SMALL_TEXT</CONTROL_TYPE>
+				<TEXT>"Every action has its corresponding reaction"</TEXT>
+			</COMMAND>
+		</STAGE>
+	</GAME>
+	<GAME>
+		<NAME>clamour_part_4</NAME>
 		<STAGE>
 			<COMMAND>
 				<ACTION>START_SYNTH</ACTION>
@@ -855,6 +971,113 @@
 				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
 			</COMMAND>
 		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<ACTION>CREATE_ZONE</ACTION>
+				<NAME>pauseZone</NAME>
+				<X>0.5</X><Y>0.5</Y><SIZE>0.25</SIZE>
+				<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
+				<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
+				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
+				<SOUND_PARAMS><FILE>click</FILE></SOUND_PARAMS>
+				<DRAW_TYPE>pauseButton</DRAW_TYPE>
+				<REACT><TYPE>incrementStage</TYPE><TRIG>ON</TRIG></REACT>
+				<REACT><TYPE>closeInZone</TYPE><TRIG>ON</TRIG></REACT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+				<S_TARGET>om25</S_TARGET>
+				<ACTION>STOP_SYNTH</ACTION>
+			</COMMAND>
+			<COMMAND>
+				<TARGET>allPlayers</TARGET>
+				<ACTION>SET_CONTROL</ACTION>
+				<CONTROL_TYPE>BIG TEXT</CONTROL_TYPE>
+				<TEXT>STOP</TEXT>
+			</COMMAND>
+		</STAGE>
+	</GAME>
+	<GAME>
+		<NAME>manyPointers</NAME>
+		<STAGE>
+		</STAGE>
+		<STAGE>
+			<PRIORITY>
+				<COMMAND>
+					<ACTION>NEW_GROUP</ACTION>
+					<TARGET>allPlayers</TARGET>
+					<SELECTOR><S_TYPE>online</S_TYPE></SELECTOR>
+					<NAME>cOnline</NAME>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>cOnline</TARGET>
+					<ACTION>SET_NODE</ACTION>
+					<PRESET>simplePointerSmall</PRESET>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>cOnline</TARGET>
+					<ACTION>DISTRIBUTE_NODES</ACTION>
+					<PATTERN>CIRCUM</PATTERN>
+					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P><RADIUS>0.25</RADIUS>
+				</COMMAND>
+			</PRIORITY>
+			<PRIORITY>
+				<COMMAND>
+					<TARGET>cOnline</TARGET>
+					<ACTION>SET_CONTROL</ACTION>
+					<CONTROL_TYPE>DRAG_ON_OFF</CONTROL_TYPE>
+				</COMMAND>
+			</PRIORITY>
+		</STAGE>
+		<STAGE>
+			<COMMAND>
+					<ACTION>CREATE_ZONE</ACTION>
+					<NAME>debug1</NAME>
+					<X>0.5</X><Y>0.5</Y><SIZE>0.25</SIZE>
+					<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
+					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
+					<SOUND_TYPE>brownExploder</SOUND_TYPE>
+				
+					<REACT><TYPE>transformNode</TYPE><PRESET>flickerPulse</PRESET><TRIG>ON</TRIG></REACT>
+			</COMMAND>
+		</STAGE>
+		
+		<STAGE>
+			<COMMAND>
+					<ACTION>CREATE_ZONE</ACTION>
+					<NAME>debug2</NAME>
+					<X>0.5</X><Y>0.8</Y><SIZE>0.25</SIZE>
+					<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
+					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
+					<OFF_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>5</GE></OFF_RULE>
+					<SOUND_TYPE>brownExploder</SOUND_TYPE>
+					
+					<REACT><TYPE>closeInZone</TYPE><TRIG>ON</TRIG></REACT>
+			</COMMAND>
+		</STAGE>
+		
+			
+		<STAGE>
+			<COMMAND>
+					<ACTION>CREATE_ZONE</ACTION>
+					<NAME>debug3</NAME>
+					<X>0.5</X><Y>0.2</Y><SIZE>0.25</SIZE>
+					<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
+					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
+					<SOUND_TYPE>brownExploder</SOUND_TYPE>
+					<REACT><TYPE>transformNode</TYPE><PRESET>simplePointer</PRESET><TRIG>ON</TRIG></REACT>
+			</COMMAND>
+		</STAGE>
+		
+		
+		
+		
 	
 	</GAME>
+	
 </CLAMOUR_MEDIA>

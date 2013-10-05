@@ -233,12 +233,14 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
         } else if(it->rType == "decrementStage") {
             appReactions.push_back("decrementStage");
         } else if(it->rType == "transformNode") {
-            //potentially could nee on/off for data storage
+            //potentially could need on/off for data storage
             map<string, ofPtr<clamourNode> > cap = z->getCaptureNodes();
             map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
             clamourNode temp = presetStore::nodePresets[it->stringParams["PRESET"]];
+
             while(c_it != cap.end()) {
                 nodeManager::setNode(c_it->second, temp);
+                c_it->second->updatePath();
                 ++ c_it;
             }
         }
@@ -265,6 +267,7 @@ void zoneManager::createZone(string name) {
 
 void zoneManager::createZone(zone z) {
 
+    cout << z.getSoundFile() << endl;
     ofPtr<zone> zp = ofPtr<zone>(new zone(z));
     zp->recalcAbsDims();
     mZones[zp->getName()] = zp;

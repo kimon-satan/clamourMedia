@@ -126,7 +126,17 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
 
         }
 
+    }else if(pattern == "XY"){
 
+        ofVec2f c(params["X"], params["Y"]);
+        if(posp)c *= ofVec2f(w_prop,1.0);
+
+
+        for(int i = 0; i < clients.size(); i++) {
+
+            mNodes[clients[i]]->setRawPos_abs(c);
+
+        }
 
     }
 }

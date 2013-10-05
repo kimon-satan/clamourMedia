@@ -11,7 +11,9 @@ public:
 
     void update();
     void draw(map<string, ofPtr<zone> > z);
-    void drawDebug(ofPtr<zone> z);
+    void drawDebug(ofPtr<zone> z, baseData &bd);
+    void pauseButton(ofPtr<zone> z, baseData &bd);
+
 
     //getters and setters
 

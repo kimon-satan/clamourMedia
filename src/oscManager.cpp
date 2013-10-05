@@ -433,6 +433,7 @@ void oscManager::sendInit() {
 void oscManager::startSynth(ofPtr<baseZode> n) {
 
     baseData sd = n->getSoundData();
+    if(sd.getName() == "none")return;
 
     ofxOscMessage m;
     m.setAddress("/startSynth");
@@ -463,11 +464,14 @@ void oscManager::startSynth(ofPtr<baseZode> n) {
 
 void oscManager::updateSynth(ofPtr<baseZode> n) {
 
+    baseData sd = n->getSoundData();
+    if(sd.getName() == "none")return;
+
     ofxOscMessage m;
     m.setAddress("/updateSynth");
     m.addStringArg(n->getName());
 
-    baseData sd = n->getSoundData();
+
 
     m.addStringArg(sd.getName()); //add the name to keep the indexing th same for update and start at the SC end
 
@@ -485,6 +489,9 @@ void oscManager::updateSynth(ofPtr<baseZode> n) {
 }
 
 void oscManager::stopSynth(ofPtr<baseZode> n) {
+
+    baseData sd = n->getSoundData();
+    if(sd.getName() == "none")return;
 
     ofxOscMessage m;
     m.setAddress("/stopSynth");
