@@ -227,7 +227,7 @@ void clamourNode::setRow(string s)
 
 void clamourNode::setRawPos_rel(ofVec2f v)
 {
-
+    if(animOverride > 0)return;
     rawPos_rel = v;
 }
 

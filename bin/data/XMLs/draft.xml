@@ -740,7 +740,7 @@
 					<ACTION>DISTRIBUTE_NODES</ACTION>
 					<TARGET>pointingPlayers</TARGET>
 					<PATTERN>XY</PATTERN>
-					<X>0.5</X><Y>0.5</Y><POS_P>1</POS_P>
+					<X>0.5</X><Y>0.5</Y>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
@@ -762,7 +762,7 @@
 				<S_TARGET>oneOfYou</S_TARGET>
 				<FILE>oneOfYou</FILE>
 				<SOUND_TYPE>monoPlayer</SOUND_TYPE>
-			</COMMAND>
+		f	</COMMAND>
 		</STAGE>
 		<STAGE>
 			<PRIORITY>
@@ -948,6 +948,7 @@
 					<ACTION>DISTRIBUTE_NODES</ACTION>
 					<PATTERN>XY</PATTERN>
 					<X>0.5</X><Y>0.5</Y>
+					<POS_P>1</POS_P>
 				</COMMAND>
 			</PRIORITY>
 			<PRIORITY>
@@ -958,16 +959,13 @@
 				</COMMAND>
 			</PRIORITY>
 		</STAGE>
-	
-		
-			
+					
 		<STAGE>
 			<COMMAND>
 					<ACTION>CREATE_ZONE</ACTION>
 					<NAME>debug3</NAME>
 					<X>0.5</X><Y>0.2</Y><SIZE>0.25</SIZE>
 					<ENV_TYPE>AS</ENV_TYPE><ATTACK_SECS>0.01</ATTACK_SECS><DECAY_SECS>1.0</DECAY_SECS>
-					<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
 					<SOUND_TYPE>brownExploder</SOUND_TYPE>
 					<REACT><TYPE>transformNode</TYPE><TRIG>ON</TRIG><PRESET>simplePointerRand</PRESET></REACT>
 					<!--<REACT><TYPE>scaleNode</TYPE><TRIG>ON</TRIG><SCALE>1.5</SCALE></REACT>

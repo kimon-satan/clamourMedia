@@ -17,6 +17,7 @@ baseZode::baseZode() {
     postSecs.abs_val = 0;
 
     mEnvType = CLAMOUR_ASR;
+    animOverride = 0;
 
 }
 
@@ -97,6 +98,8 @@ void baseZode::update() {
 
         }
     }
+
+    if(animOverride > 0)animOverride -= 1;
 }
 
 void baseZode::react() {
@@ -271,4 +274,12 @@ void baseZode::setEdgeTemplate(ofPath p) {
 
 ofPath baseZode::getEdgeTemplate() {
     return edgeTemplate;
+}
+
+void baseZode::setAnimOverride(int i){
+    animOverride = i;
+}
+
+int baseZode::getAnimOverride(){
+    return animOverride;
 }

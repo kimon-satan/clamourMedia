@@ -9,9 +9,7 @@ zone::zone()
 
     mChanged = CLAMOUR_NONE;
 
-    mOnRule.ruleType = "MIN_OCCUPANTS";
-    mOnRule.gtOccupants = 1;
-    mOnRule.isEnabled = true;
+    mOnRule.isEnabled = false;
     mOffRule.isEnabled = false;
 
 }

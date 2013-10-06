@@ -66,12 +66,16 @@ public:
     void setEdgeTemplate(ofPath p);
     ofPath getEdgeTemplate();
 
+    void setAnimOverride(int i);
+    int getAnimOverride();
+
 protected:
 
     string name;
     baseData drawData;
     baseData soundData;
     changeType mChanged;
+    int animOverride;
 
     bool isFired, isFiring;
 

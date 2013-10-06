@@ -107,6 +107,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
             p = p.getRotated(ofRandom(-180,180));
             if(dimp)p *= ofVec2f(w_prop,1.0);
             mNodes[clients[i]]->setRawPos_abs(p+c);
+            mNodes[clients[i]]->setAnimOverride(20);
 
         }
 
@@ -124,7 +125,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
             p = p.getRotated(-180 + i * interval);
             if(dimp)p *= ofVec2f(w_prop,1.0);
             mNodes[clients[i]]->setRawPos_abs(p+c);
-
+            mNodes[clients[i]]->setAnimOverride(20);
         }
 
     }else if(pattern == "XY"){
@@ -136,7 +137,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
         for(int i = 0; i < clients.size(); i++) {
 
             mNodes[clients[i]]->setRawPos_abs(c);
-
+            mNodes[clients[i]]->setAnimOverride(20);
         }
 
     }

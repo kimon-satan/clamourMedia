@@ -11,6 +11,16 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
     map<string, ofPtr<zone> >::iterator z_it;
     map<string, ofPtr<clamourNode> >::iterator n_it;
 
+     //call update method here which resets closed zones and increments reactions etc
+
+    for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it) {
+        z_it->second->update();
+        if(getOffTrig(z_it->second)) {
+            offReact(z_it->second);
+        }
+
+    }
+
     //find node intersections
     n_it = tNodes.begin();
 
@@ -82,15 +92,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
         ++n_it;
     }
 
-    //call update method here which resets closed zones and increments reactions etc
 
-    for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it) {
-        z_it->second->update();
-        if(getOffTrig(z_it->second)) {
-            offReact(z_it->second);
-        }
-
-    }
 
 
 }
@@ -142,7 +144,7 @@ bool zoneManager::getIsRuleMet(ofPtr<zone> z, zoneRule r) {
         if(z->getCaptureNodes().size() >= r.gtOccupants  &&
                 z->getCaptureNodes().size() <= r.ltOccupants)return true;
 
-    } else {
+    }else{
 
         return false;
 
@@ -159,7 +161,9 @@ bool zoneManager::getOnTrig(ofPtr<zone> z) {
     zoneRule on_zr = z->getOnRule();
     zoneRule off_zr = z->getOffRule();
 
-    if(!off_zr.isEnabled) {
+    if(!on_zr.isEnabled){
+        return true;
+    }else if(!off_zr.isEnabled) {
         return getIsRuleMet(z,on_zr);
     } else {
         return getIsRuleMet(z, off_zr)? false : getIsRuleMet(z,on_zr); //off overrides on
@@ -169,13 +173,14 @@ bool zoneManager::getOnTrig(ofPtr<zone> z) {
 
 bool zoneManager::getOffTrig(ofPtr<zone> z) {
 
-
     if(!z->getIsFired())return false;
 
     zoneRule on_zr = z->getOnRule();
     zoneRule off_zr = z->getOffRule();
 
-    if(!off_zr.isEnabled) {
+    if(!on_zr.isEnabled){
+        return true;
+    }else if(!off_zr.isEnabled) {
         return !getIsRuleMet(z,on_zr);// will fire when on rule is no longer met
     } else {
         return getIsRuleMet(z, off_zr); // off overrides on
@@ -294,7 +299,7 @@ void zoneManager::createZone(string name) {
 
 void zoneManager::createZone(zone z) {
 
-    cout << z.getSoundFile() << endl;
+//    cout << z.getSoundFile() << endl;
     ofPtr<zone> zp = ofPtr<zone>(new zone(z));
     zp->recalcAbsDims();
     mZones[zp->getName()] = zp;
