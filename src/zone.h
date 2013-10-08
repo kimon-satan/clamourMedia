@@ -5,9 +5,9 @@
 #include "clamourNode.h"
 #include "baseZode.h"
 
-struct zoneRule{
+struct zoneRule {
 
-    zoneRule(){
+    zoneRule() {
         isEnabled = true;
     };
 
@@ -22,7 +22,7 @@ struct zoneRule{
 
 };
 
-struct reaction{
+struct reaction {
 
     //these relate to aspects which effect other nodes, zones, stages etc;
     string rType;
@@ -33,6 +33,7 @@ struct reaction{
 
     map<string, string> stringParams;
     map<string, float> floatParams;
+    map<string, int> intParams;
 
     vector<clamourNode> prevNodeStates; // easier just to store the whole node
 
@@ -40,8 +41,7 @@ struct reaction{
 };
 
 
-class zone : public baseZode
-{
+class zone : public baseZode {
 public:
     zone();
     virtual ~zone();
@@ -49,7 +49,13 @@ public:
     void addNode(ofPtr<clamourNode> p);
     void removeNode(ofPtr<clamourNode> p);
 
+    void addEvent(clamourEvent e);
+
+    void updateEvents();
+    void updateDrawData();
     //getters and setters
+
+    void triggerEvent(int i);
 
     map<string, ofPtr<clamourNode> > getCaptureNodes();
 
@@ -86,6 +92,7 @@ public:
     void addReaction(reaction e);
 
 
+
 private:
 
 
@@ -108,6 +115,10 @@ private:
     zoneRule mOffRule;
 
     vector<reaction > mReactions;
+
+    //extra
+
+    vector<clamourEvent> mEvents;
 
 
 };

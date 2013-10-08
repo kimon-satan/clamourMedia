@@ -161,6 +161,19 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
     z.setPos_rel(ofVec2f(XML.getValue("X", 0.5), XML.getValue("Y",0.5)));
     ofPath p;
 
+    int numEvents = XML.getNumTags("EVENT");
+
+    for(int i =0; i < numEvents; i ++){
+        if(XML.pushTag("EVENT", i)){
+            clamourEvent e;
+            e.setAttSecs(XML.getValue("ATTACK_SECS", 0.01));
+            e.setDecSecs(XML.getValue("DECAY_SECS", 0.2));
+            e.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+            z.addEvent(e);
+            XML.popTag();
+        }
+    }
+
     if(XML.tagExists("DRAW_TYPE"))z.setDrawType(XML.getValue("DRAW_TYPE", "debugZone"));
 
     if(XML.pushTag("DRAW_PARAMS")) {
@@ -180,9 +193,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
     if(XML.tagExists("DECAY_SECS"))z.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
     if(XML.tagExists("ENV_TYPE"))z.setEnvType(XML.getValue("ENV_TYPE", "AR"));
 
-
     if(XML.tagExists("SOUND_TYPE"))z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder"));
-
 
 
     if(XML.pushTag("SOUND_PARAMS")) {
@@ -244,6 +255,7 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
     r.trig = XML.getValue("TRIG", "ON");
     if(XML.tagExists("PRESET"))r.stringParams["PRESET"] = XML.getValue("PRESET","default");
     if(XML.tagExists("SCALE"))r.floatParams["SCALE"] = XML.getValue("SCALE", 1.0);
+    if(XML.tagExists("ENV_INDEX"))r.intParams["ENV_INDEX"] = XML.getValue("ENV_INDEX", 1);
 
     int numZs = XML.getNumTags("Z_TARGET");
 
@@ -375,6 +387,7 @@ void xmlLoader::loadParam(parameter &p, ofxXmlSettings &XML) {
     p.min_val = XML.getValue("MIN_VAL", 0.0);
     p.max_val = XML.getValue("MAX_VAL", 1.0);
     p.map_type = clamourUtils::stringToMapType(XML.getValue("MAP_TYPE", "fixed"));
+    p.envIndex = XML.getValue("ENV_INDEX", 0);
     p.slave =  XML.getValue("SLAVE", "");
 
     if(XML.tagExists("WARP"))p.warp = XML.getValue("WARP", "lin");

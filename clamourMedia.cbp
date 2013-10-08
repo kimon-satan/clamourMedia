@@ -435,6 +435,12 @@
 		<Unit filename="src/baseZode.h">
 			<Option virtualFolder="src/base/" />
 		</Unit>
+		<Unit filename="src/clamourEvent.cpp">
+			<Option virtualFolder="src/base/" />
+		</Unit>
+		<Unit filename="src/clamourEvent.h">
+			<Option virtualFolder="src/base/" />
+		</Unit>
 		<Unit filename="src/clamourNode.cpp">
 			<Option virtualFolder="src/nodeClasses/" />
 		</Unit>

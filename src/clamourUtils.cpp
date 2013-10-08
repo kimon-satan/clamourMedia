@@ -36,6 +36,7 @@ mapType clamourUtils::stringToMapType(string s){
     if(s == "y")return CLAMOUR_MAP_Y;
     if(s == "rand")return CLAMOUR_MAP_RAND;
     if(s == "slave")return CLAMOUR_MAP_SLAVE;
+    if(s == "event")return CLAMOUR_MAP_EVENT;
 
     return CLAMOUR_MAP_FIXED;
 }

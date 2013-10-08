@@ -28,6 +28,7 @@ public:
     string name;
     string warp;
     string slave;
+    int envIndex;
     int index;
 
 };
@@ -46,6 +47,7 @@ public:
 
     void setParameter(parameter p);
     void update(ofVec2f pos);
+    void update(ofVec2f pos, vector<float> & f);
 
     vector<string> getSlaves();
     string getName();

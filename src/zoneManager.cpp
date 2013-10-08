@@ -15,6 +15,8 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
     for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it) {
         z_it->second->update();
+        z_it->second->updateEvents();
+        z_it->second->updateDrawData();
         if(getOffTrig(z_it->second)) {
             offReact(z_it->second);
         }
@@ -318,6 +320,13 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
                 ++c_it;
             }
 
+        }else if(it->rType == "eventOther"){
+
+             for(int i = 0; i < it->zTargets.size(); i++) {
+                if(mZones.find(it->zTargets[i]) != mZones.end()) {
+                    mZones[it->zTargets[i]]->triggerEvent(it->intParams["ENV_INDEX"]);
+                }
+            }
         }
 
         ++it;

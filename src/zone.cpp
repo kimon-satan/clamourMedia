@@ -25,6 +25,37 @@ void zone::removeNode(ofPtr<clamourNode> n)
     mCaptureNodes.erase(n->getName());
 }
 
+void zone::addEvent(clamourEvent e){
+
+    mEvents.push_back(e);
+
+}
+
+void zone::updateEvents(){
+
+    for(int i = 0; i < mEvents.size(); i ++){
+        mEvents[i].update();
+    }
+}
+
+
+void zone::updateDrawData()
+{
+    vector<float> f;
+    f.push_back(envVal);
+
+    for(int i = 0; i < mEvents.size(); i ++){
+        f.push_back(mEvents[i].getEnvVal());
+    }
+
+    drawData.update(pos_rel, f); //used for mappings & events
+
+}
+
+void zone::triggerEvent(int i){
+
+    mEvents[i - 1].react();
+}
 
 //getters and setters
 

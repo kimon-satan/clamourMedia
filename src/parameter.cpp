@@ -24,7 +24,16 @@ void baseData::init(ofVec2f pos){
 
 }
 
+
 void baseData::update(ofVec2f pos){
+
+    vector<float> f;
+    f.push_back(0);
+    update(pos, f);
+
+}
+
+void baseData::update(ofVec2f pos, vector<float> & envVals){
 
     //update all the parameters according to mappings
     //could put a different menthod for zones to use other params such as num occupants but leave for now
@@ -40,6 +49,9 @@ void baseData::update(ofVec2f pos){
                 break;
             case CLAMOUR_MAP_Y:
                 it->second.abs_val = warp(it->second.warp, 1 - pos.y, it->second.min_val, it->second.max_val);
+                break;
+            case CLAMOUR_MAP_EVENT:
+                it->second.abs_val = warp(it->second.warp, envVals[it->second.envIndex], it->second.min_val, it->second.max_val);
                 break;
 
         }
@@ -145,7 +157,9 @@ void parameter::init(ofVec2f pos){
         case CLAMOUR_MAP_RAND:
             abs_val = ofRandom(min_val, max_val);
             break;
-
+        case CLAMOUR_MAP_EVENT:
+            abs_val = min_val;
+            break;
 
     }
 

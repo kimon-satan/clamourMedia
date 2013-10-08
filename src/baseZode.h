@@ -1,20 +1,17 @@
 #ifndef BASEZODE_H
 #define BASEZODE_H
 
-#include "clamourUtils.h"
+
 #include "ofMain.h"
 #include "drawDictionary.h"
 #include "soundDictionary.h"
+#include "clamourEvent.h"
 
-class baseZode
-{
+class baseZode : public clamourEvent {
 
 public:
     baseZode();
     virtual ~baseZode();
-
-    void update();
-    void react();
 
     //getters and setters
     void setName(string name);
@@ -33,29 +30,8 @@ public:
     baseData getSoundData();
     void setSoundParameter(parameter p);
 
-    //does the zode have input to fire
-    bool getIsFired();
-    void setIsFired(bool b);
 
-    //is the zode actually firing
-    bool getIsFiring();
-    void setIsFiring(bool b);
 
-    float getEnvVal();
-    float getPostVal();
-
-    float getAttSecs();
-    float getDecSecs();
-
-    void setAttSecs(float f);
-    void setDecSecs(float f);
-
-    void setAttSecs(parameter p);
-    void setDecSecs(parameter p);
-
-    envType getEnvType();
-    void setEnvType(string s);
-    void setEnvType(envType t);
 
     void setSoundFile(string s);
     string getSoundFile();
@@ -66,8 +42,6 @@ public:
     void setEdgeTemplate(ofPath p);
     ofPath getEdgeTemplate();
 
-    void setAnimOverride(int i);
-    int getAnimOverride();
 
 protected:
 
@@ -75,15 +49,7 @@ protected:
     baseData drawData;
     baseData soundData;
     changeType mChanged;
-    int animOverride;
 
-    bool isFired, isFiring;
-
-    envType mEnvType;
-
-    int totalAtt, totalDec, totalPost, attCount, decCount, postCount;
-	float envVal, postVal;
-    parameter attSecs, decSecs, postSecs;
 
     ofPath outerEdge;
     ofPath edgeTemplate;

@@ -68,7 +68,7 @@ void zoneRenderer::simpleButton(ofPtr<zone> z, baseData &bd) {
     e.setColor(col);
 
     ofPushMatrix();
-        ofRotate(ofGetFrameNum());
+        ofRotate(bd.getParameter("outerRot").abs_val);
         e.draw();
         p.draw();
     ofPopMatrix();

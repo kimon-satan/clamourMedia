@@ -44,6 +44,7 @@ void drawDictionary::simpleZone(baseData &bd){
 
     bd.setShapeType("roundedRect");
     bd.setParameter(parameter("size", 0, 1, 0.25, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerRot", 0, 90, 0, CLAMOUR_MAP_FIXED));
 
 }
 
