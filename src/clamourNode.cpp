@@ -23,6 +23,21 @@ clamourNode::clamourNode(int ts, string tr)
     isSleeping = true;
     canSleep = true;
     isRotate = false;
+    isNewShift = false;
+
+};
+
+clamourNode::clamourNode(){
+
+    rawPos_rel.set(0.5,0.5);
+    isDragOn = false;
+    smoothFrames = 10;
+    shiftAmount = 0.2;
+    mChanged = CLAMOUR_NONE;
+    isSleeping = true;
+    canSleep = true;
+    isRotate = false;
+    isNewShift = false;
 
 };
 
@@ -199,6 +214,7 @@ void clamourNode::resetShift(float x , float y)
     ofVec2f v(ofVec2f(x,y) * shiftAmount);
     shiftStart.set(meanPos_rel - v);
     isDragOn = true;
+    isNewShift = false;
 
 }
 
@@ -260,7 +276,11 @@ ofVec2f clamourNode::getShiftStart()
 void clamourNode::setShiftAmount(float f)
 {
     shiftAmount = f;
+    if(isDragOn)isNewShift = true;
 }
+
+
+
 float clamourNode::getShiftAmount()
 {
     return shiftAmount;
@@ -314,3 +334,15 @@ void clamourNode::setCanSleep(bool b){
 void clamourNode::setIsRotate(bool b){ isRotate = b;}
 bool clamourNode::getIsRotate(){return isRotate;}
 
+bool clamourNode::getIsNewShift(){return isNewShift;}
+void clamourNode::setIsNewShift(bool b){isNewShift = b;}
+
+float clamourNode::getAvRot(){return  avRot;}
+
+void clamourNode::setIntersect(ofVec2f i){
+    intersect = i;
+}
+
+ofVec2f clamourNode::getIntersect(){
+    return intersect;
+}

@@ -20,6 +20,18 @@
 #define SC_OUT_PORT 57120
 #define NUM_MSG_STRINGS 6
 
+
+struct cBundle{
+
+    cBundle(){
+        sendCount = 0;
+    }
+
+    ofxOscBundle bundle;
+    int sendCount;
+
+};
+
 enum msgType{
 
     CLAMOUR_MSG_METEOR_IN,
@@ -70,7 +82,7 @@ class oscManager{
     ofxOscSender sender;
     ofxOscSender SCsender;
 
-    map<string, ofxOscBundle> outBundle;
+    map<string, cBundle> outBundle;
 
     ofPtr<nodeManager> pNodeManager;
     ofPtr<clientManager> pClientManager;

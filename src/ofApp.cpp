@@ -207,6 +207,20 @@ void ofApp::loadXML() {
                 }
             }
 
+            int numZPresets = XML.getNumTags("ZONE_PRESET");
+
+            for(int zp = 0; zp < numZPresets; zp ++) {
+
+                if(XML.pushTag("ZONE_PRESET", zp)) {
+
+                    zone z;
+                    xmlLoader::loadZone(z, XML);
+                    z.setName(XML.getValue("NAME", "default"));
+                    presetStore::zonePresets[z.getName()] = z;
+                    XML.popTag();
+                }
+            }
+
             int numGames = XML.getNumTags("GAME");
 
             for(int gm = 0; gm < numGames; gm++) {

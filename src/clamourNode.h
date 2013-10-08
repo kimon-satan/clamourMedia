@@ -20,7 +20,7 @@ class clamourNode : public baseZode {
 
 public:
 
-    clamourNode(){};
+    clamourNode();
     clamourNode(int ts, string tr);
 
     void updateHistory();
@@ -73,6 +73,15 @@ public:
     bool getCanSleep();
     void setCanSleep(bool b);
 
+    bool getIsNewShift();
+    void setIsNewShift(bool b);
+
+    float getAvRot();
+
+    void setIntersect(ofVec2f i);
+    ofVec2f getIntersect();
+
+
 private:
 
     bool isSleeping, canSleep;
@@ -86,10 +95,12 @@ private:
     ofVec2f rawPos_rel;
     ofVec2f meanPos_rel;
     ofVec2f meanPos_abs;
+    ofVec2f intersect;
 
     ofVec2f shiftStart;
     float shiftAmount;
     bool isDragOn;
+    bool isNewShift;
     float avRot;
     bool isRotate;
 

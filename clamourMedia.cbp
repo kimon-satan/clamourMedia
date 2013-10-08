@@ -511,10 +511,10 @@
 			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/presetStore.cpp">
-			<Option virtualFolder="src/base/" />
+			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/presetStore.h">
-			<Option virtualFolder="src/base/" />
+			<Option virtualFolder="src/loading/" />
 		</Unit>
 		<Unit filename="src/soundDictionary.cpp">
 			<Option virtualFolder="src/base/" />

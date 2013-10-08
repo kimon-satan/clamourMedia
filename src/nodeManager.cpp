@@ -213,7 +213,13 @@ void nodeManager::updateNodePosition(string t_index, float x, float y) {
 void nodeManager::shiftNodePosition(string t_index, float x, float y) {
 
     if(!mNodes[t_index]->getIsDragOn())return;
+
     ofVec2f s(x,y);
+    if(mNodes[t_index]->getAnimOverride() > 0 || mNodes[t_index]->getIsNewShift()){
+        cout << "reset \n" << endl;
+        mNodes[t_index]->resetShift(x,y);
+        return;
+    }
     ofVec2f p = mNodes[t_index]->getShiftStart() + s * mNodes[t_index]->getShiftAmount();
     mNodes[t_index]->setRawPos_rel(p);
     if(mNodes[t_index]->getChanged() == CLAMOUR_NONE)mNodes[t_index]->setChanged(CLAMOUR_POSITION);
@@ -316,6 +322,7 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
     target->setDecSecs(temp.getDecSecs());
     target->setCanSleep(temp.getCanSleep());
     target->setIsRotate(temp.getIsRotate());
+    target->setShiftAmount(temp.getShiftAmount());
     target->init();
 
     //now create an edgeTemplate

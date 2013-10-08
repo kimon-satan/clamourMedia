@@ -20,11 +20,10 @@ class drawDictionary{
     static baseData createDrawData(string dt);
 
     //drawTypes here
-    static void debugZone(baseData &bd);
+    static void simpleZone(baseData &bd);
     static void debugNode(baseData &bd);
     static void flickerDrawData(baseData &bd);
     static void roundDrawData(baseData &bd);
-    static void pauseButtonData(baseData &bd);
     static void simplePointerData(baseData &bd);
 
 

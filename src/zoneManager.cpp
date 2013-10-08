@@ -99,14 +99,21 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
 bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
-    return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
+
+  //  return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
+    ofPoint intersect;
+    bool isIntersect = clamourUtils::pathInPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
+    if(isIntersect)n->setIntersect(intersect);
+    return isIntersect;
+
 }
 
 void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
     //finding centroid is not solved here so this method only works if zones drawn from the center
-
-    ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getMeanPos_abs());
+    ofVec2f v = n->getMeanPos_abs() - n->getIntersect();
+    ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getIntersect());
+    p = p + v;
     n->setRawPos_abs(p);
     n->modifyHistory();
 
@@ -114,15 +121,23 @@ void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
 void zoneManager::containNode(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
-    ofVec2f v(n->getMeanPos_abs() - z->getPos_abs());
+    ofPoint intersect;
+    bool isOutside = clamourUtils::pathOutPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
 
-    ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getMeanPos_abs());
-    ofVec2f d = (p - z->getPos_abs());
-    p -= d * 0.05; //move it slightly inside
+    if(isOutside){
+        ofVec2f v = n->getMeanPos_abs() - intersect;
+        ofVec2f vi(intersect - z->getPos_abs());
 
-    if(d.length() * 0.95 < v.length()) { //only if necessary
-        n->setRawPos_abs(p);
-        n->modifyHistory();
+        ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), intersect);
+        ofVec2f d = (p - z->getPos_abs());
+        p -= d * 0.05; //move it slightly inside
+        p = p + v;
+
+        if(d.length() * 0.95 < vi.length()) { //only if necessary
+            n->setRawPos_abs(p);
+            n->modifyHistory();
+        }
+
     }
 
 }
@@ -242,11 +257,9 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
             //potentially could need on/off for data storage
 
             map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
-            clamourNode temp = presetStore::nodePresets[it->stringParams["PRESET"]];
-
+            clamourNode temp = presetStore::nodePresets[it->stringParams["PRESET"]]; //load the node into the reaction for easier variation
             while(c_it != cap.end()) {
                 nodeManager::setNode(c_it->second, temp);
-                c_it->second->updatePath();
                 ++ c_it;
             }
         } else if(it->rType == "scaleNode"){
@@ -258,6 +271,7 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
                 parameter p = c_it->second->getDrawData().getParameter("size");
 
                 p.abs_val *= it->floatParams["SCALE"];
+                p.abs_val = min(1.0f, p.abs_val);
                 c_it->second->setDrawParameter(p);
                 ofPath pt = c_it->second->getEdgeTemplate();
                 pt.scale(it->floatParams["SCALE"], it->floatParams["SCALE"]);
@@ -272,6 +286,16 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
             while(c_it != cap.end()) {
                 float shift = c_it->second->getShiftAmount() * it->floatParams["SCALE"];
                 c_it->second->setShiftAmount(shift);
+                ++c_it;
+            }
+
+        }else if(it->rType == "scaleAttack"){
+
+            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+
+            while(c_it != cap.end()) {
+                float att = c_it->second->getAttSecs() * it->floatParams["SCALE"];
+                c_it->second->setAttSecs(att);
                 ++c_it;
             }
 

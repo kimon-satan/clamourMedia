@@ -51,7 +51,10 @@ class clamourUtils{
     public:
 
     static int rowToInt(string r);
+    static ofRectangle pathToPoints(ofPath p, vector<ofPoint> & pts);
     static bool pointInPath(ofPath p, ofVec2f v);
+    static bool pathInPath(ofPath intruder, ofPath host, ofPoint &intersect);
+    static bool pathOutPath(ofPath target, ofPath host, ofPoint &intersect);
     static ofPoint getInsideIntersect(ofPath p, ofPoint centroid, ofPoint invader);
     static mapType stringToMapType(string s);
 

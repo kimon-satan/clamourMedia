@@ -55,6 +55,9 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
     cmd.mCommand = XML.getValue("ACTION", "none");
 
     if(cmd.mCommand == "CREATE_ZONE") {
+        if(XML.tagExists("PRESET")) {
+            cmd.mZone = presetStore::zonePresets[XML.getValue("PRESET", "default")];
+        }
         xmlLoader::loadZone(cmd.mZone, XML);
         return;
     }
@@ -158,18 +161,7 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
     z.setPos_rel(ofVec2f(XML.getValue("X", 0.5), XML.getValue("Y",0.5)));
     ofPath p;
 
-    z.setDrawType(XML.getValue("DRAW_TYPE", "debugZone"));
-
-    pathFactory::createPath(p, z.getDrawData().getShapeType(),
-                            XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0), XML.getValue("SIZE", 0.1));
-    z.setEdgeTemplate(p);
-
-    z.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
-    z.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
-    z.setEnvType(XML.getValue("ENV_TYPE", "AR"));
-
-
-    z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder"));
+    if(XML.tagExists("DRAW_TYPE"))z.setDrawType(XML.getValue("DRAW_TYPE", "debugZone"));
 
     if(XML.pushTag("DRAW_PARAMS")) {
 
@@ -178,6 +170,20 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
         for(int i = 0; i < p.size(); i++)z.setDrawParameter(p[i]);
         XML.popTag();
     }
+
+    pathFactory::createPath(p, z.getDrawData().getShapeType(),
+                            XML.getValue("X_DIM",1.0),XML.getValue("Y_DIM", 1.0),
+                            z.getDrawData().getParameter("size").abs_val);
+    z.setEdgeTemplate(p);
+
+    if(XML.tagExists("ATTACK_SECS"))z.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
+    if(XML.tagExists("DECAY_SECS"))z.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
+    if(XML.tagExists("ENV_TYPE"))z.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+
+
+    if(XML.tagExists("SOUND_TYPE"))z.setSoundType(XML.getValue("SOUND_TYPE","brownExploder"));
+
+
 
     if(XML.pushTag("SOUND_PARAMS")) {
 
@@ -250,7 +256,7 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE","none"));
     if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "none"));
     if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
-    if(XML.tagExists("ROTATE"))n.setIsRotate(XML.getValue("ROTATE", true));
+    if(XML.tagExists("ROTATE")){n.setIsRotate(XML.getValue("ROTATE", true));}
 
     if(XML.tagExists("SHIFT"))n.setShiftAmount(XML.getValue("SHIFT", 0.2));
 

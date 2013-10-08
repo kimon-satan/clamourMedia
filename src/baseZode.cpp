@@ -99,7 +99,9 @@ void baseZode::update() {
         }
     }
 
-    if(animOverride > 0)animOverride -= 1;
+    if(animOverride > 0){
+        animOverride -= 1;
+    }
 }
 
 void baseZode::react() {

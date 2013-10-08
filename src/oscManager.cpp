@@ -238,16 +238,28 @@ void oscManager::sendBundle() {
 
     //send the client's outbundle to Meteor if it has messages waiting
 
-    map<string, ofxOscBundle>::iterator osc_it;
-
+    //nasty dropped message hack ... send five times ugh
+    map<string, cBundle>::iterator osc_it;
+    bool printed = false;
+    int count = 0;
     for(osc_it = outBundle.begin(); osc_it != outBundle.end(); osc_it++) {
 
-        if(osc_it->second.getMessageCount() > 0) {
-            sender.sendBundle(osc_it->second);
-            osc_it->second.clear();
+        if(osc_it->second.bundle.getMessageCount() > 0) {
+            printed = true;
+            //cout << osc_it->first << " - " << osc_it->second.getMessageCount() << ",";
+            sender.sendBundle(osc_it->second.bundle);
+            osc_it->second.sendCount += 1;
+            if(osc_it->second.sendCount == 5)osc_it->second.bundle.clear();
+            count ++;
         }
 
+
     }
+
+   // if(printed)cout << endl << "BUNDLE OUT AT: " << ofGetFrameNum() << endl;
+
+
+
 }
 
 
@@ -405,11 +417,14 @@ void oscManager::setText(vector<string> clients, string text) {
 void oscManager::addToBundle(string index, ofxOscMessage m) {
 
     if(outBundle.find(index) != outBundle.end()) {
-        outBundle[index].addMessage(m);
+        outBundle[index].bundle.addMessage(m);
+        outBundle[index].sendCount = 0;
     } else {
         ofxOscBundle b;
-        outBundle[index] = b;
-        outBundle[index].addMessage(m);
+        cBundle c;
+        c.bundle = b;
+        outBundle[index] = c;
+        outBundle[index].bundle.addMessage(m);
     }
 
 }

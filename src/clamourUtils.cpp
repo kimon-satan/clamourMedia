@@ -16,8 +16,12 @@ bool clamourUtils::pointInPath(ofPath p, ofVec2f  v){
     vector<ofPolyline> pls = p.getOutline();
     vector<ofPolyline>::iterator it = pls.begin();
 
+
     while(it != pls.end()){
-        if(it->inside(v))return true;
+        ofRectangle r = it->getBoundingBox();
+        if(r.inside(v)){
+            if(it->inside(v))return true; // don't bother with ray cast unless already in bounding box
+        }
         ++it;
     }
 
@@ -46,7 +50,7 @@ ofPoint clamourUtils::getInsideIntersect(ofPath p, ofPoint centroid, ofPoint inv
     vector<ofPoint> pts;
 
     for(int i = 0; i < pls.size(); i++){
-        vector<ofPoint> t = pls[i].getVertices(); //filterout to bounding box here
+        vector<ofPoint> t = pls[i].getVertices(); //filter out to bounding box here
         for(int j = 0; j < t.size(); j++){
             pts.push_back(t[j]);
         }
@@ -84,5 +88,65 @@ ofPoint clamourUtils::getInsideIntersect(ofPath p, ofPoint centroid, ofPoint inv
         return negP + edgeSeg * prop;
     }
 
+
+}
+
+ofRectangle clamourUtils::pathToPoints(ofPath p, vector<ofPoint> & pts){
+
+    vector<ofPolyline> pls = p.getOutline();
+    ofVec2f minVec(1,1);
+    ofVec2f maxVec(0,0);
+
+    for(int i = 0; i < pls.size(); i++){
+        vector<ofPoint> t = pls[i].getVertices();
+        for(int j = 0; j < t.size(); j++){
+            if(t[j].x < maxVec.x)minVec.x = t[j].x;
+            if(t[j].y < maxVec.y)minVec.y = t[j].y;
+            if(t[j].x > maxVec.x)maxVec.x = t[j].x;
+            if(t[j].y > maxVec.y)maxVec.y = t[j].y;
+            pts.push_back(t[j]);
+        }
+    }
+
+    ofVec2f dims = maxVec - minVec;
+    return ofRectangle(minVec.x, minVec.y, dims.x, dims.y); //the bounding box
+
+}
+
+bool clamourUtils::pathInPath(ofPath intruder, ofPath host, ofPoint & intersect){
+
+    vector<ofPoint> pts;
+    vector<ofPoint> pts_h;
+
+    ofRectangle ri = clamourUtils::pathToPoints(intruder, pts);
+    ofRectangle rh = clamourUtils::pathToPoints(host, pts_h);
+
+    for(int i = 0; i < pts.size(); i ++){
+        if(rh.inside(pts[i])){ // only bother if it's inside the bounding box
+            if(clamourUtils::pointInPath(host, pts[i])){
+                intersect = pts[i];
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool clamourUtils::pathOutPath(ofPath target, ofPath host, ofPoint &intersect){
+
+    vector<ofPoint> pts_t;
+
+    clamourUtils::pathToPoints(target, pts_t);
+
+     for(int i = 0; i < pts_t.size(); i ++){ // no possibility for optimisations here
+        if(!clamourUtils::pointInPath(host, pts_t[i])){
+
+            intersect = pts_t[i]; //should find furthest really
+            return true;
+        }
+    }
+
+    return false;
 
 }

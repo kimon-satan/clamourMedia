@@ -93,6 +93,7 @@ void nodeRenderer::simplePointer(ofPtr<clamourNode> n, baseData &bd) {
 
     ofScale(screenData::height, screenData::height,1.0);
     ofTranslate(n->getMeanPos_abs());
+    if(n->getIsRotate())ofRotate(n->getAvRot());
 
     float h = bd.getParameter("colH").abs_val * 255;
     float s = bd.getParameter("colS").abs_val * 255;
@@ -103,7 +104,11 @@ void nodeRenderer::simplePointer(ofPtr<clamourNode> n, baseData &bd) {
     ofColor c;
 
     if(n->getIsFiring()){
-        (ofGetFrameNum()%pulse == 0) ? c.setHsb(h,s,bF) : c.setHsb(h,s,b);
+        if(pulse > 0){
+            (ofGetFrameNum()%pulse == 0) ? c.setHsb(h,s,bF) : c.setHsb(h,s,b);
+        }else{
+            c.setHsb(h,s,bF);
+        }
 
         float s = bd.getParameter("size").abs_val * bd.getParameter("shudder").abs_val * n->getEnvVal();
         ofTranslate(ofRandomf() * s, ofRandomf() * s, 0);

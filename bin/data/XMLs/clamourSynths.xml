@@ -56,7 +56,55 @@
 			<ABS_VAL>0</ABS_VAL>
 			<WARP>lin</WARP>
 			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+	</SYNTH>
 
+	<SYNTH>
+		<NAME>brownExploder</NAME>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+	</SYNTH>
+
+
+	<SYNTH>
+		<NAME>whiteExploder</NAME>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
 		</PARAM>
 	</SYNTH>
 
@@ -103,7 +151,7 @@
 			<UNIT/>
 		</PARAM>
 	</SYNTH>
-	
+
 	<SYNTH>
 		<NAME>sinAm</NAME>
 		<PARAM>
@@ -139,8 +187,8 @@
 			<UNIT/>
 		</PARAM>
 	</SYNTH>
-	
-	
+
+
 	<SYNTH>
 		<NAME>pulseAm</NAME>
 		<PARAM>
@@ -184,7 +232,7 @@
 			<UNIT/>
 		</PARAM>
 	</SYNTH>
-	
+
 	<SYNTH>
 		<NAME>noise0Am</NAME>
 		<PARAM>
@@ -220,8 +268,8 @@
 			<UNIT/>
 		</PARAM>
 	</SYNTH>
-	
-		
+
+
 	<SYNTH>
 		<NAME>noise1Am</NAME>
 		<PARAM>
@@ -285,6 +333,176 @@
 			<UNIT/>
 		</PARAM>
 	</SYNTH>
+
+	<SYNTH>
+		<NAME>sinBeep</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.1</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>freq</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>5000</MAX_VAL>
+			<ABS_VAL>1500</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>shitBeep</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>freq</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>10000</MAX_VAL>
+			<ABS_VAL>5000</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>preAmp</NAME>
+			<MIN_VAL>1</MIN_VAL>
+			<MAX_VAL>10</MAX_VAL>
+			<ABS_VAL>5</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>thinBeep</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>freq</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>5000</MAX_VAL>
+			<ABS_VAL>1500</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>width</NAME>
+			<MIN_VAL>0.01</MIN_VAL>
+			<MAX_VAL>1.0</MAX_VAL>
+			<ABS_VAL>0.1</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>rumbler</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>freq</NAME>
+			<MIN_VAL>50</MIN_VAL>
+			<MAX_VAL>200</MAX_VAL>
+			<ABS_VAL>100</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>filFreq</NAME>
+			<MIN_VAL>50</MIN_VAL>
+			<MAX_VAL>200</MAX_VAL>
+			<ABS_VAL>100</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+
+
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>static</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>density</NAME>
+			<MIN_VAL>50</MIN_VAL>
+			<MAX_VAL>200</MAX_VAL>
+			<ABS_VAL>100</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
+
 
 </CLAMOUR_SYNTHS>
 
