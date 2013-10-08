@@ -230,7 +230,9 @@
 		<DRAW_PARAMS>
 			<PARAM><NAME>size</NAME><ABS_VAL>0.1</ABS_VAL></PARAM>
 		</DRAW_PARAMS>
+		<ON_RULE><TYPE>MIN_OCCUPANTS</TYPE><GE>1</GE></ON_RULE>
 		<REACT><TYPE>closeInZone</TYPE><TRIG>ON</TRIG></REACT>
+		<REACT><TYPE>closeOutZone</TYPE><TRIG>ON_OFF</TRIG></REACT>
 	</ZONE_PRESET>
 
 	<!--    GAMES DEFINED HERE  -->
@@ -290,9 +292,19 @@
 		</STAGE>
 		<STAGE>
 			<COMMAND><ACTION>CREATE_ZONE</ACTION>
-				<NAME>test</NAME>
+				<NAME>test1</NAME>
 				<X>0.5</X><Y>0.5</Y>
 				<PRESET>simpleButton</PRESET>
+				<REACT><TYPE>openInOther</TYPE><Z_TARGET>test2</Z_TARGET><TRIG>ON</TRIG></REACT>
+			</COMMAND>
+		</STAGE>
+		<STAGE>
+			<COMMAND><ACTION>CREATE_ZONE</ACTION>
+				<NAME>test2</NAME>
+				<X>0.5</X><Y>0.7</Y>
+				<PRESET>simpleButton</PRESET>
+				<REACT><TYPE>closeOut</TYPE></REACT><TRIG>ON_OFF</TRIG>
+				<REACT><TYPE>openInOther</TYPE><Z_TARGET>test1</Z_TARGET><TRIG>ON</TRIG></REACT>
 			</COMMAND>
 		</STAGE>
 	</GAME>

@@ -67,8 +67,11 @@ void zoneRenderer::simpleButton(ofPtr<zone> z, baseData &bd) {
 
     e.setColor(col);
 
-    e.draw();
-    p.draw();
+    ofPushMatrix();
+        ofRotate(ofGetFrameNum());
+        e.draw();
+        p.draw();
+    ofPopMatrix();
 
     ofSetColor(col);
     //draw the symbol
@@ -134,7 +137,6 @@ void zoneRenderer::ffwdSymbol(float s, float w) {
             0, s * 0.2,
             s * 0.35, 0
             );
-
 
 }
 

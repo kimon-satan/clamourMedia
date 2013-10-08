@@ -11,7 +11,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
     map<string, ofPtr<zone> >::iterator z_it;
     map<string, ofPtr<clamourNode> >::iterator n_it;
 
-     //call update method here which resets closed zones and increments reactions etc
+    //call update method here which resets closed zones and increments reactions etc
 
     for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it) {
         z_it->second->update();
@@ -100,7 +100,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
 
-  //  return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
+    //  return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
     ofPoint intersect;
     bool isIntersect = clamourUtils::pathInPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
     if(isIntersect)n->setIntersect(intersect);
@@ -124,7 +124,7 @@ void zoneManager::containNode(ofPtr<clamourNode> n, ofPtr<zone> z) {
     ofPoint intersect;
     bool isOutside = clamourUtils::pathOutPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
 
-    if(isOutside){
+    if(isOutside) {
         ofVec2f v = n->getMeanPos_abs() - intersect;
         ofVec2f vi(intersect - z->getPos_abs());
 
@@ -159,7 +159,7 @@ bool zoneManager::getIsRuleMet(ofPtr<zone> z, zoneRule r) {
         if(z->getCaptureNodes().size() >= r.gtOccupants  &&
                 z->getCaptureNodes().size() <= r.ltOccupants)return true;
 
-    }else{
+    } else {
 
         return false;
 
@@ -176,9 +176,9 @@ bool zoneManager::getOnTrig(ofPtr<zone> z) {
     zoneRule on_zr = z->getOnRule();
     zoneRule off_zr = z->getOffRule();
 
-    if(!on_zr.isEnabled){
+    if(!on_zr.isEnabled) {
         return true;
-    }else if(!off_zr.isEnabled) {
+    } else if(!off_zr.isEnabled) {
         return getIsRuleMet(z,on_zr);
     } else {
         return getIsRuleMet(z, off_zr)? false : getIsRuleMet(z,on_zr); //off overrides on
@@ -193,9 +193,9 @@ bool zoneManager::getOffTrig(ofPtr<zone> z) {
     zoneRule on_zr = z->getOnRule();
     zoneRule off_zr = z->getOffRule();
 
-    if(!on_zr.isEnabled){
+    if(!on_zr.isEnabled) {
         return true;
-    }else if(!off_zr.isEnabled) {
+    } else if(!off_zr.isEnabled) {
         return !getIsRuleMet(z,on_zr);// will fire when on rule is no longer met
     } else {
         return getIsRuleMet(z, off_zr); // off overrides on
@@ -247,6 +247,25 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
             z->setIsClosedOut(!isReverse);
         } else if(it->rType == "openOutZone") {
             z->setIsClosedOut(isReverse);
+        } else if(it->rType == "closeInOther") {
+
+            for(int i = 0; i < it->zTargets.size(); i++) {
+
+                if(mZones.find(it->zTargets[i]) != mZones.end()) {
+                    mZones[it->zTargets[i]]->setIsClosedIn(!isReverse);
+                }
+
+            }
+
+        } else if(it->rType == "openInOther") {
+
+
+            for(int i = 0; i < it->zTargets.size(); i++) {
+                if(mZones.find(it->zTargets[i]) != mZones.end()) {
+                    mZones[it->zTargets[i]]->setIsClosedIn(isReverse);
+                }
+            }
+
         } else if(it->rType == "incrementStage") {
             appReactions.push_back("incrementStage");
         } else if(it->rType == "repeatStage") {
@@ -262,7 +281,7 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
                 nodeManager::setNode(c_it->second, temp);
                 ++ c_it;
             }
-        } else if(it->rType == "scaleNode"){
+        } else if(it->rType == "scaleNode") {
 
             map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
 
@@ -279,7 +298,7 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
                 c_it->second->updatePath();
                 ++ c_it;
             }
-        }else if(it->rType == "scaleShift"){
+        } else if(it->rType == "scaleShift") {
 
             map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
 
@@ -289,7 +308,7 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
                 ++c_it;
             }
 
-        }else if(it->rType == "scaleAttack"){
+        } else if(it->rType == "scaleAttack") {
 
             map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
 

@@ -29,6 +29,7 @@ struct reaction{
 
     //closeOutZone, openOutZone, closeInZone, openInZone, incrementStage
     string trig; //ON, OFF, ON_OFF
+    vector<string> zTargets;
 
     map<string, string> stringParams;
     map<string, float> floatParams;

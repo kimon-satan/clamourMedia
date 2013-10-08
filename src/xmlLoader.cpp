@@ -245,6 +245,12 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
     if(XML.tagExists("PRESET"))r.stringParams["PRESET"] = XML.getValue("PRESET","default");
     if(XML.tagExists("SCALE"))r.floatParams["SCALE"] = XML.getValue("SCALE", 1.0);
 
+    int numZs = XML.getNumTags("Z_TARGET");
+
+    for(int i = 0; i < numZs; i++){
+        r.zTargets.push_back(XML.getValue("Z_TARGET", "",i));
+    }
+
 }
 
 void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
