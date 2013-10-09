@@ -52,6 +52,17 @@ void scMessenger::startSynth(string z_name, clamourEvent & e, baseData & sd) {
 
 }
 
+void scMessenger::stopSynth(string z_name, baseData & sd){
+
+
+    ofxOscMessage m;
+    m.setAddress("/stopSynth");
+    m.addStringArg(z_name + "_" + ofToString(sd.getEventIndex(), 0));
+    SCsender.sendMessage(m);
+
+    scMessenger::logMessages(m);
+}
+
 void scMessenger::sendInit() {
 
     ofxOscMessage m;

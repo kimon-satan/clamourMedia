@@ -224,7 +224,8 @@ void zoneManager::onReact(ofPtr<zone> z) {
 
     z->setIsFired(true);
     z->react();
-    z->setChanged(CLAMOUR_ON_OFF);
+    z->setChanged(CLAMOUR_ON_OFF); //still needed ?
+    scMessenger::startSynth(z);
     implementReactions(z, true);
 
 }
@@ -232,7 +233,11 @@ void zoneManager::onReact(ofPtr<zone> z) {
 void zoneManager::offReact(ofPtr<zone> z) {
 
     z->setIsFired(false);
-    if(z->getEnvType() == CLAMOUR_ASR)z->setChanged(CLAMOUR_ON_OFF);
+
+    if(z->getEnvType() == CLAMOUR_ASR){
+        scMessenger::stopSynth(z);
+        z->setChanged(CLAMOUR_ON_OFF); // is this still needed
+    }
     implementReactions(z, false);
 
 }
@@ -359,7 +364,11 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
 
     } else if(r.rType == "event") {
 
-        z->triggerEvent(r.intParams["ENV_INDEX"]);
+        if(!isReverse){
+            z->triggerEvent(r.intParams["ENV_INDEX"]);
+        }else{
+            z->endEvent(r.intParams["ENV_INDEX"]);
+        }
 
     }
 }
@@ -371,8 +380,6 @@ void zoneManager::createZone(string name) {
     ofPtr<zone> z = ofPtr<zone>(new zone());
     mZones[name] = z;
 
-
-
 }
 
 
@@ -382,6 +389,7 @@ void zoneManager::createZone(zone z) {
 //    cout << z.getSoundFile() << endl;
     ofPtr<zone> zp = ofPtr<zone>(new zone(z));
     zp->recalcAbsDims();
+    zp->init();
     mZones[zp->getName()] = zp;
 
 }
@@ -396,6 +404,7 @@ void zoneManager::showZone(string name) {
 
 void zoneManager::destroyZone(string name) {
 
+    mZones[name]->endEvents();
 
     if(mZones[name]->getCaptureNodes().size() > 0) {
 
@@ -420,22 +429,8 @@ void zoneManager::destroyAllZones() {
 
     while(zit != mZones.end()) {
 
-        if(zit->second->getCaptureNodes().size() == 0) {
-            ++zit;
-            continue;
-        }
-
-        map<string, ofPtr<clamourNode> > :: iterator nit = zit->second->getCaptureNodes().begin();
-
-
-        while(nit != zit->second->getCaptureNodes().end()) {
-
-            nit->second->resetZonePair();
-
-            ++nit;
-        }
-
-        ++ zit;
+      destroyZone(zit->first);
+      ++zit;
     }
 
     mZones.clear();

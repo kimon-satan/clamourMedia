@@ -14,6 +14,16 @@ zone::zone()
 
 }
 
+void zone::init(){
+
+    drawData.init(pos_rel);
+    soundData.init(pos_rel);
+
+    for(int i = 0; i < mSounds.size(); i++){
+        mSounds[i].init(pos_rel);
+    }
+
+}
 
 void zone::addNode(ofPtr<clamourNode> n)
 {
@@ -54,14 +64,37 @@ void zone::updateDrawData()
 
 void zone::triggerEvent(int i){
 
-    mEvents[i - 1].react();
+    if(mEvents.size() > i -1){
+        mEvents[i - 1].react();
 
-    for(int s = 0; s < mSounds.size(); s ++){
-        if(mSounds[s].getEventIndex() == i){
-            scMessenger::startSynth(name, mEvents[i - 1], mSounds[s]);
+        for(int s = 0; s < mSounds.size(); s ++){
+            if(mSounds[s].getEventIndex() == i){
+                scMessenger::startSynth(name, mEvents[i - 1], mSounds[s]);
+            }
+            //send the osc to superCollider via OSC manager
         }
-        //send the osc to superCollider via OSC manager
     }
+}
+
+void zone::endEvent(int i){
+
+    if(mEvents.size() > i -1){
+
+         mEvents[i - 1].setIsFired(false);
+
+        for(int s = 0; s < mSounds.size(); s ++){
+            if(mSounds[s].getEventIndex() == i){
+                scMessenger::stopSynth(name, mSounds[s]);
+            }
+            //send the osc to superCollider via OSC manager
+        }
+    }
+
+}
+
+void zone::endEvents(){
+
+    for(int i = 0; i < mEvents.size(); i ++)endEvent(i + 1);
 }
 
 //getters and setters

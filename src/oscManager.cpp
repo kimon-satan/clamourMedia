@@ -177,38 +177,9 @@ void oscManager::updateOutMessages() {
         ++it;
     }
 
-    if(pZoneManager->getZones().size() > 0) {
-
-        map<string, ofPtr<zone> > t_zones = pZoneManager->getZones();
-        map<string, ofPtr<zone> >::iterator zit = t_zones.begin();
-
-        while(zit != t_zones.end()) {
-
-            if(zit->second->getChanged() == CLAMOUR_ON_OFF) {
-
-                zit->second->setChanged(CLAMOUR_NONE);
-
-                if(zit->second->getIsFiring()) {
-
-                    //send an osc to supercollider
-                    scMessenger::startSynth(zit->second);
-
-                } else {
-
-                    //send a stop osc
-                }
-
-
-            }
-
-            ++zit;
-        }
-    }
 
     map<string, ofPtr<baseZode> > t_synths = pSplashManager->getSynths();
     map<string, ofPtr<baseZode> >::iterator sit = t_synths.begin();
-
-
 
     while(sit != t_synths.end()) {
 

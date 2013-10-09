@@ -47,6 +47,8 @@ public:
     zone();
     virtual ~zone();
 
+    void init();
+
     void addNode(ofPtr<clamourNode> p);
     void removeNode(ofPtr<clamourNode> p);
 
@@ -57,6 +59,8 @@ public:
     //getters and setters
 
     void triggerEvent(int i);
+    void endEvent(int i);
+    void endEvents();
 
     map<string, ofPtr<clamourNode> > getCaptureNodes();
 

@@ -17,6 +17,7 @@ class scMessenger
             static void sendInit();
 
             static void stopSynth(ofPtr<baseZode> n);
+            static void stopSynth(string z_name, baseData & sd);
             static void updateSynth(ofPtr<baseZode> n);
 
             static void startSynth(ofPtr<baseZode> z);
