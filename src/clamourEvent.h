@@ -40,11 +40,15 @@ public:
     bool getIsFiring();
     void setIsFiring(bool b);
 
+    int getExecAt();
+    void setExecAt(int i);
+
 protected:
 
     int animOverride; // really should be in ClamourNode
     bool isFiring;
     bool isFired;
+    int execAt;
 
     envType mEnvType;
 

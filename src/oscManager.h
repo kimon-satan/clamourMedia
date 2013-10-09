@@ -10,6 +10,8 @@
 #define __clamourMedia__oscManager__
 
 #include "ofxOsc.h"
+#include  "scMessenger.h""
+
 #include "nodeManager.h"
 #include "clientManager.h"
 #include "zoneManager.h"
@@ -17,8 +19,7 @@
 
 #define METEOR_IN_PORT 41234
 #define METEOR_OUT_PORT 42345
-#define SC_OUT_PORT 57120
-#define NUM_MSG_STRINGS 6
+
 
 
 struct cBundle{
@@ -69,9 +70,12 @@ class oscManager{
     void updateSynth(ofPtr<baseZode> n);
 
     void startSynth(ofPtr<baseZode> z);
+    void startSynth(string z_name, clamourEvent & e, baseData & sd);
 
     //getters and setters (internal)
     string getMsgString(int mt);
+
+    static ofxOscSender SCsender;
 
     private:
 
@@ -80,7 +84,7 @@ class oscManager{
 
     ofxOscReceiver receiver;
     ofxOscSender sender;
-    ofxOscSender SCsender;
+
 
     map<string, cBundle> outBundle;
 

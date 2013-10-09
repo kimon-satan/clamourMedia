@@ -59,6 +59,9 @@ public:
 
     vector<float> getAbsVals();
 
+    void setEventIndex(int i);
+    int getEventIndex();
+
     virtual ~baseData(){};
 
 
@@ -72,6 +75,7 @@ private:
     string shapeType;
     vector<string> slaveParameters;
     string soundFile;
+    int eventIndex;
 
 
 };

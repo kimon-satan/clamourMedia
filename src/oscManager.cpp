@@ -8,12 +8,13 @@
 
 #include "oscManager.h"
 
+ofxOscSender oscManager::SCsender;
 
 oscManager::oscManager() {
 
     receiver.setup(METEOR_IN_PORT);
     sender.setup("192.168.2.200", METEOR_OUT_PORT);
-    SCsender.setup("localhost", SC_OUT_PORT);
+
 
     for(int i = 0; i < 3; i ++) {
         vector<string> s;
@@ -139,6 +140,8 @@ void oscManager::updateInMessages() {
 
 void oscManager::updateOutMessages() {
 
+    //TODO put back into various classes and lose flags
+
     //stop the synths for recently turned off nodes
     map<string, ofPtr<clamourNode> > t_nodes = pNodeManager->getNodes();
     map<string, ofPtr<clamourNode> >::iterator it;
@@ -150,22 +153,22 @@ void oscManager::updateOutMessages() {
 
 
             if(it->second->getIsFired()) {
-                startSynth(it->second);
+                scMessenger::startSynth(it->second);
             } else {
-                stopSynth(it->second);
+                scMessenger::stopSynth(it->second);
             }
 
 
         } else if(it->second->getChanged() == CLAMOUR_SOUND) {
 
             if(it->second->getIsFiring()) {
-                stopSynth(it->second);
-                startSynth(it->second);
+                scMessenger::stopSynth(it->second);
+                scMessenger::startSynth(it->second);
             }
 
         } else if(it->second->getChanged() == CLAMOUR_POSITION) {
 
-            updateSynth(it->second);
+            scMessenger::updateSynth(it->second);
 
         }
 
@@ -188,7 +191,7 @@ void oscManager::updateOutMessages() {
                 if(zit->second->getIsFiring()) {
 
                     //send an osc to supercollider
-                    startSynth(zit->second);
+                    scMessenger::startSynth(zit->second);
 
                 } else {
 
@@ -215,13 +218,13 @@ void oscManager::updateOutMessages() {
             if(sit->second->getIsFiring()) {
 
                 //send an osc to supercollider
-                startSynth(sit->second);
+                scMessenger::startSynth(sit->second);
                 if(sit->second->getEnvType() == CLAMOUR_AR) {
                     sit->second->setIsFiring(false);
                 }
 
             } else {
-                stopSynth(sit->second);
+                scMessenger::stopSynth(sit->second);
                 sit->second->setIsFiring(false);
                 //send a stop osc
             }
@@ -435,7 +438,7 @@ void oscManager::addToBundle(string index, ofxOscMessage m) {
 
 //------------------------------SuperCollider Messages---------------------------------//
 
-void oscManager::sendInit() {
+/*void oscManager::sendInit() {
 
     ofxOscMessage m;
     m.setAddress("/init");
@@ -477,6 +480,8 @@ void oscManager::startSynth(ofPtr<baseZode> n) {
 
 
 
+
+
 void oscManager::updateSynth(ofPtr<baseZode> n) {
 
     baseData sd = n->getSoundData();
@@ -514,4 +519,4 @@ void oscManager::stopSynth(ofPtr<baseZode> n) {
 
     logMessages(m, CLAMOUR_MSG_SC_OUT);
 
-}
+}*/

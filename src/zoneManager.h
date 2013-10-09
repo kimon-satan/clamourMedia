@@ -5,6 +5,15 @@
 #include "presetStore.h"
 #include "nodeManager.h"
 
+struct eventComm{
+
+    string ownerIndex;
+    reaction r;
+    int execAt;
+    int eventIndex;
+
+};
+
 class zoneManager
 {
     public:
@@ -56,10 +65,12 @@ class zoneManager
         void onReact(ofPtr<zone> z);
         void offReact(ofPtr<zone> z);
         void implementReactions(ofPtr<zone> z, bool isOn);
+        void implementReaction(reaction &r, ofPtr<zone> z, bool isReverse = false);
 
         map <string, ofPtr<zone> > mZones;
 
         vector<string> appReactions;
+        vector<eventComm> mFutureEvents;
 
 
 };

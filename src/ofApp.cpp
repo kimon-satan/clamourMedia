@@ -22,6 +22,7 @@ void ofApp::setup() {
     }
 
     soundDictionary::loadSynthDefs();
+    scMessenger::setup();
 
     mClientManager = ofPtr<clientManager>(new clientManager(mPlayerIndexes));
 
@@ -42,7 +43,6 @@ void ofApp::setup() {
 
     isMouseDown = false;
 
-    mOscManager->sendInit();
 
     loadXML();
     mCurrentGame = mGames[0];
@@ -52,6 +52,7 @@ void ofApp::setup() {
     mGameBrowseIndex = 0;
 
     setupGUI();
+
 
 }
 
@@ -299,7 +300,7 @@ void ofApp::update() {
     t = (ofxUITextArea *)gui->getWidget("METEOR_OSC_OUT");
     t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_METEOR_OUT));
     t = (ofxUITextArea *)gui->getWidget("SC_OSC_OUT");
-    t->setTextString(mOscManager->getMsgString(CLAMOUR_MSG_SC_OUT));
+    t->setTextString(scMessenger::getMsgString());
 
 }
 

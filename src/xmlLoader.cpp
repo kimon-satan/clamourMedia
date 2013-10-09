@@ -232,6 +232,46 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
 
     }
 
+    int numSounds = XML.getNumTags("SOUND");
+
+    for(int i = 0; i < numSounds; i ++){
+
+        if(XML.pushTag("SOUND", i)){
+
+            baseData bd;
+
+            string st = XML.getValue("TYPE", "none");
+            if(st != "none"){
+                bd = soundDictionary::createSoundData(st);
+            }else{
+                bd.setName(st);
+            }
+
+            bd.setEventIndex(XML.getValue("EVENT" , 0));
+
+            //load up the sound and bind to trigger event ...
+             if(XML.pushTag("SOUND_PARAMS")) {
+
+                if(XML.tagExists("FILE"))bd.setSoundFile(XML.getValue("FILE", "default"));
+                vector<parameter> p;
+                xmlLoader::loadParams( p ,XML);
+
+                for(int i = 0; i < p.size(); i++){
+                    p[i].index = bd.getParameter(p[i].name).index;
+                    p[i].warp = bd.getParameter(p[i].name).warp;
+                    bd.setParameter(p[i]);
+                }
+                XML.popTag();
+            }
+            //
+
+            z.addSound(bd);
+
+            XML.popTag();
+        }
+
+    }
+
 
 }
 
@@ -256,6 +296,7 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
     if(XML.tagExists("PRESET"))r.stringParams["PRESET"] = XML.getValue("PRESET","default");
     if(XML.tagExists("SCALE"))r.floatParams["SCALE"] = XML.getValue("SCALE", 1.0);
     if(XML.tagExists("ENV_INDEX"))r.intParams["ENV_INDEX"] = XML.getValue("ENV_INDEX", 1);
+    if(XML.tagExists("DELAY_SECS"))r.floatParams["DELAY_SECS"] = XML.getValue("DELAY_SECS", 0.25);
 
     int numZs = XML.getNumTags("Z_TARGET");
 

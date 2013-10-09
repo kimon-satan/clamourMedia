@@ -196,6 +196,12 @@ int clamourEvent::getAnimOverride(){
     return animOverride;
 }
 
+int clamourEvent::getExecAt(){
+    return execAt;
+}
+
+void clamourEvent::setExecAt(int i){execAt = i;}
+
 clamourEvent::~clamourEvent()
 {
     //dtor

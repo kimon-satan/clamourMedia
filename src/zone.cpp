@@ -55,10 +55,20 @@ void zone::updateDrawData()
 void zone::triggerEvent(int i){
 
     mEvents[i - 1].react();
+
+    for(int s = 0; s < mSounds.size(); s ++){
+        if(mSounds[s].getEventIndex() == i){
+            scMessenger::startSynth(name, mEvents[i - 1], mSounds[s]);
+        }
+        //send the osc to superCollider via OSC manager
+    }
 }
 
 //getters and setters
+void zone::addSound(baseData bd){
 
+    mSounds.push_back(bd);
+}
 
 
 map<string, ofPtr<clamourNode> > zone::getCaptureNodes()

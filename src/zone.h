@@ -4,6 +4,7 @@
 
 #include "clamourNode.h"
 #include "baseZode.h"
+#include "scMessenger.h"
 
 struct zoneRule {
 
@@ -91,6 +92,7 @@ public:
     void setReactions(vector<reaction>);
     void addReaction(reaction e);
 
+    void addSound(baseData bd);
 
 
 private:
@@ -119,6 +121,7 @@ private:
     //extra
 
     vector<clamourEvent> mEvents;
+    vector<baseData> mSounds;
 
 
 };

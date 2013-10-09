@@ -8,6 +8,20 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
     appReactions.clear();
 
+    //implement scheduled commands
+    vector<eventComm>::iterator e_it = mFutureEvents.begin();
+
+    while(e_it != mFutureEvents.end()) {
+        if(e_it->execAt == ofGetFrameNum()) {
+            if(mZones.find(e_it->ownerIndex) != mZones.end()){
+                implementReaction(e_it->r, mZones[e_it->ownerIndex]);
+            }
+            e_it = mFutureEvents.erase(e_it);
+        } else {
+            ++e_it;
+        }
+    }
+
     map<string, ofPtr<zone> >::iterator z_it;
     map<string, ofPtr<clamourNode> >::iterator n_it;
 
@@ -229,7 +243,6 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
     vector<reaction> r = z->getReactions(); //TODO copy the reactions out and replace them at the end of this method
     // ptrs don't work here
     vector<reaction>::iterator it = r.begin();
-    map<string, ofPtr<clamourNode> > cap = z->getCaptureNodes();
 
     while(it != r.end()) {
 
@@ -241,100 +254,115 @@ void zoneManager::implementReactions(ofPtr<zone> z, bool isOn) {
 
         bool isReverse = (it->trig == "ON_OFF" && !isOn);
 
-        if(it->rType == "closeInZone") {
-            z->setIsClosedIn(!isReverse);
-        } else if(it->rType == "openInZone") {
-            z->setIsClosedIn(isReverse);
-        } else if(it->rType == "closeOutZone") {
-            z->setIsClosedOut(!isReverse);
-        } else if(it->rType == "openOutZone") {
-            z->setIsClosedOut(isReverse);
-        } else if(it->rType == "closeInOther") {
+        vector<ofPtr<zone> > zt;
 
+        if(it->zTargets.size() == 0){
+            zt.push_back(z);
+        }else{
             for(int i = 0; i < it->zTargets.size(); i++) {
-
-                if(mZones.find(it->zTargets[i]) != mZones.end()) {
-                    mZones[it->zTargets[i]]->setIsClosedIn(!isReverse);
-                }
-
-            }
-
-        } else if(it->rType == "openInOther") {
-
-
-            for(int i = 0; i < it->zTargets.size(); i++) {
-                if(mZones.find(it->zTargets[i]) != mZones.end()) {
-                    mZones[it->zTargets[i]]->setIsClosedIn(isReverse);
-                }
-            }
-
-        } else if(it->rType == "incrementStage") {
-            appReactions.push_back("incrementStage");
-        } else if(it->rType == "repeatStage") {
-            appReactions.push_back("repeatStage");
-        } else if(it->rType == "decrementStage") {
-            appReactions.push_back("decrementStage");
-        } else if(it->rType == "transformNode") {
-            //potentially could need on/off for data storage
-
-            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
-            clamourNode temp = presetStore::nodePresets[it->stringParams["PRESET"]]; //load the node into the reaction for easier variation
-            while(c_it != cap.end()) {
-                nodeManager::setNode(c_it->second, temp);
-                ++ c_it;
-            }
-        } else if(it->rType == "scaleNode") {
-
-            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
-
-            while(c_it != cap.end()) {
-
-                parameter p = c_it->second->getDrawData().getParameter("size");
-
-                p.abs_val *= it->floatParams["SCALE"];
-                p.abs_val = min(1.0f, p.abs_val);
-                c_it->second->setDrawParameter(p);
-                ofPath pt = c_it->second->getEdgeTemplate();
-                pt.scale(it->floatParams["SCALE"], it->floatParams["SCALE"]);
-                c_it->second->setEdgeTemplate(pt);
-                c_it->second->updatePath();
-                ++ c_it;
-            }
-        } else if(it->rType == "scaleShift") {
-
-            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
-
-            while(c_it != cap.end()) {
-                float shift = c_it->second->getShiftAmount() * it->floatParams["SCALE"];
-                c_it->second->setShiftAmount(shift);
-                ++c_it;
-            }
-
-        } else if(it->rType == "scaleAttack") {
-
-            map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
-
-            while(c_it != cap.end()) {
-                float att = c_it->second->getAttSecs() * it->floatParams["SCALE"];
-                c_it->second->setAttSecs(att);
-                ++c_it;
-            }
-
-        }else if(it->rType == "eventOther"){
-
-             for(int i = 0; i < it->zTargets.size(); i++) {
-                if(mZones.find(it->zTargets[i]) != mZones.end()) {
-                    mZones[it->zTargets[i]]->triggerEvent(it->intParams["ENV_INDEX"]);
-                }
+                if(mZones.find(it->zTargets[i]) != mZones.end())zt.push_back(mZones[it->zTargets[i]]);
             }
         }
 
-        ++it;
+        for(int i = 0; i < zt.size(); i++) {
+
+            if(it->floatParams.find("DELAY_SECS") != it->floatParams.end()) {
+
+                //ON_OFF events not available for these
+                //very messy definitely needs reworking
+
+                eventComm e;
+                int delFrames = it->floatParams["DELAY_SECS"] * ofGetFrameRate();
+                e.execAt = ofGetFrameNum() + delFrames;
+                if(it->intParams.find("ENV_INDEX") != it->intParams.end())e.eventIndex = it->intParams["ENV_INDEX"];
+                e.ownerIndex = zt[i]->getName();
+                e.r = *it;
+                mFutureEvents.push_back(e);
+
+
+            }else{
+                //implement immediately
+                implementReaction(*it, zt[i], isReverse);
+            }
+
+        }
+         ++it;
     }
 
-    z->setReactions(r);
+    //z->setReactions(r); NOT CURRENTLY STORING DATA
 
 };
+
+void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) {
+
+    map<string, ofPtr<clamourNode> > cap = z->getCaptureNodes();
+
+    if(r.rType == "closeInZone") {
+        z->setIsClosedIn(!isReverse);
+    } else if(r.rType == "openInZone") {
+        z->setIsClosedIn(isReverse);
+    } else if(r.rType == "closeOutZone") {
+        z->setIsClosedOut(!isReverse);
+    } else if(r.rType == "openOutZone") {
+        z->setIsClosedOut(isReverse);
+    } else if(r.rType == "incrementStage") {
+        appReactions.push_back("incrementStage");
+    } else if(r.rType == "repeatStage") {
+        appReactions.push_back("repeatStage");
+    } else if(r.rType == "decrementStage") {
+        appReactions.push_back("decrementStage");
+    } else if(r.rType == "transformNode") {
+        //potentially could need on/off for data storage
+
+        map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+        clamourNode temp = presetStore::nodePresets[r.stringParams["PRESET"]]; //load the node into the reaction for easier variation
+        while(c_it != cap.end()) {
+            nodeManager::setNode(c_it->second, temp);
+            ++ c_it;
+        }
+    } else if(r.rType == "scaleNode") {
+
+        map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+
+        while(c_it != cap.end()) {
+
+            parameter p = c_it->second->getDrawData().getParameter("size");
+
+            p.abs_val *= r.floatParams["SCALE"];
+            p.abs_val = min(1.0f, p.abs_val);
+            c_it->second->setDrawParameter(p);
+            ofPath pt = c_it->second->getEdgeTemplate();
+            pt.scale(r.floatParams["SCALE"], r.floatParams["SCALE"]);
+            c_it->second->setEdgeTemplate(pt);
+            c_it->second->updatePath();
+            ++ c_it;
+        }
+    } else if(r.rType == "scaleShift") {
+
+        map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+
+        while(c_it != cap.end()) {
+            float shift = c_it->second->getShiftAmount() * r.floatParams["SCALE"];
+            c_it->second->setShiftAmount(shift);
+            ++c_it;
+        }
+
+    } else if(r.rType == "scaleAttack") {
+
+        map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
+
+        while(c_it != cap.end()) {
+            float att = c_it->second->getAttSecs() * r.floatParams["SCALE"];
+            c_it->second->setAttSecs(att);
+            ++c_it;
+        }
+
+    } else if(r.rType == "event") {
+
+        z->triggerEvent(r.intParams["ENV_INDEX"]);
+
+    }
+}
 
 void zoneManager::createZone(string name) {
 

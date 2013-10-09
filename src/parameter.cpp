@@ -140,6 +140,9 @@ string baseData::getShapeType(){return shapeType;}
 void baseData::setSoundFile(string s){soundFile = s;}
 string baseData::getSoundFile(){return soundFile;}
 
+void baseData::setEventIndex(int i){eventIndex = i;}
+int baseData::getEventIndex(){return eventIndex;}
+
 
 /*-----------------------------------------------------------------------------------*/
 
