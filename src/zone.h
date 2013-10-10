@@ -97,6 +97,13 @@ public:
     void addReaction(reaction e);
 
     void addSound(baseData bd);
+    void endSound();
+
+    void setIsBloom(bool b);
+    bool getIsBloom();
+
+    void setFlickerCount(int i);
+    int getFlickerCount();
 
 
 private:
@@ -127,7 +134,10 @@ private:
     vector<clamourEvent> mEvents;
     vector<baseData> mSounds;
 
+    //internal draw stuff that has no place being here
 
+    bool isBloom;
+    int flickerCount;
 };
 
 #endif // ZONE_H

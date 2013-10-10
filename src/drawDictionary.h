@@ -12,12 +12,24 @@
 #include "parameter.h"
 
 
+class zoneData : public baseData{
+
+
+    public:
+
+    //internal variables
+    bool isBloomOn;
+    int bloomCycleCount;
+
+};
+
 class drawDictionary{
 
 
     public:
 
     static baseData createDrawData(string dt);
+    static zoneData createZoneDrawData();
 
     //drawTypes here
     static void simpleZone(baseData &bd);
@@ -30,5 +42,7 @@ class drawDictionary{
 
 
 };
+
+
 
 

@@ -2,12 +2,13 @@
 #define ZONERENDERER_H
 
 #include "zone.h"
+#include "ofxPostProcessing.h"
 
 
-class zoneRenderer
-{
+class zoneRenderer {
 public:
     zoneRenderer();
+    void setupPostProc();
 
     void update();
     void draw(map<string, ofPtr<zone> > z);
@@ -30,6 +31,9 @@ public:
 
 protected:
 private:
+
+    ofPtr<ofxPostProcessing> mPost;
+    bool isShaderRender;
 
 
 };

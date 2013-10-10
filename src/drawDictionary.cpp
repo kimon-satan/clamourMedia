@@ -14,8 +14,7 @@
 //draw dictionary methods
 
 
-baseData drawDictionary::createDrawData(string dt)
-{
+baseData drawDictionary::createDrawData(string dt){
 
     baseData data;
     data.setName(dt);
@@ -35,7 +34,6 @@ baseData drawDictionary::createDrawData(string dt)
 
     if(dt == "simplePointer")drawDictionary::simplePointerData(data);
 
-
     return data;
 
 }
@@ -45,6 +43,31 @@ void drawDictionary::simpleZone(baseData &bd){
     bd.setShapeType("roundedRect");
     bd.setParameter(parameter("size", 0, 1, 0.25, CLAMOUR_MAP_FIXED));
     bd.setParameter(parameter("outerRot", 0, 90, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("innerRot", 0, 90, 0, CLAMOUR_MAP_FIXED));
+
+    bd.setParameter(parameter("bloom", 0, 1, 0.0, CLAMOUR_MAP_FIXED));
+
+    bd.setParameter(parameter("innerB", 0, 1, 1.0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerB", 0, 1, 1.0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("innerH", 0, 1, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerH", 0, 1, 0.5, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("innerS", 0, 1, 1.0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerS", 0, 1, 0, CLAMOUR_MAP_FIXED));
+
+    bd.setParameter(parameter("innerFlicker", 0, 1, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("innerPulse", 0, 5, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerFlicker", 0, 1, 0, CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerPulse", 0, 5, 0, CLAMOUR_MAP_FIXED));
+
+    bd.setParameter(parameter("outerBAdd", 0, 1, 1,CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerBMul", 0, 1,0,CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("outerBCycle", 0, 1,2.0,CLAMOUR_MAP_FIXED));
+
+    bd.setParameter(parameter("innerBAdd", 0, 1, 1,CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("innerBMul", 0, 1, 0,CLAMOUR_MAP_FIXED));
+    bd.setParameter(parameter("innerBCycle", 0, 1,2.0,CLAMOUR_MAP_FIXED));
+
+    bd.setParameter(parameter("innerWarp", 0, 1, 0, CLAMOUR_MAP_FIXED));
 
 }
 

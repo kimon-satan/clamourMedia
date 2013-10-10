@@ -9,6 +9,7 @@ void ofApp::setup() {
     ofSetCircleResolution(50);
     ofSetWindowPosition(800, 100);
     ofSetWindowTitle("CLAMOUR CONTROL");
+     smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
 
     ofxFensterManager::get()->setupWindow(&mDisplay);
 
@@ -40,6 +41,8 @@ void ofApp::setup() {
     mSplashManager = ofPtr<splashManager>(new splashManager());
     mDisplay.setSplashManager(mSplashManager);
     mOscManager->setSplashManager(mSplashManager);
+
+
 
     isMouseDown = false;
 
@@ -308,6 +311,9 @@ void ofApp::update() {
 void ofApp::draw() {
 
     gui->draw();
+
+    ofSetColor(255);
+    smallFont.drawString(ofToString(ofGetFrameRate(),2),20,600);
 }
 
 void ofApp::guiEvent(ofxUIEventArgs &e) {

@@ -12,6 +12,9 @@ zone::zone()
     mOnRule.isEnabled = false;
     mOffRule.isEnabled = false;
 
+    flickerCount = 0;
+
+
 }
 
 void zone::init(){
@@ -66,6 +69,7 @@ void zone::triggerEvent(int i){
 
     if(mEvents.size() > i -1){
         mEvents[i - 1].react();
+        mEvents[i - 1].setIsFired(true);
 
         for(int s = 0; s < mSounds.size(); s ++){
             if(mSounds[s].getEventIndex() == i){
@@ -110,7 +114,16 @@ map<string, ofPtr<clamourNode> > zone::getCaptureNodes()
 }
 
 
+void zone::endSound(){
 
+     scMessenger::stopSynth(name);
+    for(int s = 0; s < mSounds.size(); s ++){
+
+        scMessenger::stopSynth(name, mSounds[s]);
+
+    }
+
+}
 
 
 string zone::getShapeType()
@@ -211,6 +224,23 @@ void zone::setPos_rel(ofVec2f v)
     float f = (float)screenData::width/(float)screenData::height;
     pos_abs.set(v.x * f, v.y);
 
+}
+
+
+void zone::setIsBloom(bool b){
+    isBloom = b;
+}
+
+bool zone::getIsBloom(){
+    return isBloom;
+}
+
+void zone::setFlickerCount(int i){
+    flickerCount = i;
+}
+
+int zone::getFlickerCount(){
+    return flickerCount;
 }
 
 zone::~zone()

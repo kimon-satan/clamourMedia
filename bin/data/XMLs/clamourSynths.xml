@@ -179,6 +179,31 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
+			<NAME>am2Pulse</NAME>
+			<MIN_VAL>0.1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>am2Mul</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>0.5</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>am2Add</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.75</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		
+		<PARAM>
 			<NAME>carFreq</NAME>
 			<MIN_VAL>100</MIN_VAL>
 			<MAX_VAL>2000</MAX_VAL>
@@ -503,6 +528,74 @@
 
 	</SYNTH>
 
+	<SYNTH>
+		<NAME>servo</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>start</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>end</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>sus</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>top</NAME>
+			<MIN_VAL>0.6</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.8</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>filFreq</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>detune</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.05</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
 
 </CLAMOUR_SYNTHS>
 

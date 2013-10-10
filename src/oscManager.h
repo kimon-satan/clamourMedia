@@ -30,6 +30,7 @@ struct cBundle{
 
     ofxOscBundle bundle;
     int sendCount;
+    int sendNum;
 
 };
 

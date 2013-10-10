@@ -13,7 +13,7 @@ ofxOscSender oscManager::SCsender;
 oscManager::oscManager() {
 
     receiver.setup(METEOR_IN_PORT);
-    sender.setup("192.168.2.200", METEOR_OUT_PORT);
+    sender.setup("192.168.1.200", METEOR_OUT_PORT);
 
 
     for(int i = 0; i < 3; i ++) {
@@ -70,6 +70,21 @@ void oscManager::updateInMessages() {
                 }
 
 
+            }else{
+
+                if(movType == "drag") {
+
+                    pNodeManager->switchOnNode(t_index);
+                    pNodeManager->beginShift(t_index, x, y);
+
+                } else {
+
+                    //normal xy stuff
+                    pNodeManager->switchOnNode(t_index, x, y);
+                }
+
+
+
             }
 
 
@@ -86,6 +101,8 @@ void oscManager::updateInMessages() {
 
                 pNodeManager->switchOnNode(t_index);
                 pNodeManager->beginShift(t_index, x, y);
+
+
 
             } else {
 
@@ -215,22 +232,23 @@ void oscManager::sendBundle() {
     //nasty dropped message hack ... send five times ugh
     map<string, cBundle>::iterator osc_it;
     bool printed = false;
-    int count = 0;
+    int counter;
+
     for(osc_it = outBundle.begin(); osc_it != outBundle.end(); osc_it++) {
 
         if(osc_it->second.bundle.getMessageCount() > 0) {
-            printed = true;
-            //cout << osc_it->first << " - " << osc_it->second.getMessageCount() << ",";
-            sender.sendBundle(osc_it->second.bundle);
-            osc_it->second.sendCount += 1;
-            if(osc_it->second.sendCount == 5)osc_it->second.bundle.clear();
-            count ++;
+
+            if(ofGetFrameNum()%10 == osc_it->second.sendNum){
+                sender.sendBundle(osc_it->second.bundle);
+                osc_it->second.sendCount += 1;
+                if(osc_it->second.sendCount == 5)osc_it->second.bundle.clear();
+                counter ++;
+            }
+
         }
 
 
     }
-
-   // if(printed)cout << endl << "BUNDLE OUT AT: " << ofGetFrameNum() << endl;
 
 
 
@@ -314,8 +332,6 @@ void oscManager::setControl(vector<string> clients, string control) {
 
     pClientManager->setCtrlIndexes(clients, 5);
 
-
-
     for(int i = 0; i < clients.size(); i++) {
 
         //makes more sense in ofApp
@@ -338,7 +354,7 @@ void oscManager::setControl(vector<string> clients, string control) {
 
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
 
-        addToBundle(clients[i], m);
+        sender.sendMessage(m);
 
     }
 
@@ -361,6 +377,7 @@ void oscManager::setControl(vector<string> clients, string control, string text)
 
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
 
+        sender.sendMessage(m);
         addToBundle(clients[i], m);
 
     }
@@ -380,23 +397,29 @@ void oscManager::setText(vector<string> clients, string text) {
 
         logMessages(m, CLAMOUR_MSG_METEOR_OUT);
 
+        sender.sendMessage(m);
         addToBundle(clients[i], m);
 
     }
-
-
 
 }
 
 void oscManager::addToBundle(string index, ofxOscMessage m) {
 
+    static int sendNumCount = 0;
+
+    sendNumCount = (sendNumCount + 1)%10;
+
     if(outBundle.find(index) != outBundle.end()) {
+        outBundle[index].bundle.clear();
         outBundle[index].bundle.addMessage(m);
         outBundle[index].sendCount = 0;
+        outBundle[index].sendNum = sendNumCount;
     } else {
         ofxOscBundle b;
         cBundle c;
         c.bundle = b;
+        c.sendNum = outBundle[index].sendNum = sendNumCount;
         outBundle[index] = c;
         outBundle[index].bundle.addMessage(m);
     }
@@ -407,87 +430,3 @@ void oscManager::addToBundle(string index, ofxOscMessage m) {
 
 
 
-//------------------------------SuperCollider Messages---------------------------------//
-
-/*void oscManager::sendInit() {
-
-    ofxOscMessage m;
-    m.setAddress("/init");
-    SCsender.sendMessage(m);
-
-    logMessages(m, CLAMOUR_MSG_SC_OUT);
-
-}
-
-void oscManager::startSynth(ofPtr<baseZode> n) {
-
-    baseData sd = n->getSoundData();
-    if(sd.getName() == "none")return;
-
-    ofxOscMessage m;
-    m.setAddress("/startSynth");
-    m.addStringArg(n->getName());
-
-    m.addStringArg(sd.getName());
-
-    string et = (n->getEnvType() == CLAMOUR_ASR)? "ASR" : "AR"; //might change to string later
-    m.addStringArg(et);
-    m.addFloatArg(n->getAttSecs());
-    m.addFloatArg(n->getDecSecs());
-
-
-    vector<float> vals = sd.getAbsVals();
-
-    for(int i = 0; i < vals.size(); i++) {
-        m.addFloatArg(vals[i]);
-    }
-
-    m.addStringArg(sd.getSoundFile());
-
-    SCsender.sendMessage(m);
-    logMessages(m, CLAMOUR_MSG_SC_OUT);
-
-}
-
-
-
-
-
-void oscManager::updateSynth(ofPtr<baseZode> n) {
-
-    baseData sd = n->getSoundData();
-    if(sd.getName() == "none")return;
-
-    ofxOscMessage m;
-    m.setAddress("/updateSynth");
-    m.addStringArg(n->getName());
-
-
-
-    m.addStringArg(sd.getName()); //add the name to keep the indexing th same for update and start at the SC end
-
-    vector<float> vals = sd.getAbsVals();
-
-    for(int i = 0; i < vals.size(); i++) {
-        m.addFloatArg(vals[i]);
-    }
-
-    SCsender.sendMessage(m);
-
-    logMessages(m, CLAMOUR_MSG_SC_OUT);
-
-
-}
-
-void oscManager::stopSynth(ofPtr<baseZode> n) {
-
-    baseData sd = n->getSoundData();
-
-    ofxOscMessage m;
-    m.setAddress("/stopSynth");
-    m.addStringArg(n->getName());
-    SCsender.sendMessage(m);
-
-    logMessages(m, CLAMOUR_MSG_SC_OUT);
-
-}*/

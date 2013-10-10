@@ -180,7 +180,7 @@ envType clamourEvent::getEnvType() {
     return mEnvType;
 }
 void clamourEvent::setEnvType(string s) {
-    mEnvType = (s == "ASR")?CLAMOUR_ASR : CLAMOUR_AR;
+    mEnvType = (s == "ASR")? CLAMOUR_ASR : CLAMOUR_AR;
 }
 
 void clamourEvent::setEnvType(envType t) {

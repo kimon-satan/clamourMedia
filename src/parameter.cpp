@@ -143,6 +143,21 @@ string baseData::getSoundFile(){return soundFile;}
 void baseData::setEventIndex(int i){eventIndex = i;}
 int baseData::getEventIndex(){return eventIndex;}
 
+void baseData::setInternal(string s, float f){
+    internalsF[s] = f;
+}
+
+void baseData::setInternal(string s, int i){
+    internalsI[s] = i;
+}
+
+float baseData::getInternalF(string s){
+    return internalsF[s];
+}
+
+float baseData::getInternalI(string s){
+    return internalsI[s];
+}
 
 /*-----------------------------------------------------------------------------------*/
 

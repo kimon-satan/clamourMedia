@@ -62,6 +62,10 @@ public:
     void setEventIndex(int i);
     int getEventIndex();
 
+    void setInternal(string s, float f);
+    void setInternal(string s, int i);
+    float getInternalF(string s);
+    float getInternalI(string s);
     virtual ~baseData(){};
 
 
@@ -76,6 +80,8 @@ private:
     vector<string> slaveParameters;
     string soundFile;
     int eventIndex;
+    map<string, float> internalsF;
+    map<string, int> internalsI;
 
 
 };

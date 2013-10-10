@@ -134,8 +134,6 @@ void scMessenger::updateSynth(ofPtr<baseZode> n) {
 
 void scMessenger::stopSynth(ofPtr<baseZode> n) {
 
-    baseData sd = n->getSoundData();
-
     ofxOscMessage m;
     m.setAddress("/stopSynth");
     m.addStringArg(n->getName());
@@ -145,6 +143,16 @@ void scMessenger::stopSynth(ofPtr<baseZode> n) {
 
 }
 
+void scMessenger::stopSynth(string z_name){
+
+    ofxOscMessage m;
+    m.setAddress("/stopSynth");
+    m.addStringArg(z_name);
+    SCsender.sendMessage(m);
+
+    scMessenger::logMessages(m);
+
+}
 
 void scMessenger::scMessenger::logMessages(ofxOscMessage m) {
 
@@ -192,6 +200,7 @@ string scMessenger::getMsgString(){
 
     }
 
+    msg_string_count = 0;
     return s;
 
 }

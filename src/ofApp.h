@@ -7,6 +7,7 @@
 #include "ofxOsc.h"
 #include "ofxUI.h"
 
+
 #include "oscManager.h"
 #include "xmlLoader.h"
 
@@ -73,6 +74,7 @@ private:
     int mGameBrowseIndex;
 
     bool isMouseDown;
+    ofTrueTypeFont smallFont;
 
     int currentControl;
 };

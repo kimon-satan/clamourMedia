@@ -370,6 +370,10 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
             z->endEvent(r.intParams["ENV_INDEX"]);
         }
 
+    } else if(r.rType == "eventOff") {
+
+        z->endEvent(r.intParams["ENV_INDEX"]);
+
     }
 }
 
@@ -405,6 +409,7 @@ void zoneManager::showZone(string name) {
 void zoneManager::destroyZone(string name) {
 
     mZones[name]->endEvents();
+    mZones[name]->endSound();
 
     if(mZones[name]->getCaptureNodes().size() > 0) {
 

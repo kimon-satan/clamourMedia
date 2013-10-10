@@ -40,6 +40,7 @@ class displayWindow : public ofxFenster{
      zoneRenderer mZoneRenderer;
 
      ofTrueTypeFont smallFont;
+    bool isScreenChanged;
 
 
 };
