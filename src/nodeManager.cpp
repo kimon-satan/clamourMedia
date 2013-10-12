@@ -44,9 +44,37 @@ nodeManager::nodeManager(vector<string> indexes) {
 
     }
 
+    for(int i = 0; i < 16; i ++) {
+        vector<ofPtr<clamourNode> >t;
+        mCollisionMap.push_back(t);
+    }
+
+
+
 
 }
 
+
+void nodeManager::setupRegions() {
+
+    mCollisionMapBounds.clear();
+    float p = (float)screenData::width/screenData::height;
+
+    for(int i = 0; i < 4; i++) {
+
+        for(int j = 0; j < 4; j ++) {
+
+            ofRectangle r;
+            r.x = 0.25 * p * i;
+            r.y = 0.25 * j;
+            r.width = 0.25 * p;
+            r.height = 0.25;
+            mCollisionMapBounds.push_back(r);
+        }
+
+    }
+
+}
 
 void nodeManager::beginShift(string t_index, float x, float y) {
 
@@ -59,6 +87,25 @@ void nodeManager::beginShift(string t_index, float x, float y) {
 
 
 void nodeManager::updateNodes() {
+
+    appReactions.clear();
+
+    //implement scheduled commands
+    vector<eventComm>::iterator e_it = mFutureEvents.begin();
+
+    while(e_it != mFutureEvents.end()) {
+        if(e_it->execAt == ofGetFrameNum()) {
+            if(mNodes.find(e_it->ownerIndex) != mNodes.end()){
+                implementReaction(e_it->r, mNodes[e_it->ownerIndex]);
+            }
+            e_it = mFutureEvents.erase(e_it);
+        } else {
+            ++e_it;
+        }
+    }
+
+
+    for(int i = 0; i < mCollisionMap.size(); i++)mCollisionMap[i].clear();
 
     map<string, ofPtr<clamourNode> >::iterator it;
 
@@ -80,6 +127,8 @@ void nodeManager::updateNodes() {
             it->second->reconcileSlaves();
             it->second->updateRotHistory();
             it->second->updatePath();
+            it->second->updateEvents();
+            addToCollisionRegions(it->second);
         }
 
         ++it;
@@ -88,8 +137,183 @@ void nodeManager::updateNodes() {
 
 
 
+    it = mNodes.begin();
+
+    //now check for collisions
+    while(it != mNodes.end()) {
+        if(!it->second->getIsSleeping()) {
+            checkForCollisions(it->second);
+        }
+        ++it;
+    }
+}
+
+void nodeManager::addToCollisionRegions(ofPtr<clamourNode> n) {
+
+    ofRectangle r = n->getBounds();
+
+    float nFar_x = r.x + r.width;
+    float nFar_y = r.y + r.height;
+
+    vector <ofRectangle> :: iterator it =  mCollisionMapBounds.begin();
+    int t_count = 0;
+
+    while(it != mCollisionMapBounds.end()) {
+
+        float tFar_x = it->x + it->width;
+        float tFar_y = it->y + it->height;
+
+        if(
+            (
+                it->inside(ofPoint(r.x,r.y)) ||
+                it->inside(ofPoint(r.x,nFar_y)) ||
+                it->inside(ofPoint(nFar_x,r.y)) ||
+                it->inside(ofPoint(nFar_x,nFar_y))
+            )
+            ||
+            (
+                ((it->x >= r.x && it->x <= nFar_x) ||
+                 ( tFar_x <= nFar_x &&  tFar_x >= r.x)
+                )
+                &&
+                ((it->y >= r.y && it->y <= nFar_y) ||
+                 ( tFar_y <= nFar_y &&  tFar_y >= r.y)
+                )
+            )
+        ) {
+
+            mCollisionMap[t_count].push_back(n);
+
+        }
+        t_count ++;
+        ++it;
+    }
 
 }
+
+void nodeManager::checkForCollisions(ofPtr<clamourNode> n) {
+
+    bool collisionFound = false;
+
+    for(int  i = 0; i < mCollisionMapBounds.size(); i ++) {
+
+        if(mCollisionMapBounds[i].inside(n->getMeanPos_abs())) {
+
+            vector <ofPtr<clamourNode> >::iterator target;
+
+            target = mCollisionMap[i].begin();
+
+            while(target != mCollisionMap[i].end()) {
+
+                if(*target != n) {
+
+                    if((*target)->getBounds().inside(n->getMeanPos_abs())){
+                        bool isCollision = clamourUtils::pointInPath((*target)->getOuterEdge(), n->getMeanPos_abs());
+                        if(isCollision){
+                            if(!n->getIsColliding() && !(*target)->getIsColliding())implementReactions(n , *target);
+                            n->setIsColliding(true);
+                            (*target)->setIsColliding(true);
+                            collisionFound = true;
+                        }
+                    }
+
+                }
+
+                ++target;
+            }
+
+
+        }
+
+    }
+
+    n->setIsColliding(collisionFound);
+
+}
+
+void nodeManager::implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tgt){
+
+    vector<reaction> r = n->getReactions();
+    vector<reaction>::iterator it = r.begin();
+
+    while(it != r.end()){
+
+        if(it->floatParams.find("DELAY_SECS") != it->floatParams.end()) {
+
+            //ON_OFF events not available for these
+            //very messy definitely needs reworking
+
+            eventComm e;
+            int delFrames = it->floatParams["DELAY_SECS"] * ofGetFrameRate();
+            e.execAt = ofGetFrameNum() + delFrames;
+            if(it->intParams.find("ENV_INDEX") != it->intParams.end())e.eventIndex = it->intParams["ENV_INDEX"];
+            e.ownerIndex = n->getName();
+            e.r = *it;
+            mFutureEvents.push_back(e);
+
+
+        }else{
+            //implement immediately
+            implementReaction(*it, tgt);
+        }
+
+        ++it;
+    }
+
+
+
+}
+
+void nodeManager::implementReaction(reaction & r, ofPtr<clamourNode> t){
+
+    if(r.rType == "sleep"){
+
+        switchOffNode(t->getName());
+        t->setCanSleep(true);
+
+   }else if(r.rType == "transform"){
+
+        clamourNode temp = presetStore::nodePresets[r.stringParams["PRESET"]]; //load the node into the reaction for easier variation
+        nodeManager::setNode(t, temp);
+
+    } else if(r.rType == "scaleNode") {
+
+        parameter p = t->getDrawData().getParameter("size");
+
+        p.abs_val *= r.floatParams["SCALE"];
+        p.abs_val = min(1.0f, p.abs_val);
+        t->setDrawParameter(p);
+        ofPath pt = t->getEdgeTemplate();
+        pt.scale(r.floatParams["SCALE"], r.floatParams["SCALE"]);
+        t->setEdgeTemplate(pt);
+        t->updatePath();
+
+
+    } else if(r.rType == "scaleShift") {
+
+        float shift = t->getShiftAmount() * r.floatParams["SCALE"];
+        t->setShiftAmount(shift);
+
+    } else if(r.rType == "scaleAttack") {
+
+        float att = t->getAttSecs() * r.floatParams["SCALE"];
+        t->setAttSecs(att);
+
+    } else if(r.rType == "event") {
+
+        t->triggerEvent(r.intParams["ENV_INDEX"]);
+
+
+    } else if(r.rType == "eventOff") {
+
+        t->endEvent(r.intParams["ENV_INDEX"]); // not sure this one is necessary
+
+    }
+
+}
+
+
+
 
 void nodeManager::distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp) {
 
@@ -128,7 +352,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
             mNodes[clients[i]]->setAnimOverride(20);
         }
 
-    }else if(pattern == "XY"){
+    } else if(pattern == "XY") {
 
         ofVec2f c(params["X"], params["Y"]);
         if(posp)c *= ofVec2f(w_prop,1.0);
@@ -175,7 +399,7 @@ void nodeManager::switchOffNode(string t_index) {
         if(mNodes[t_index]->getCanSleep())mNodes[t_index]->setIsSleeping(true);
         if(mNodes[t_index]->getEnvType() == CLAMOUR_ASR)mNodes[t_index]->setChanged(CLAMOUR_ON_OFF);
         mNodes[t_index]->clearHistory();
-    }else{
+    } else {
         if(mNodes[t_index]->getIsSleeping())mNodes[t_index]->setIsSleeping(true);
     }
 
@@ -215,7 +439,7 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y) {
     if(!mNodes[t_index]->getIsDragOn())return;
 
     ofVec2f s(x,y);
-    if(mNodes[t_index]->getAnimOverride() > 0 || mNodes[t_index]->getIsNewShift()){
+    if(mNodes[t_index]->getAnimOverride() > 0 || mNodes[t_index]->getIsNewShift()) {
         cout << "reset \n" << endl;
         mNodes[t_index]->resetShift(x,y);
         return;
@@ -313,6 +537,8 @@ void nodeManager::setNodes(vector<string> indexes, clamourNode &n) {
 
 void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
 
+    target->endEvents();
+    target->endSound();
     target->setSoundData(temp.getSoundData());
     target->setChanged(CLAMOUR_SOUND);
 
@@ -323,11 +549,14 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
     target->setCanSleep(temp.getCanSleep());
     target->setIsRotate(temp.getIsRotate());
     target->setShiftAmount(temp.getShiftAmount());
+    target->setEvents(temp.getEvents());
+    target->setReactions(temp.getReactions());
+    target->setSounds(temp.getSounds());
     target->init();
 
     //now create an edgeTemplate
 
-    if(target->getDrawData().getName() != "none"){
+    if(target->getDrawData().getName() != "none") {
 
         ofPath p;
         pathFactory::createPath(p, target->getDrawData().getShapeType(),
@@ -338,6 +567,10 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
     }
 
 
+}
+
+
+vector<string> nodeManager::getAppReactions(){
 
 }
 

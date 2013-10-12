@@ -92,7 +92,28 @@ ofPoint clamourUtils::getInsideIntersect(ofPath p, ofPoint centroid, ofPoint inv
 
 }
 
-ofRectangle clamourUtils::pathToPoints(ofPath p, vector<ofPoint> & pts){
+ofRectangle clamourUtils::getBounds(ofPath & p){
+
+    vector<ofPolyline> pls = p.getOutline();
+    ofVec2f minVec(1,1);
+    ofVec2f maxVec(0,0);
+
+    for(int i = 0; i < pls.size(); i++){
+        vector<ofPoint> t = pls[i].getVertices();
+        for(int j = 0; j < t.size(); j++){
+            if(t[j].x < maxVec.x)minVec.x = t[j].x;
+            if(t[j].y < maxVec.y)minVec.y = t[j].y;
+            if(t[j].x > maxVec.x)maxVec.x = t[j].x;
+            if(t[j].y > maxVec.y)maxVec.y = t[j].y;
+        }
+    }
+
+    ofVec2f dims = maxVec - minVec;
+    return ofRectangle(minVec.x, minVec.y, dims.x, dims.y); //the bounding box
+
+}
+
+ofRectangle clamourUtils::pathToPoints(ofPath & p, vector<ofPoint> & pts){
 
     vector<ofPolyline> pls = p.getOutline();
     ofVec2f minVec(1,1);

@@ -38,18 +38,6 @@ void zone::removeNode(ofPtr<clamourNode> n)
     mCaptureNodes.erase(n->getName());
 }
 
-void zone::addEvent(clamourEvent e){
-
-    mEvents.push_back(e);
-
-}
-
-void zone::updateEvents(){
-
-    for(int i = 0; i < mEvents.size(); i ++){
-        mEvents[i].update();
-    }
-}
 
 
 void zone::updateDrawData()
@@ -65,47 +53,7 @@ void zone::updateDrawData()
 
 }
 
-void zone::triggerEvent(int i){
 
-    if(mEvents.size() > i -1){
-        mEvents[i - 1].react();
-        mEvents[i - 1].setIsFired(true);
-
-        for(int s = 0; s < mSounds.size(); s ++){
-            if(mSounds[s].getEventIndex() == i){
-                scMessenger::startSynth(name, mEvents[i - 1], mSounds[s]);
-            }
-            //send the osc to superCollider via OSC manager
-        }
-    }
-}
-
-void zone::endEvent(int i){
-
-    if(mEvents.size() > i -1){
-
-         mEvents[i - 1].setIsFired(false);
-
-        for(int s = 0; s < mSounds.size(); s ++){
-            if(mSounds[s].getEventIndex() == i){
-                scMessenger::stopSynth(name, mSounds[s]);
-            }
-            //send the osc to superCollider via OSC manager
-        }
-    }
-
-}
-
-void zone::endEvents(){
-
-    for(int i = 0; i < mEvents.size(); i ++)endEvent(i + 1);
-}
-
-//getters and setters
-void zone::addSound(baseData bd){
-
-    mSounds.push_back(bd);
-}
 
 
 map<string, ofPtr<clamourNode> > zone::getCaptureNodes()
@@ -114,16 +62,7 @@ map<string, ofPtr<clamourNode> > zone::getCaptureNodes()
 }
 
 
-void zone::endSound(){
 
-     scMessenger::stopSynth(name);
-    for(int s = 0; s < mSounds.size(); s ++){
-
-        scMessenger::stopSynth(name, mSounds[s]);
-
-    }
-
-}
 
 
 string zone::getShapeType()
@@ -191,22 +130,7 @@ bool zone::getIsClosedIn()
     return isClosedIn;
 }
 
-vector<reaction >zone::getReactions()
-{
-    return mReactions;
-}
 
-void zone::addReaction(reaction e){
-
-    mReactions.push_back(e);
-
-}
-
-void zone::setReactions(vector<reaction> r){
-
-    mReactions = r;
-
-}
 
 void zone::setPos_abs(ofVec2f v)
 {
@@ -226,22 +150,6 @@ void zone::setPos_rel(ofVec2f v)
 
 }
 
-
-void zone::setIsBloom(bool b){
-    isBloom = b;
-}
-
-bool zone::getIsBloom(){
-    return isBloom;
-}
-
-void zone::setFlickerCount(int i){
-    flickerCount = i;
-}
-
-int zone::getFlickerCount(){
-    return flickerCount;
-}
 
 zone::~zone()
 {

@@ -40,7 +40,7 @@ public:
 
     baseData();
 
-    parameter getParameter(string name);
+    parameter & getParameter(string name);
 
 
     void init(ofVec2f pos); //sets random and initial variables

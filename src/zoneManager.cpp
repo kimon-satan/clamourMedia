@@ -225,7 +225,7 @@ void zoneManager::onReact(ofPtr<zone> z) {
     z->setIsFired(true);
     z->react();
     z->setChanged(CLAMOUR_ON_OFF); //still needed ?
-    scMessenger::startSynth(z);
+    scMessenger::startSynth(z->getName(), *z, z->getSoundData());
     implementReactions(z, true);
 
 }
@@ -235,7 +235,7 @@ void zoneManager::offReact(ofPtr<zone> z) {
     z->setIsFired(false);
 
     if(z->getEnvType() == CLAMOUR_ASR){
-        scMessenger::stopSynth(z);
+        scMessenger::stopSynth(z->getName(), z->getSoundData());
         z->setChanged(CLAMOUR_ON_OFF); // is this still needed
     }
     implementReactions(z, false);

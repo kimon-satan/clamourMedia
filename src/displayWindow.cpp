@@ -22,6 +22,7 @@ void displayWindow::update()
         screenData::width = getWidth();
         screenData::height = getHeight();
         mZoneRenderer.setupPostProc();
+        pNodeManager->setupRegions();
         isScreenChanged = false;
     }
 

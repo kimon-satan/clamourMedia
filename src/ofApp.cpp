@@ -42,7 +42,7 @@ void ofApp::setup() {
     mDisplay.setSplashManager(mSplashManager);
     mOscManager->setSplashManager(mSplashManager);
 
-
+    mNodeManager->setupRegions();
 
     isMouseDown = false;
 

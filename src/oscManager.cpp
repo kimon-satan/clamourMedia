@@ -170,22 +170,22 @@ void oscManager::updateOutMessages() {
 
 
             if(it->second->getIsFired()) {
-                scMessenger::startSynth(it->second);
+                scMessenger::startSynth(it->second->getName(), *it->second, it->second->getSoundData()); //a dumb hack
             } else {
-                scMessenger::stopSynth(it->second);
+                scMessenger::stopSynth(it->second->getName(), it->second->getSoundData());
             }
 
 
         } else if(it->second->getChanged() == CLAMOUR_SOUND) {
 
             if(it->second->getIsFiring()) {
-                scMessenger::stopSynth(it->second);
-                scMessenger::startSynth(it->second);
+                scMessenger::stopSynth(it->second->getName(), it->second->getSoundData());
+                scMessenger::startSynth(it->second->getName(), *it->second, it->second->getSoundData());
             }
 
         } else if(it->second->getChanged() == CLAMOUR_POSITION) {
 
-            scMessenger::updateSynth(it->second);
+            scMessenger::updateSynth(it->second->getName(), it->second->getSoundData());
 
         }
 
@@ -206,13 +206,13 @@ void oscManager::updateOutMessages() {
             if(sit->second->getIsFiring()) {
 
                 //send an osc to supercollider
-                scMessenger::startSynth(sit->second);
+                scMessenger::startSynth(sit->second->getName(), *sit->second, sit->second->getSoundData());
                 if(sit->second->getEnvType() == CLAMOUR_AR) {
                     sit->second->setIsFiring(false);
                 }
 
             } else {
-                scMessenger::stopSynth(sit->second);
+                scMessenger::stopSynth(sit->second->getName(), sit->second->getSoundData());
                 sit->second->setIsFiring(false);
                 //send a stop osc
             }
@@ -241,7 +241,7 @@ void oscManager::sendBundle() {
             if(ofGetFrameNum()%10 == osc_it->second.sendNum){
                 sender.sendBundle(osc_it->second.bundle);
                 osc_it->second.sendCount += 1;
-                if(osc_it->second.sendCount == 5)osc_it->second.bundle.clear();
+                if(osc_it->second.sendCount == 10)osc_it->second.bundle.clear();
                 counter ++;
             }
 

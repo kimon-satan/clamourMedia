@@ -13,7 +13,6 @@
 #include "baseZode.h"
 
 
-
 class zone;
 
 class clamourNode : public baseZode {
@@ -81,6 +80,10 @@ public:
     void setIntersect(ofVec2f i);
     ofVec2f getIntersect();
 
+    ofRectangle getBounds();
+
+    bool getIsColliding();
+    void setIsColliding(bool b);
 
 private:
 
@@ -107,6 +110,10 @@ private:
     vector<ofVec2f> history;
     vector<ofVec2f> rotHist;
     ofPtr<zone> zonePair;
+
+    ofRectangle bounds;
+
+    bool isColliding;
 
 
 };

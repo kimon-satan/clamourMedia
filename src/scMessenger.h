@@ -2,7 +2,8 @@
 #define SCMESSENGER_H
 
 #include "ofxOsc.h"
-#include "baseZode.h"
+#include "clamourEvent.h"
+#include "parameter.h"
 
 #define SC_OUT_PORT 57120
 #define NUM_MSG_STRINGS 6
@@ -16,13 +17,11 @@ class scMessenger
             static void setup();
             static void sendInit();
 
-            static void stopSynth(ofPtr<baseZode> n);
-            static void stopSynth(string z_name, baseData & sd);
-            static void stopSynth(string z_name);
-            static void updateSynth(ofPtr<baseZode> n);
-
-            static void startSynth(ofPtr<baseZode> z);
             static void startSynth(string z_name, clamourEvent & e, baseData & sd);
+            static void stopSynth(string z_name);
+            static void stopSynth(string z_name, baseData & sd);
+            static void updateSynth(string name, baseData & sd);
+
             static void logMessages(ofxOscMessage m);
 
             static string getMsgString();

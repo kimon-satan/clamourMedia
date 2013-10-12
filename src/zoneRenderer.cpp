@@ -95,17 +95,10 @@ void zoneRenderer::drawDebug(ofPtr<zone> z, baseData &bd) {
 void zoneRenderer::simpleButton(ofPtr<zone> z, baseData &bd) {
 
     if(isShaderRender){
-
-        if(bd.getParameter("bloom").abs_val < 0.01){
-            z->setIsBloom(false);
-            return;
-        }
-
+        if(bd.getParameter("bloom").abs_val < 0.01)return;
     }else{
-        if(z->getIsBloom())return;
+        if(bd.getParameter("bloom").abs_val > 0)return;
     }
-
-
 
     ofPath p = z->getEdgeTemplate();
     ofPath e = p;
@@ -175,6 +168,7 @@ void zoneRenderer::simpleButton(ofPtr<zone> z, baseData &bd) {
         if(bd.getName() == "playButton")playSymbol(s);
         if(bd.getName() == "revButton")revPlaySymbol(s);
         if(bd.getName() == "ffwdButton")ffwdSymbol(s, bd.getParameter("innerWarp").abs_val);
+        if(bd.getName() == "ejectButton")ejectSymbol(s, bd.getParameter("innerWarp").abs_val);
 
         ofPopMatrix();
 
@@ -199,12 +193,12 @@ void zoneRenderer::pauseSymbol(float s, float w) {
     ofPushStyle();
     ofSetRectMode(OF_RECTMODE_CENTER);
     ofPushMatrix();
-    ofTranslate(0.15 * w, 0);
+    ofTranslate(0.15 * w * s, 0);
     ofRect(-s * 0.15 ,0,s/7,s/2);
     ofPopMatrix();
 
     ofPushMatrix();
-    ofTranslate(-0.15 * w, 0);
+    ofTranslate(-0.15 * w * s, 0);
     ofRect(s * 0.15 ,0,s/7,s/2);
     ofPopMatrix();
 
@@ -259,6 +253,16 @@ void zoneRenderer::rrwdSymbol(float s, float w) {
 
 void zoneRenderer::ejectSymbol(float s, float w) {
 
+      ofTriangle(
+        s * -0.25, 0 * s,
+        s * 0.25, 0 * s,
+        0, -s * 0.3
+        );
+
+    ofPushStyle();
+    ofSetRectMode(OF_RECTMODE_CENTER);
+        ofRect(0,0.15 * s,s * 0.5, s * 0.12);
+    ofPopStyle();
 
 }
 

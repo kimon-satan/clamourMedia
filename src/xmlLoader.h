@@ -28,6 +28,9 @@ public:
     static void loadDraw(baseData &bd, ofxXmlSettings &XML);
 
     static void loadZoneParams(command &cmd, ofxXmlSettings &XML);
+    static void loadEvents(baseZode &z, ofxXmlSettings &XML);
+    static void loadSounds(baseZode &z, ofxXmlSettings &XML);
+    static void loadReactions(baseZode &z, ofxXmlSettings &XML);
 
 };
 

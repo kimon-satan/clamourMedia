@@ -4,7 +4,7 @@
 
 #include "clamourNode.h"
 #include "baseZode.h"
-#include "scMessenger.h"
+
 
 struct zoneRule {
 
@@ -23,23 +23,6 @@ struct zoneRule {
 
 };
 
-struct reaction {
-
-    //these relate to aspects which effect other nodes, zones, stages etc;
-    string rType;
-
-    //closeOutZone, openOutZone, closeInZone, openInZone, incrementStage
-    string trig; //ON, OFF, ON_OFF
-    vector<string> zTargets;
-
-    map<string, string> stringParams;
-    map<string, float> floatParams;
-    map<string, int> intParams;
-
-    vector<clamourNode> prevNodeStates; // easier just to store the whole node
-
-
-};
 
 
 class zone : public baseZode {
@@ -52,15 +35,9 @@ public:
     void addNode(ofPtr<clamourNode> p);
     void removeNode(ofPtr<clamourNode> p);
 
-    void addEvent(clamourEvent e);
 
-    void updateEvents();
     void updateDrawData();
     //getters and setters
-
-    void triggerEvent(int i);
-    void endEvent(int i);
-    void endEvents();
 
     map<string, ofPtr<clamourNode> > getCaptureNodes();
 
@@ -92,18 +69,10 @@ public:
     void setOffRule(zoneRule zr);
     zoneRule getOffRule();
 
-    vector<reaction> getReactions();
-    void setReactions(vector<reaction>);
-    void addReaction(reaction e);
 
-    void addSound(baseData bd);
-    void endSound();
 
-    void setIsBloom(bool b);
-    bool getIsBloom();
 
-    void setFlickerCount(int i);
-    int getFlickerCount();
+
 
 
 private:
@@ -127,12 +96,8 @@ private:
     zoneRule mOnRule;
     zoneRule mOffRule;
 
-    vector<reaction > mReactions;
 
-    //extra
 
-    vector<clamourEvent> mEvents;
-    vector<baseData> mSounds;
 
     //internal draw stuff that has no place being here
 

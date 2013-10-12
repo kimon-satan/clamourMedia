@@ -73,50 +73,19 @@ void scMessenger::sendInit() {
 
 }
 
-void scMessenger::startSynth(ofPtr<baseZode> n) {
-
-    baseData sd = n->getSoundData();
-    if(sd.getName() == "none")return;
-
-    ofxOscMessage m;
-    m.setAddress("/startSynth");
-    m.addStringArg(n->getName());
-
-    m.addStringArg(sd.getName());
-
-    string et = (n->getEnvType() == CLAMOUR_ASR)? "ASR" : "AR"; //might change to string later
-    m.addStringArg(et);
-    m.addFloatArg(n->getAttSecs());
-    m.addFloatArg(n->getDecSecs());
-
-
-    vector<float> vals = sd.getAbsVals();
-
-    for(int i = 0; i < vals.size(); i++) {
-        m.addFloatArg(vals[i]);
-    }
-
-    m.addStringArg(sd.getSoundFile());
-
-    SCsender.sendMessage(m);
-    scMessenger::logMessages(m);
-
-}
 
 
 
 
 
-void scMessenger::updateSynth(ofPtr<baseZode> n) {
 
-    baseData sd = n->getSoundData();
+void scMessenger::updateSynth(string name, baseData & sd) {
+
     if(sd.getName() == "none")return;
 
     ofxOscMessage m;
     m.setAddress("/updateSynth");
-    m.addStringArg(n->getName());
-
-
+    m.addStringArg(name + "_" + ofToString(sd.getEventIndex(), 0));
 
     m.addStringArg(sd.getName()); //add the name to keep the indexing th same for update and start at the SC end
 
@@ -132,27 +101,7 @@ void scMessenger::updateSynth(ofPtr<baseZode> n) {
 
 }
 
-void scMessenger::stopSynth(ofPtr<baseZode> n) {
 
-    ofxOscMessage m;
-    m.setAddress("/stopSynth");
-    m.addStringArg(n->getName());
-    SCsender.sendMessage(m);
-
-    scMessenger::logMessages(m);
-
-}
-
-void scMessenger::stopSynth(string z_name){
-
-    ofxOscMessage m;
-    m.setAddress("/stopSynth");
-    m.addStringArg(z_name);
-    SCsender.sendMessage(m);
-
-    scMessenger::logMessages(m);
-
-}
 
 void scMessenger::scMessenger::logMessages(ofxOscMessage m) {
 

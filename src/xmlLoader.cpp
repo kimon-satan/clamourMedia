@@ -154,12 +154,7 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
 
 }
 
-void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
-
-    z.setName(XML.getValue("NAME", "default"));
-
-    z.setPos_rel(ofVec2f(XML.getValue("X", 0.5), XML.getValue("Y",0.5)));
-    ofPath p;
+void xmlLoader::loadEvents(baseZode &z, ofxXmlSettings &XML){
 
     int numEvents = XML.getNumTags("EVENT");
 
@@ -173,6 +168,16 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
             XML.popTag();
         }
     }
+}
+
+void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
+
+    z.setName(XML.getValue("NAME", "default"));
+
+    z.setPos_rel(ofVec2f(XML.getValue("X", 0.5), XML.getValue("Y",0.5)));
+    ofPath p;
+
+    loadEvents(z, XML);
 
     if(XML.tagExists("DRAW_TYPE"))z.setDrawType(XML.getValue("DRAW_TYPE", "debugZone"));
 
@@ -220,19 +225,16 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
         XML.popTag();
     }
 
-    int numReacts  = XML.getNumTags("REACT");
 
-    for(int rc = 0; rc < numReacts; rc ++) {
-        if(XML.pushTag("REACT", rc)) {
-            reaction r;
-            xmlLoader::loadReaction(r, XML);
-            z.addReaction(r);
-            XML.popTag();
-        }
+    loadReactions(z, XML);
+    loadSounds(z, XML);
 
-    }
 
-    int numSounds = XML.getNumTags("SOUND");
+}
+
+void xmlLoader::loadSounds(baseZode &z, ofxXmlSettings &XML){
+
+int numSounds = XML.getNumTags("SOUND");
 
     for(int i = 0; i < numSounds; i ++){
 
@@ -275,6 +277,22 @@ void xmlLoader::loadZone(zone &z, ofxXmlSettings &XML) {
 
 }
 
+void xmlLoader::loadReactions(baseZode &z, ofxXmlSettings &XML){
+
+    int numReacts  = XML.getNumTags("REACT");
+
+    for(int rc = 0; rc < numReacts; rc ++) {
+        if(XML.pushTag("REACT", rc)) {
+            reaction r;
+            xmlLoader::loadReaction(r, XML);
+            z.addReaction(r);
+            XML.popTag();
+        }
+
+    }
+
+}
+
 void xmlLoader::loadRule(zoneRule &r, ofxXmlSettings &XML) {
 
     r.ruleType = XML.getValue("TYPE", "MIN_OCCUPANTS");
@@ -311,6 +329,8 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("ATTACK_SECS"))n.setAttSecs(XML.getValue("ATTACK_SECS", 0.01)); // could be in a param if necessary later
     if(XML.tagExists("DECAY_SECS"))n.setDecSecs(XML.getValue("DECAY_SECS", 0.2));  //
     if(XML.tagExists("ENV_TYPE"))n.setEnvType(XML.getValue("ENV_TYPE", "AR"));
+
+    loadEvents(n, XML);
 
     if(XML.tagExists("SOUND_TYPE"))n.setSoundType(XML.getValue("SOUND_TYPE","none"));
     if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "none"));
@@ -352,6 +372,9 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
         }
         XML.popTag();
     }
+
+    loadSounds(n, XML);
+    loadReactions(n,XML);
 
 
 }

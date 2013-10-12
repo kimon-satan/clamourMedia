@@ -24,6 +24,7 @@ clamourNode::clamourNode(int ts, string tr)
     canSleep = true;
     isRotate = false;
     isNewShift = false;
+    isColliding = false;
 
 };
 
@@ -141,6 +142,7 @@ void clamourNode::updatePath(){
     outerEdge = edgeTemplate;
    if(isRotate)outerEdge.rotate(avRot ,ofVec3f(0,0,1));
     outerEdge.translate(getMeanPos_abs());
+    bounds = clamourUtils::getBounds(outerEdge);
 
 }
 
@@ -155,7 +157,14 @@ void clamourNode::setDrawType(string dt)
 void clamourNode::updateDrawData()
 {
 
-    drawData.update(meanPos_rel); //used for mappings
+    vector<float> f;
+    f.push_back(envVal);
+
+    for(int i = 0; i < mEvents.size(); i ++){
+        f.push_back(mEvents[i].getEnvVal());
+    }
+
+    drawData.update(meanPos_rel, f); //used for mappings
 
 }
 
@@ -346,3 +355,8 @@ void clamourNode::setIntersect(ofVec2f i){
 ofVec2f clamourNode::getIntersect(){
     return intersect;
 }
+
+ofRectangle clamourNode::getBounds(){return bounds;}
+
+bool clamourNode::getIsColliding(){return isColliding;}
+void clamourNode::setIsColliding(bool b){isColliding =b;}

@@ -11,6 +11,7 @@
 baseData::baseData(){
     soundFile = "none";
     name = "none";
+    eventIndex = 0;
 }
 
 void baseData::init(ofVec2f pos){
@@ -62,7 +63,7 @@ void baseData::update(ofVec2f pos, vector<float> & envVals){
 
 }
 
-parameter baseData::getParameter(string name){
+parameter & baseData::getParameter(string name){
 
     try{
 

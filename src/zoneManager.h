@@ -5,14 +5,6 @@
 #include "presetStore.h"
 #include "nodeManager.h"
 
-struct eventComm{
-
-    string ownerIndex;
-    reaction r;
-    int execAt;
-    int eventIndex;
-
-};
 
 class zoneManager
 {
