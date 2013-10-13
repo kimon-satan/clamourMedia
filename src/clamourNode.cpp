@@ -25,6 +25,7 @@ clamourNode::clamourNode(int ts, string tr)
     isRotate = false;
     isNewShift = false;
     isColliding = false;
+    isCollidable = false;
 
 };
 
@@ -39,6 +40,8 @@ clamourNode::clamourNode(){
     canSleep = true;
     isRotate = false;
     isNewShift = false;
+    isColliding = false;
+    isCollidable = false;
 
 };
 
@@ -360,3 +363,6 @@ ofRectangle clamourNode::getBounds(){return bounds;}
 
 bool clamourNode::getIsColliding(){return isColliding;}
 void clamourNode::setIsColliding(bool b){isColliding =b;}
+
+bool clamourNode::getIsCollidable(){return isCollidable;}
+void clamourNode::setIsCollidable(bool b){isCollidable =b;}

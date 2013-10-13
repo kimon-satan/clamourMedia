@@ -47,6 +47,7 @@ private:
 
     void implementStage(bool isRepeat = false);
     void implementCommand(command & cmd);
+    void implementNodeReactions();
 
     void unpackClients(vector<string> &clients, command &cmd);
     void scheduleCommands(command &cmd, vector<string> & clients);

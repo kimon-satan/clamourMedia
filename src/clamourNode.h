@@ -85,6 +85,9 @@ public:
     bool getIsColliding();
     void setIsColliding(bool b);
 
+    bool getIsCollidable();
+    void setIsCollidable(bool b);
+
 private:
 
     bool isSleeping, canSleep;
@@ -113,7 +116,7 @@ private:
 
     ofRectangle bounds;
 
-    bool isColliding;
+    bool isColliding , isCollidable;
 
 
 };

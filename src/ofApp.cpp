@@ -281,6 +281,7 @@ void ofApp::update() {
 
     ofBackground(100);
 
+    implementNodeReactions();
     implementZoneReactions(); //stuff from the previous frame
     implementSchedCommands();
 
@@ -382,7 +383,7 @@ void ofApp::resetEverything() {
 
     mSplashManager->reset();
     if(mCurrentGame)mCurrentGame->reset();
-    mNodeManager->switchOffAllNodes();
+    mNodeManager->killAllNodes();
     mZoneManager->destroyAllZones();
 
 }
@@ -427,6 +428,24 @@ void ofApp::implementSchedCommands() {
         for(int i = 0; i < cmds.size(); i++) {
             implementCommand(cmds[i]);
         }
+    }
+
+}
+
+void ofApp::implementNodeReactions() {
+
+    map<string, string> r = mNodeManager->getAppReactions();
+    map<string, string> :: iterator it = r.begin();
+
+    while(it != r.end()){
+
+        if(it->second == "resetControl"){
+            vector<string> s;
+            s.push_back(it->first);
+            mOscManager->setControl(s, "BIG_TEXT");
+        }
+
+        ++it;
     }
 
 }

@@ -52,6 +52,9 @@ class nodeManager{
 
     void setNodeAttSecs(vector<string> indexes, float att);
     void setNodeDecSecs(vector<string> indexes, float dec);
+    void killNode(string index);
+    void killNodes(vector<string> indexes);
+    void killAllNodes();
 
     //add parameter versions for randomisation later
 
@@ -63,7 +66,7 @@ class nodeManager{
     void implementReaction(ofPtr<clamourNode> n, ofPtr<clamourNode> tgt);
 
     static void setNode(ofPtr<clamourNode> target, clamourNode &temp);
-    vector<string> getAppReactions();
+    map<string, string> getAppReactions();
 
     private:
 
@@ -72,7 +75,7 @@ class nodeManager{
     vector<ofRectangle> mCollisionMapBounds;
 
 
-    vector<string> appReactions;
+    map<string, string> appReactions;
     vector<eventComm> mFutureEvents;
 
 

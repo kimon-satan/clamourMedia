@@ -336,6 +336,7 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("DRAW_TYPE"))n.setDrawType(XML.getValue("DRAW_TYPE", "none"));
     if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
     if(XML.tagExists("ROTATE")){n.setIsRotate(XML.getValue("ROTATE", true));}
+    if(XML.tagExists("COLLIDES")){n.setIsCollidable(XML.getValue("COLLIDES", false));}
 
     if(XML.tagExists("SHIFT"))n.setShiftAmount(XML.getValue("SHIFT", 0.2));
 

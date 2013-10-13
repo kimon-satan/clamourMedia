@@ -128,7 +128,7 @@ void nodeManager::updateNodes() {
             it->second->updateRotHistory();
             it->second->updatePath();
             it->second->updateEvents();
-            addToCollisionRegions(it->second);
+            if(it->second->getIsCollidable())addToCollisionRegions(it->second);
         }
 
         ++it;
@@ -142,7 +142,7 @@ void nodeManager::updateNodes() {
     //now check for collisions
     while(it != mNodes.end()) {
         if(!it->second->getIsSleeping()) {
-            checkForCollisions(it->second);
+            if(it->second->getIsCollidable())checkForCollisions(it->second);
         }
         ++it;
     }
@@ -240,9 +240,6 @@ void nodeManager::implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tg
 
         if(it->floatParams.find("DELAY_SECS") != it->floatParams.end()) {
 
-            //ON_OFF events not available for these
-            //very messy definitely needs reworking
-
             eventComm e;
             int delFrames = it->floatParams["DELAY_SECS"] * ofGetFrameRate();
             e.execAt = ofGetFrameNum() + delFrames;
@@ -268,13 +265,13 @@ void nodeManager::implementReaction(reaction & r, ofPtr<clamourNode> t){
 
     if(r.rType == "sleep"){
 
-        switchOffNode(t->getName());
-        t->setCanSleep(true);
+        appReactions[t->getName()] = "resetControl";
+        killNode(t->getName());
 
    }else if(r.rType == "transform"){
 
         clamourNode temp = presetStore::nodePresets[r.stringParams["PRESET"]]; //load the node into the reaction for easier variation
-        nodeManager::setNode(t, temp);
+        setNode(t, temp);
 
     } else if(r.rType == "scaleNode") {
 
@@ -287,7 +284,6 @@ void nodeManager::implementReaction(reaction & r, ofPtr<clamourNode> t){
         pt.scale(r.floatParams["SCALE"], r.floatParams["SCALE"]);
         t->setEdgeTemplate(pt);
         t->updatePath();
-
 
     } else if(r.rType == "scaleShift") {
 
@@ -422,6 +418,33 @@ void nodeManager::switchOnNode(string t_index, float x, float y) {
 
 }
 
+void nodeManager::killAllNodes(){
+
+    map<string, ofPtr<clamourNode> >::iterator it;
+
+    it = mNodes.begin();
+
+    while(it != mNodes.end()) {
+        killNode(it->first);
+        ++it;
+    }
+
+}
+
+void nodeManager::killNodes(vector<string> indexes){
+
+    for(int i = 0; i < indexes.size(); i ++) {
+        killNode(indexes[i]);
+    }
+
+}
+
+void nodeManager::killNode(string t_index){
+
+    setNode(mNodes[t_index], presetStore::nodePresets["defaultNode"]);
+
+}
+
 void nodeManager::wakeupNode(string t_index) {
 
     mNodes[t_index]->setIsSleeping(mNodes[t_index]->getCanSleep());
@@ -552,6 +575,7 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
     target->setEvents(temp.getEvents());
     target->setReactions(temp.getReactions());
     target->setSounds(temp.getSounds());
+    target->setIsCollidable(temp.getIsCollidable());
     target->init();
 
     //now create an edgeTemplate
@@ -570,8 +594,8 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
 }
 
 
-vector<string> nodeManager::getAppReactions(){
-
+map<string, string> nodeManager::getAppReactions(){
+    return appReactions;
 }
 
 
