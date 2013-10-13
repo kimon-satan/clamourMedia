@@ -531,6 +531,10 @@ void ofApp::scheduleCommands(command &cmd, vector<string> & clients) {
         clients.push_back(s);
     }
 
+    if(cmd.schedType == "delay") {
+        if(cmd.execNum == 1)isSched = false;
+    }
+
 
     if(isSched) {
         //calculate the next scheduled time for the command
@@ -569,6 +573,7 @@ void ofApp::implementCommand(command &cmd) {
     unpackClients(clients, cmd);
 
     if(cmd.schedType != "none")scheduleCommands(cmd, clients);
+    if(cmd.schedType == "delay" && cmd.execAt != ofGetFrameNum())return;
 
     //now carry out the command
 
@@ -684,6 +689,9 @@ void ofApp::implementCommand(command &cmd) {
         mSplashManager->endSynth(cmd.sTargets);
     } else if(cmd.mCommand == "CLEAR_SCHED"){
         mCurrentGame->clearSchedCommands();
+    } else if(cmd.mCommand == "ZONE_COMM") {
+        mZoneManager->implementComm(cmd.zTargets, cmd.stringParams["TYPE"]); //needs implementing other parts
+
     }
 
 

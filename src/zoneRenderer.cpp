@@ -45,7 +45,7 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z) {
 
     mPost->end();
 
-    isShaderRender = false;
+    /*isShaderRender = false;
     //now for the normal render
     ofPushMatrix();
 
@@ -64,7 +64,7 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z) {
 
     }
 
-    ofPopMatrix();
+    ofPopMatrix(); */
 
 
 }

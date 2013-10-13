@@ -4,6 +4,28 @@ zoneManager::zoneManager() {
     //ctor
 }
 
+void zoneManager::setupRegions() {
+
+   /* mCollisionMapBounds.clear();
+    float p = (float)screenData::width/screenData::height;
+
+    for(int i = 0; i < 4; i++) {
+
+        for(int j = 0; j < 4; j ++) {
+
+            ofRectangle r;
+            r.x = 0.25 * p * i;
+            r.y = 0.25 * j;
+            r.width = 0.25 * p;
+            r.height = 0.25;
+            mCollisionMapBounds.push_back(r);
+        }
+
+    }*/
+
+}
+
+
 void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
     appReactions.clear();
@@ -37,6 +59,8 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
     }
 
+
+
     //find node intersections
     n_it = tNodes.begin();
 
@@ -55,6 +79,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
             continue;
 
         }
+
 
         for(z_it = mZones.begin(); z_it != mZones.end(); ++z_it) {
 
@@ -79,6 +104,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
                 //new nodes inside the zone
 
                 if(z_it->second->getIsClosedOut()) {
+                    cout << "repell \n";
                     repellNode(n_it->second, z_it->second);
                 } else {
 
@@ -115,7 +141,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
 bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
-
+    cout << "check in zone \n";
     //  return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
     ofPoint intersect;
     bool isIntersect = clamourUtils::pathInPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
@@ -126,6 +152,7 @@ bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
 void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
+    cout << "repell \n";
     //finding centroid is not solved here so this method only works if zones drawn from the center
     ofVec2f v = n->getMeanPos_abs() - n->getIntersect();
     ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getIntersect());
@@ -377,8 +404,24 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
     }
 }
 
+void zoneManager::implementComm(vector<string> zTargets, string comm){
+
+
+    for(int i = 0; i < zTargets.size(); i++){
+
+        if(comm == "closeOutZone"){
+            mZones[zTargets[i]]->setIsClosedOut(true);
+        }else if(comm == "openOutZone"){
+            mZones[zTargets[i]]->setIsClosedOut(false);
+        }
+
+    }
+
+}
+
 void zoneManager::createZone(string name) {
 
+    cout << "create \n";
     //there will be alot more detail here at some point
     //perhaps pass the zone from the main app
     ofPtr<zone> z = ofPtr<zone>(new zone());
@@ -390,6 +433,7 @@ void zoneManager::createZone(string name) {
 
 void zoneManager::createZone(zone z) {
 
+   cout << "create \n";
 //    cout << z.getSoundFile() << endl;
     ofPtr<zone> zp = ofPtr<zone>(new zone(z));
     zp->recalcAbsDims();

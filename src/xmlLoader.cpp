@@ -32,7 +32,7 @@ void xmlLoader::loadCommands(ofPtr<game> gm, ofxXmlSettings &XML, int stage, int
             t_cmd.priority = pty;
 
             if(XML.tagExists("REPEAT"))t_cmd.isRepeatable = XML.getValue("REPEAT", true);
-            if(XML.tagExists("SCHED"))t_cmd.isSchedulable = XML.getValue("SCHED", true);
+            t_cmd.isSchedulable = XML.getValue("SCHED", false);
             if(XML.tagExists("SCHED_TYPE"))t_cmd.schedType = XML.getValue("SCHED_TYPE", "none");
             if(XML.tagExists("INTERVAL_SECS"))t_cmd.interval_secs = XML.getValue("INTERVAL_SECS", 0.0);
             if(XML.tagExists("TOT_EXECS"))t_cmd.totExecs = XML.getValue("TOT_EXECS", 1);
@@ -142,12 +142,11 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
     if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
     if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.0);
     if(XML.tagExists("Y"))cmd.floatParams["Y"] = XML.getValue("Y", 0.0);
+    if(XML.tagExists("TYPE"))cmd.stringParams["TYPE"] = XML.getValue("TYPE", "");
     if(XML.tagExists("SIZE"))cmd.floatParams["SIZE"] = XML.getValue("SIZE", 0.0);
     if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
 
     if(XML.tagExists("PATTERN"))cmd.stringParams["PATTERN"] = XML.getValue("PATTERN", "default");
-    if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.5);
-    if(XML.tagExists("Y"))cmd.floatParams["Y"] = XML.getValue("Y", 0.5);
     if(XML.tagExists("DIM_P"))cmd.intParams["DIM_P"] = XML.getValue("DIM_P", 0);
     if(XML.tagExists("POS_P"))cmd.intParams["POS_P"] = XML.getValue("POS_P", 0);
     if(XML.tagExists("RADIUS"))cmd.floatParams["RADIUS"] = XML.getValue("RADIUS", 0.25);

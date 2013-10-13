@@ -21,7 +21,9 @@ class zoneManager
         void showZone(string name);
         void destroyZone(string name);
         void destroyAllZones();
+        void setupRegions();
 
+        void implementComm(vector<string> zTargets, string comm);
 
         map<string, ofPtr<zone> > getZones();
 
