@@ -30,9 +30,9 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes) {
                 pos *= screenData::height;
                 debugFont.drawString(it->second->getRow() + "_" + ofToString(it->second->getSeat()), pos.x, pos.y);
             }
-            if(bd.getName() == "FLICKER")drawFlicker(it->second, bd);
-            if(bd.getName() == "ROUND")drawRound(it->second, bd);
+
             if(bd.getName() == "simplePointer")simplePointer(it->second, bd);
+            if(bd.getName() == "fanPointer")fanPointer(it->second, bd);
         }
 
     }
@@ -42,50 +42,11 @@ void nodeRenderer::renderNodes(map<string, ofPtr<clamourNode> > nodes) {
 }
 
 
-void nodeRenderer::drawFlicker(ofPtr<clamourNode> n, baseData &bd) {
 
-    ofVec2f pos = n->getMeanPos_abs();
-    pos *= screenData::height;
-
-
-    ofSetColor(255);
-
-
-    if(ofRandom(1) < bd.getParameter("flicker").abs_val) {
-
-        glBegin(GL_POINTS);
-        // glColor3ub(255 * n->getEnvVal() ,255 * n->getEnvVal(),255 * n->getEnvVal());
-        glColor3ub(255,255,255);
-
-        float mul = (n->getIsFiring())? 0.5 : 1.0;
-        float size = bd.getParameter("size").abs_val * mul;
-        int numPs = (n->getIsFiring())? 200 : 50;
-
-        for(int i = 0; i < 50; i ++) {
-            glVertex2d(pos.x + ofRandom(-size/2,size/2), pos.y + ofRandom(-size/2,size/2));
-        }
-        glEnd();
-    }
-
-}
-
-
-void nodeRenderer::drawRound(ofPtr<clamourNode> n, baseData &bd) {
-
-    ofVec2f pos = n->getMeanPos_abs();
-    pos *= screenData::height;
-
-    ofSetColor(255 * n->getEnvVal());
-    float t_size = bd.getParameter("size").abs_val;
-
-    ofNoFill();
-    ofCircle( pos.x, pos.y, t_size);
-
-}
 
 void nodeRenderer::simplePointer(ofPtr<clamourNode> n, baseData &bd) {
 
-    if(n->getIsFiring() && ofRandomf() < bd.getParameter("flicker").abs_val)return;
+    if(bd.getParameter("flickerOn").abs_val > 0.01 && ofRandomf() < bd.getParameter("flicker").abs_val)return;
 
     ofPath p = n->getEdgeTemplate();
 
@@ -100,23 +61,19 @@ void nodeRenderer::simplePointer(ofPtr<clamourNode> n, baseData &bd) {
     float bF = bd.getParameter("bFire").abs_val * 255;
     float b = bd.getParameter("bOff").abs_val * 255;
     int pulse = bd.getParameter("pulse").abs_val * ofGetFrameRate();
-
     ofColor c;
 
-    if(n->getIsFiring()){
-        if(pulse > 0){
-            (ofGetFrameNum()%pulse == 0) ? c.setHsb(h,s,bF) : c.setHsb(h,s,b);
-        }else{
-            c.setHsb(h,s,bF);
-        }
-
-        float s = bd.getParameter("size").abs_val * bd.getParameter("shudder").abs_val * n->getEnvVal();
-        ofTranslate(ofRandomf() * s, ofRandomf() * s, 0);
-        float w = bd.getParameter("wobble").abs_val * 180 * n->getEnvVal();
-        ofRotateZ(ofRandomf() * w);
+    if(pulse > 0 &&  bd.getParameter("pulseOn").abs_val > 0.01){
+        (ofGetFrameNum()%pulse == 0) ? c.setHsb(h,s,bF) : c.setHsb(h,s,b);
     }else{
         c.setHsb(h,s,b);
     }
+
+    float sh = bd.getParameter("size").abs_val * bd.getParameter("shudder").abs_val;
+    ofTranslate(ofRandomf() * sh, ofRandomf() * sh, 0);
+    float w = bd.getParameter("wobble").abs_val * 180;
+    ofRotateZ(ofRandomf() * w);
+
 
     p.setFilled(true);
     p.setColor(c);
@@ -125,6 +82,79 @@ void nodeRenderer::simplePointer(ofPtr<clamourNode> n, baseData &bd) {
     p.setFilled(false);
     p.setStrokeColor(0);
     p.draw();
+
+    ofPopMatrix();
+
+}
+
+
+void nodeRenderer::fanPointer(ofPtr<clamourNode> n, baseData &bd){
+
+    if(bd.getParameter("flickerOn").abs_val > 0.01 && ofRandomf() < bd.getParameter("flicker").abs_val)return;
+
+    ofPath p = n->getEdgeTemplate();
+    ofRectangle r = clamourUtils::getBounds(p);
+    ofVec2f v = r.getCenter();
+
+    ofPushMatrix();
+
+    ofScale(screenData::height, screenData::height,1.0);
+    ofTranslate(n->getMeanPos_abs());
+    if(n->getIsRotate())ofRotate(n->getAvRot());
+
+    int numFans = bd.getParameter("numFans").abs_val;
+
+    float flap = sin(ofDegToRad(ofGetFrameNum()* 5.0/bd.getParameter("flapSpeed").abs_val)) * bd.getParameter("flapMul").abs_val + bd.getParameter("flapAdd").abs_val;
+    float floop = sin(ofDegToRad(ofGetFrameNum() * 5.0/bd.getParameter("floopSpeed").abs_val)) * (r.height * bd.getParameter("floopMul").abs_val) + (r.height * bd.getParameter("floopAdd").abs_val);
+
+    float flutter = sin(ofDegToRad(ofGetFrameNum() * 5.0/bd.getParameter("flutterSpeed").abs_val)) * bd.getParameter("flutterMul").abs_val + bd.getParameter("flutterAdd").abs_val;
+    float flutterAng = bd.getParameter("flutterAng").abs_val;
+
+    ofColor c1;
+    c1.setHsb(bd.getParameter("col1H").abs_val * 255, bd.getParameter("col1S").abs_val * 255, bd.getParameter("col1B").abs_val * 255);
+
+    ofColor c2;
+    c2.setHsb(bd.getParameter("col2H").abs_val * 255, bd.getParameter("col2S").abs_val * 255, bd.getParameter("col2B").abs_val * 255);
+
+    for(int i = numFans; i > -1; i --){
+
+        for(int j = 0; j < 2; j ++){
+
+            ofPushMatrix();
+            ofTranslate(0,r.height);
+
+            ofRotate(0.5/(float)numFans * (1-j*2) * i * bd.getParameter("fanAngle").abs_val * flap);
+            ofTranslate(0, - r.height);
+
+            ofPushMatrix();
+            ofTranslate(0, i * floop);
+
+            ofRotate(ofRandom(-flutterAng,flutterAng) * flutter);
+            (i%2 ==  0)? p.setColor(c1) : p.setColor(c2);
+            p.setFilled(true);
+            p.draw();
+
+            p.setFilled(false);
+            p.setStrokeColor(0);
+            p.draw();
+
+            ofPopMatrix();
+
+            ofPopMatrix();
+        }
+
+    }
+
+
+    p.setColor(c1);
+    p.setFilled(true);
+    p.draw();
+
+    p.setFilled(false);
+    p.setStrokeColor(0);
+    p.draw();
+
+
 
     ofPopMatrix();
 

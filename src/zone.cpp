@@ -4,7 +4,7 @@ zone::zone()
 {
 //ctor
 
-    isClosedOut = false;
+    isClosedOut = true;
     isClosedIn = false;
 
     mChanged = CLAMOUR_NONE;

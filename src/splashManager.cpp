@@ -119,6 +119,34 @@ void splashManager::reset(){
 
 }
 
+void splashManager::muteAllSynths(){
+
+    map<string , ofPtr<baseZode> >::iterator it;
+
+    for(it = mSynths.begin(); it != mSynths.end(); it++){
+
+        baseData bd = it->second->getSoundData();
+        parameter p = bd.getParameter("mute");
+        p.abs_val = (p.abs_val >= 1 ) ? 0 :1;
+        bd.setParameter(p);
+        it->second->setSoundData(bd);
+        scMessenger::updateSynth(it->second->getName(), bd );
+    }
+
+}
+
+void splashManager::stopAllSynths(){
+
+    map<string , ofPtr<baseZode> >::iterator it;
+
+    for(it = mSynths.begin(); it != mSynths.end(); it++){
+        it->second->setIsFired(false);
+        it->second->setIsFiring(false);
+        it->second->setChanged(CLAMOUR_ON_OFF);
+    }
+
+}
+
 vector<ofPtr<title> >splashManager::getOnTitles(){
 
     return onTitles;

@@ -40,12 +40,15 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z) {
         if(bd.getName() == "ffwdButton")simpleButton(it->second, bd);
         if(bd.getName() == "rrwdButton")simpleButton(it->second, bd);
         if(bd.getName() == "ejectButton")simpleButton(it->second, bd);
+        if(bd.getName() == "jogButton")simpleButton(it->second, bd);
+
 
     }
 
     mPost->end();
 
-    /*isShaderRender = false;
+
+    isShaderRender = false;
     //now for the normal render
     ofPushMatrix();
 
@@ -61,10 +64,11 @@ void zoneRenderer::draw(map<string, ofPtr<zone> > z) {
         if(bd.getName() == "ffwdButton")simpleButton(it->second, bd);
         if(bd.getName() == "rrwdButton")simpleButton(it->second, bd);
         if(bd.getName() == "ejectButton")simpleButton(it->second, bd);
+        if(bd.getName() == "jogButton")simpleButton(it->second, bd);
 
     }
 
-    ofPopMatrix(); */
+    ofPopMatrix();
 
 
 }
@@ -135,6 +139,7 @@ void zoneRenderer::simpleButton(ofPtr<zone> z, baseData &bd) {
 
         ofPushMatrix();
             ofRotate(bd.getParameter("outerRot").abs_val);
+
             e.draw();
             p.draw();
         ofPopMatrix();
@@ -169,6 +174,7 @@ void zoneRenderer::simpleButton(ofPtr<zone> z, baseData &bd) {
         if(bd.getName() == "revButton")revPlaySymbol(s);
         if(bd.getName() == "ffwdButton")ffwdSymbol(s, bd.getParameter("innerWarp").abs_val);
         if(bd.getName() == "ejectButton")ejectSymbol(s, bd.getParameter("innerWarp").abs_val);
+        if(bd.getName() == "jogButton")jogSymbol(s, bd.getParameter("innerWarp").abs_val);
 
         ofPopMatrix();
 
@@ -247,9 +253,29 @@ void zoneRenderer::ffwdSymbol(float s, float w) {
 
 }
 
-void zoneRenderer::rrwdSymbol(float s, float w) {
+void zoneRenderer::jogSymbol(float s, float w) {
+
+    ofPushMatrix();
+        ofTranslate(-0.1 * w,0);
+        ofTriangle(
+            -0.06 * s, - s * 0.2,
+            -0.06 * s, s * 0.2,
+            -s * 0.37, 0
+        );
+    ofPopMatrix();
+
+    ofPushMatrix();
+        ofTranslate(0.1 * w,0);
+        ofTriangle(
+            0.06 * s , - s * 0.2,
+            0.06 * s, s * 0.2,
+            s * 0.37, 0
+        );
+    ofPopMatrix();
 
 }
+
+
 
 void zoneRenderer::ejectSymbol(float s, float w) {
 

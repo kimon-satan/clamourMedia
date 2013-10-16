@@ -24,6 +24,12 @@ struct zoneRule {
 };
 
 
+struct zoneReaction: public reaction{
+
+    clamourNode temp;
+
+};
+
 
 class zone : public baseZode {
 public:

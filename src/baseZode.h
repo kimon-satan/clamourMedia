@@ -8,6 +8,8 @@
 #include "clamourEvent.h"
 #include "scMessenger.h"
 
+class clamourNode;
+
 struct reaction {
 
     //these relate to aspects which effect other nodes, zones, stages etc;
@@ -23,6 +25,7 @@ struct reaction {
       //closeOutZone, openOutZone, closeInZone, openInZone, incrementStage
     string trig; //ON, OFF, ON_OFF
     vector<string> zTargets;
+    ofPtr<clamourNode> tempNode;
 
 };
 

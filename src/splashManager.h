@@ -21,6 +21,9 @@ public:
     void endSynth(vector<string> sTargets);
     map<string, ofPtr<baseZode> > getSynths();
 
+    void muteAllSynths();
+    void stopAllSynths();
+
 protected:
 private:
 

@@ -104,7 +104,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
                 //new nodes inside the zone
 
                 if(z_it->second->getIsClosedOut()) {
-                    cout << "repell \n";
+//                    cout << "repell \n";
                     repellNode(n_it->second, z_it->second);
                 } else {
 
@@ -141,7 +141,7 @@ void zoneManager::update(map<string, ofPtr<clamourNode> > tNodes) {
 
 bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
-    cout << "check in zone \n";
+//    cout << "check in zone \n";
     //  return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
     ofPoint intersect;
     bool isIntersect = clamourUtils::pathInPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
@@ -152,7 +152,7 @@ bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
 void zoneManager::repellNode(ofPtr<clamourNode> n, ofPtr<zone> z) {
 
-    cout << "repell \n";
+//    cout << "repell \n";
     //finding centroid is not solved here so this method only works if zones drawn from the center
     ofVec2f v = n->getMeanPos_abs() - n->getIntersect();
     ofPoint p = clamourUtils::getInsideIntersect(z->getOuterEdge(), z->getPos_abs(), n->getIntersect());
@@ -343,11 +343,20 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
         appReactions.push_back("repeatStage");
     } else if(r.rType == "decrementStage") {
         appReactions.push_back("decrementStage");
+    } else if(r.rType == "muteSynths") {
+        appReactions.push_back("muteSynths");
     } else if(r.rType == "transformNode") {
         //potentially could need on/off for data storage
 
         map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
-        clamourNode temp = presetStore::nodePresets[r.stringParams["PRESET"]]; //load the node into the reaction for easier variation
+        clamourNode temp;
+
+        if(!r.tempNode){
+            temp = presetStore::nodePresets[r.stringParams["PRESET"]]; //load the node into the reaction for easier variation
+        }else{
+            temp = *r.tempNode;
+        }
+
         while(c_it != cap.end()) {
             nodeManager::setNode(c_it->second, temp);
             ++ c_it;
@@ -360,13 +369,17 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
 
             parameter p = c_it->second->getDrawData().getParameter("size");
 
-            p.abs_val *= r.floatParams["SCALE"];
-            p.abs_val = min(1.0f, p.abs_val);
-            c_it->second->setDrawParameter(p);
-            ofPath pt = c_it->second->getEdgeTemplate();
-            pt.scale(r.floatParams["SCALE"], r.floatParams["SCALE"]);
-            c_it->second->setEdgeTemplate(pt);
-            c_it->second->updatePath();
+            if((p.abs_val < 0.75 && r.floatParams["SCALE"] > 1 )|| ( p.abs_val > 0.01 && r.floatParams["SCALE"] < 1 )){
+                p.abs_val *= r.floatParams["SCALE"];
+                p.abs_val = min(1.0f, p.abs_val);
+                c_it->second->setDrawParameter(p);
+                ofPath pt = c_it->second->getEdgeTemplate();
+
+                pt.scale(r.floatParams["SCALE"], r.floatParams["SCALE"]);
+                c_it->second->setEdgeTemplate(pt);
+                c_it->second->updatePath();
+            }
+
             ++ c_it;
         }
     } else if(r.rType == "scaleShift") {
@@ -384,8 +397,11 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
         map<string, ofPtr<clamourNode> >::iterator c_it = cap.begin();
 
         while(c_it != cap.end()) {
-            float att = c_it->second->getAttSecs() * r.floatParams["SCALE"];
-            c_it->second->setAttSecs(att);
+
+            float att = c_it->second->getAttSecs();
+             if((att > 0.2 && r.floatParams["SCALE"] < 1 )|| ( att < 1 && r.floatParams["SCALE"] > 1 )){
+                c_it->second->setAttSecs(att* r.floatParams["SCALE"]);
+             }
             ++c_it;
         }
 
@@ -421,7 +437,7 @@ void zoneManager::implementComm(vector<string> zTargets, string comm){
 
 void zoneManager::createZone(string name) {
 
-    cout << "create \n";
+  //  cout << "create \n";
     //there will be alot more detail here at some point
     //perhaps pass the zone from the main app
     ofPtr<zone> z = ofPtr<zone>(new zone());
@@ -433,7 +449,7 @@ void zoneManager::createZone(string name) {
 
 void zoneManager::createZone(zone z) {
 
-   cout << "create \n";
+  // cout << "create \n";
 //    cout << z.getSoundFile() << endl;
     ofPtr<zone> zp = ofPtr<zone>(new zone(z));
     zp->recalcAbsDims();

@@ -4,7 +4,7 @@
 void ofApp::setup() {
 
     //ofSetLogLevel(OF_LOG_VERBOSE);
-    ofSetVerticalSync(true);
+    //ofSetVerticalSync(true); // only when dual screen
     //ofSetFrameRate(60);
     ofSetCircleResolution(50);
     ofSetWindowPosition(800, 100);
@@ -469,6 +469,9 @@ void ofApp::implementZoneReactions() {
         } else if(*it == "decrementStage") {
             decrementStage();
             break;
+        } else if (*it == "muteSynths"){
+            mSplashManager->muteAllSynths();
+            break;
         }
         ++it;
     }
@@ -679,14 +682,19 @@ void ofApp::implementCommand(command &cmd) {
         }
     } else if(cmd.mCommand == "SET_NODE") {
         mNodeManager->setNodes(clients, cmd.mNode);
+
     } else if(cmd.mCommand == "CREATE_ZONE") {
         mZoneManager->createZone(cmd.mZone);
     } else if(cmd.mCommand == "DESTROY_ZONE") {
         mZoneManager->destroyZone(cmd.stringParams["NAME"]);
+     } else if(cmd.mCommand == "DESTROY_ALL_ZONES") {
+        mZoneManager->destroyAllZones();
     } else if(cmd.mCommand == "START_SYNTH") {
         mSplashManager->addSynth(cmd.sTargets, cmd.mSynth);
     } else if(cmd.mCommand == "STOP_SYNTH") {
         mSplashManager->endSynth(cmd.sTargets);
+    } else if(cmd.mCommand == "STOP_ALL_SYNTHS") {
+        mSplashManager->stopAllSynths();
     } else if(cmd.mCommand == "CLEAR_SCHED"){
         mCurrentGame->clearSchedCommands();
     } else if(cmd.mCommand == "ZONE_COMM") {

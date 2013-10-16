@@ -9,7 +9,19 @@
 
 #include "nodeManager.h"
 
+bool sortByIndex(string a, string b){
 
+    string aR = a.substr(0,1);
+    string bR = b.substr(0,1);
+
+    if(aR.compare(bR) > 0)return true;
+    if(aR.compare(bR) < 0)return false;
+
+    int aC = ofToInt(a.substr(2));
+    int bC = ofToInt(b.substr(2));
+
+    return (aC > bC);
+}
 
 nodeManager::nodeManager() {
 
@@ -95,7 +107,7 @@ void nodeManager::updateNodes() {
 
     while(e_it != mFutureEvents.end()) {
         if(e_it->execAt == ofGetFrameNum()) {
-            if(mNodes.find(e_it->ownerIndex) != mNodes.end()){
+            if(mNodes.find(e_it->ownerIndex) != mNodes.end()) {
                 implementReaction(e_it->r, mNodes[e_it->ownerIndex]);
             }
             e_it = mFutureEvents.erase(e_it);
@@ -142,7 +154,12 @@ void nodeManager::updateNodes() {
     //now check for collisions
     while(it != mNodes.end()) {
         if(!it->second->getIsSleeping()) {
+
+
             if(it->second->getIsCollidable())checkForCollisions(it->second);
+            if(it->second->getChanged() == CLAMOUR_ON_OFF) {
+                implementReactions(it->second, it->second->getIsFired());
+            }
         }
         ++it;
     }
@@ -207,9 +224,9 @@ void nodeManager::checkForCollisions(ofPtr<clamourNode> n) {
 
                 if(*target != n) {
 
-                    if((*target)->getBounds().inside(n->getMeanPos_abs())){
+                    if((*target)->getBounds().inside(n->getMeanPos_abs())) {
                         bool isCollision = clamourUtils::pointInPath((*target)->getOuterEdge(), n->getMeanPos_abs());
-                        if(isCollision){
+                        if(isCollision) {
                             if(!n->getIsColliding() && !(*target)->getIsColliding())implementReactions(n , *target);
                             n->setIsColliding(true);
                             (*target)->setIsColliding(true);
@@ -231,12 +248,26 @@ void nodeManager::checkForCollisions(ofPtr<clamourNode> n) {
 
 }
 
-void nodeManager::implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tgt){
+
+void nodeManager::implementReactions(ofPtr<clamourNode> n, bool isOn) {
 
     vector<reaction> r = n->getReactions();
     vector<reaction>::iterator it = r.begin();
 
-    while(it != r.end()){
+    while(it != r.end()) {
+
+        if(it->trig == "OFF" && isOn) {
+            ++it;
+            continue;
+        }
+        if(it->trig == "COLLIDE") {
+            ++it;
+            continue;
+        }
+        if(it->trig == "ON" && !isOn) {
+            ++it;
+            continue;
+        }
 
         if(it->floatParams.find("DELAY_SECS") != it->floatParams.end()) {
 
@@ -249,7 +280,40 @@ void nodeManager::implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tg
             mFutureEvents.push_back(e);
 
 
-        }else{
+        } else {
+            //implement immediately
+            implementReaction(*it, n);
+        }
+
+        ++it;
+    }
+
+}
+
+void nodeManager::implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tgt) {
+
+    vector<reaction> r = n->getReactions();
+    vector<reaction>::iterator it = r.begin();
+
+    while(it != r.end()) {
+
+        if(it->trig != "COLLIDE") {
+            ++it;
+            continue;
+        }
+
+        if(it->floatParams.find("DELAY_SECS") != it->floatParams.end()) {
+
+            eventComm e;
+            int delFrames = it->floatParams["DELAY_SECS"] * ofGetFrameRate();
+            e.execAt = ofGetFrameNum() + delFrames;
+            if(it->intParams.find("ENV_INDEX") != it->intParams.end())e.eventIndex = it->intParams["ENV_INDEX"];
+            e.ownerIndex = tgt->getName();
+            e.r = *it;
+            mFutureEvents.push_back(e);
+
+
+        } else {
             //implement immediately
             implementReaction(*it, tgt);
         }
@@ -261,14 +325,14 @@ void nodeManager::implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tg
 
 }
 
-void nodeManager::implementReaction(reaction & r, ofPtr<clamourNode> t){
+void nodeManager::implementReaction(reaction & r, ofPtr<clamourNode> t, bool isOn) {
 
-    if(r.rType == "sleep"){
+    if(r.rType == "sleep") {
 
         appReactions[t->getName()] = "resetControl";
         killNode(t->getName());
 
-   }else if(r.rType == "transform"){
+    } else if(r.rType == "transform") {
 
         clamourNode temp = presetStore::nodePresets[r.stringParams["PRESET"]]; //load the node into the reaction for easier variation
         setNode(t, temp);
@@ -323,6 +387,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
 
         for(int i = 0; i < clients.size(); i++) {
 
+            if(!mNodes[clients[i]]->getIsDistributable())continue;
             ofVec2f p(0,ofRandom(0,r));
             p = p.getRotated(ofRandom(-180,180));
             if(dimp)p *= ofVec2f(w_prop,1.0);
@@ -340,7 +405,7 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
         float interval = (float)360.0/clients.size();
 
         for(int i = 0; i < clients.size(); i++) {
-
+            if(!mNodes[clients[i]]->getIsDistributable())continue;
             ofVec2f p(0,r);
             p = p.getRotated(-180 + i * interval);
             if(dimp)p *= ofVec2f(w_prop,1.0);
@@ -355,8 +420,28 @@ void nodeManager::distributeNodes(vector<string> clients, string pattern, map<st
 
 
         for(int i = 0; i < clients.size(); i++) {
-
+            if(!mNodes[clients[i]]->getIsDistributable())continue;
             mNodes[clients[i]]->setRawPos_abs(c);
+            mNodes[clients[i]]->setAnimOverride(20);
+        }
+
+    } else if(pattern == "GRID") {
+
+        ofVec2f c(params["X"], params["Y"]);
+        int rl  = params["ROW_LENGTH"];
+        int numRows = clients.size()/rl;
+        if(posp)c *= ofVec2f(w_prop,1.0);
+
+        ofVec2f w(params["WIDTH"]/rl, params["HEIGHT"]/(float)numRows);
+        if(dimp)c *= ofVec2f(w_prop, 1.0);
+
+        sort(clients.begin(), clients.end(), sortByIndex);
+
+        for(int i = 0; i < clients.size(); i++) {
+            if(!mNodes[clients[i]]->getIsDistributable())continue;
+            ofVec2f p(c.x + w.x * (float)(i%rl), c.y + w.y * floor(i/rl));
+
+            mNodes[clients[i]]->setRawPos_abs(p);
             mNodes[clients[i]]->setAnimOverride(20);
         }
 
@@ -418,7 +503,7 @@ void nodeManager::switchOnNode(string t_index, float x, float y) {
 
 }
 
-void nodeManager::killAllNodes(){
+void nodeManager::killAllNodes() {
 
     map<string, ofPtr<clamourNode> >::iterator it;
 
@@ -431,7 +516,7 @@ void nodeManager::killAllNodes(){
 
 }
 
-void nodeManager::killNodes(vector<string> indexes){
+void nodeManager::killNodes(vector<string> indexes) {
 
     for(int i = 0; i < indexes.size(); i ++) {
         killNode(indexes[i]);
@@ -439,7 +524,7 @@ void nodeManager::killNodes(vector<string> indexes){
 
 }
 
-void nodeManager::killNode(string t_index){
+void nodeManager::killNode(string t_index) {
 
     setNode(mNodes[t_index], presetStore::nodePresets["defaultNode"]);
 
@@ -463,7 +548,6 @@ void nodeManager::shiftNodePosition(string t_index, float x, float y) {
 
     ofVec2f s(x,y);
     if(mNodes[t_index]->getAnimOverride() > 0 || mNodes[t_index]->getIsNewShift()) {
-        cout << "reset \n" << endl;
         mNodes[t_index]->resetShift(x,y);
         return;
     }
@@ -576,8 +660,11 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
     target->setReactions(temp.getReactions());
     target->setSounds(temp.getSounds());
     target->setIsCollidable(temp.getIsCollidable());
+    target->setIsDistributable(temp.getIsDistributable());
+
     target->init();
 
+    target->reconcileSlaves();
     //now create an edgeTemplate
 
     if(target->getDrawData().getName() != "none") {
@@ -590,11 +677,11 @@ void nodeManager::setNode(ofPtr<clamourNode> target, clamourNode &temp) {
         target->setEdgeTemplate(p);
     }
 
-
+    target->setIsSleeping(target->getCanSleep()); //wake up the node
 }
 
 
-map<string, string> nodeManager::getAppReactions(){
+map<string, string> nodeManager::getAppReactions() {
     return appReactions;
 }
 

@@ -48,7 +48,8 @@ class nodeManager{
     void distributeNodes(vector<string> clients, string pattern, map<string, float> params, bool dimp, bool posp);
 
     void implementReactions(ofPtr<clamourNode> n, ofPtr<clamourNode> tgt);
-    void implementReaction(reaction & r, ofPtr<clamourNode> n);
+    void implementReactions(ofPtr<clamourNode> n, bool isOn);
+    void implementReaction(reaction & r, ofPtr<clamourNode> n, bool isOn = true);
 
     void setNodeAttSecs(vector<string> indexes, float att);
     void setNodeDecSecs(vector<string> indexes, float dec);
@@ -63,7 +64,6 @@ class nodeManager{
     void setNodeSound(vector<string> indexes, baseData &bd);
     void setNodeSoundParam(vector<string> indexes, parameter &p);
     void setNodes(vector<string> indexes, clamourNode &n);
-    void implementReaction(ofPtr<clamourNode> n, ofPtr<clamourNode> tgt);
 
     static void setNode(ofPtr<clamourNode> target, clamourNode &temp);
     map<string, string> getAppReactions();

@@ -142,6 +142,9 @@ void xmlLoader::parseActions(command &cmd, ofxXmlSettings &XML) {
     if(XML.tagExists("DECAY_SECS"))cmd.floatParams["DECAY_SECS"] = XML.getValue("DECAY_SECS", 0.0);
     if(XML.tagExists("X"))cmd.floatParams["X"] = XML.getValue("X", 0.0);
     if(XML.tagExists("Y"))cmd.floatParams["Y"] = XML.getValue("Y", 0.0);
+    if(XML.tagExists("WIDTH"))cmd.floatParams["WIDTH"] = XML.getValue("WIDTH", 0.5);
+    if(XML.tagExists("HEIGHT"))cmd.floatParams["HEIGHT"] = XML.getValue("HEIGHT", 0.5);
+    if(XML.tagExists("ROW_LENGTH"))cmd.floatParams["ROW_LENGTH"] = XML.getValue("ROW_LENGTH", 10.0);
     if(XML.tagExists("TYPE"))cmd.stringParams["TYPE"] = XML.getValue("TYPE", "");
     if(XML.tagExists("SIZE"))cmd.floatParams["SIZE"] = XML.getValue("SIZE", 0.0);
     if(XML.tagExists("NAME"))cmd.stringParams["NAME"] = XML.getValue("NAME", "default");
@@ -311,9 +314,17 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
     r.rType = XML.getValue("TYPE", "closeOutZone");
     r.trig = XML.getValue("TRIG", "ON");
     if(XML.tagExists("PRESET"))r.stringParams["PRESET"] = XML.getValue("PRESET","default");
+    if(XML.tagExists("P_CHILD")){
+        clamourNode temp = presetStore::nodePresets[XML.getValue("P_CHILD","defaultNode")];
+        loadNode(temp, XML);
+        r.tempNode = ofPtr<clamourNode>(new clamourNode(temp));
+    }
+
     if(XML.tagExists("SCALE"))r.floatParams["SCALE"] = XML.getValue("SCALE", 1.0);
     if(XML.tagExists("ENV_INDEX"))r.intParams["ENV_INDEX"] = XML.getValue("ENV_INDEX", 1);
     if(XML.tagExists("DELAY_SECS"))r.floatParams["DELAY_SECS"] = XML.getValue("DELAY_SECS", 0.25);
+    if(XML.tagExists("NAME"))r.stringParams["NAME"] = XML.getValue("NAME", "");
+
 
     int numZs = XML.getNumTags("Z_TARGET");
 
@@ -322,6 +333,8 @@ void xmlLoader::loadReaction(reaction &r, ofxXmlSettings &XML) {
     }
 
 }
+
+
 
 void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
 
@@ -336,6 +349,7 @@ void xmlLoader::loadNode(clamourNode &n, ofxXmlSettings &XML) {
     if(XML.tagExists("CAN_SLEEP"))n.setCanSleep(XML.getValue("CAN_SLEEP", true));
     if(XML.tagExists("ROTATE")){n.setIsRotate(XML.getValue("ROTATE", true));}
     if(XML.tagExists("COLLIDES")){n.setIsCollidable(XML.getValue("COLLIDES", false));}
+    if(XML.tagExists("DISTRIB")){n.setIsDistributable(XML.getValue("DISTRIB", true));}
 
     if(XML.tagExists("SHIFT"))n.setShiftAmount(XML.getValue("SHIFT", 0.2));
 

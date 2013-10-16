@@ -26,6 +26,7 @@ clamourNode::clamourNode(int ts, string tr)
     isNewShift = false;
     isColliding = false;
     isCollidable = false;
+    isDistributable = true;
 
 };
 
@@ -42,6 +43,7 @@ clamourNode::clamourNode(){
     isNewShift = false;
     isColliding = false;
     isCollidable = false;
+    isDistributable = true;
 
 };
 
@@ -366,3 +368,6 @@ void clamourNode::setIsColliding(bool b){isColliding =b;}
 
 bool clamourNode::getIsCollidable(){return isCollidable;}
 void clamourNode::setIsCollidable(bool b){isCollidable =b;}
+
+bool clamourNode::getIsDistributable(){return isDistributable;}
+void clamourNode::setIsDistributable(bool b){isDistributable = b;}

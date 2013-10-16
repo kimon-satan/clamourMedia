@@ -21,7 +21,7 @@ public:
     void playSymbol(float s);
     void revPlaySymbol(float s);
     void ffwdSymbol(float s, float w);
-    void rrwdSymbol(float s, float w);
+    void jogSymbol(float s, float w);
     void ejectSymbol(float s, float w);
 
     //getters and setters

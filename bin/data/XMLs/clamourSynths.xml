@@ -37,20 +37,29 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
 			<WARP>lin</WARP>
 			<UNIT/>
 		</PARAM>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
 
 	</SYNTH>
 
 	<SYNTH>
 		<NAME>brownExploder</NAME>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -70,7 +79,7 @@
 	<SYNTH>
 		<NAME>brownExploder</NAME>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -91,7 +100,7 @@
 	<SYNTH>
 		<NAME>whiteExploder</NAME>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -111,6 +120,14 @@
 	<SYNTH>
 		<NAME>om</NAME>
 		<PARAM>
+			<NAME>mute</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
 			<NAME>amp</NAME>
 			<MIN_VAL>0</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
@@ -119,7 +136,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -163,7 +180,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -202,7 +219,7 @@
 			<WARP>lin</WARP>
 			<UNIT/>
 		</PARAM>
-		
+
 		<PARAM>
 			<NAME>carFreq</NAME>
 			<MIN_VAL>100</MIN_VAL>
@@ -225,7 +242,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -269,7 +286,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -306,7 +323,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -342,7 +359,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -354,6 +371,14 @@
 			<MIN_VAL>-5</MIN_VAL>
 			<MAX_VAL>5</MAX_VAL>
 			<ABS_VAL>1</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>loop</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
 			<WARP>lin</WARP>
 			<UNIT/>
 		</PARAM>
@@ -370,7 +395,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -398,7 +423,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -435,7 +460,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -472,7 +497,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -510,7 +535,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -539,7 +564,7 @@
 			<UNIT/>
 		</PARAM>
 		<PARAM>
-			<NAME>pan</NAME>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
 			<MIN_VAL>-1</MIN_VAL>
 			<MAX_VAL>1</MAX_VAL>
 			<ABS_VAL>0</ABS_VAL>
@@ -595,6 +620,252 @@
 			<UNIT/>
 		</PARAM>
 
+	</SYNTH>
+
+
+	<SYNTH>
+		<NAME>klanker</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MAP_TYPE>x</MAP_TYPE>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>bFreq</NAME>
+			<MIN_VAL>25</MIN_VAL>
+			<MAX_VAL>500</MAX_VAL>
+			<ABS_VAL>100</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>fund</NAME>
+			<MIN_VAL>10</MIN_VAL>
+			<MAX_VAL>200</MAX_VAL>
+			<ABS_VAL>40</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>detune</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>swellRate</NAME>
+			<MIN_VAL>1</MIN_VAL>
+			<MAX_VAL>5</MAX_VAL>
+			<ABS_VAL>2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>swellMul</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.25</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>swellAdd</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.75</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>fluttery</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MAP_TYPE>x</MAP_TYPE>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>freq</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>1000</MAX_VAL>
+			<ABS_VAL>500</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>speedModFreq</NAME>
+			<MIN_VAL>2</MIN_VAL>
+			<MAX_VAL>20</MAX_VAL>
+			<ABS_VAL>10</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>speedModMul</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>10</MAX_VAL>
+			<ABS_VAL>5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>speedModAdd</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>25</MAX_VAL>
+			<ABS_VAL>15</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>rqModFreq</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>25</MAX_VAL>
+			<ABS_VAL>5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>
+
+	<SYNTH>
+		<NAME>didgery</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME>
+			<MAP_TYPE>x</MAP_TYPE>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>noiseFreq</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>1000</MAX_VAL>
+			<ABS_VAL>100</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pulseRate</NAME>
+			<MIN_VAL>2</MIN_VAL>
+			<MAX_VAL>20</MAX_VAL>
+			<ABS_VAL>10</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pulseMul</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.5</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>filRate</NAME>
+			<MIN_VAL>2</MIN_VAL>
+			<MAX_VAL>10</MAX_VAL>
+			<ABS_VAL>2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>filMul</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>250</MAX_VAL>
+			<ABS_VAL>250</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>filAdd</NAME>
+			<MIN_VAL>100</MIN_VAL>
+			<MAX_VAL>2000</MAX_VAL>
+			<ABS_VAL>1000</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>rq</NAME>
+			<MIN_VAL>0.01</MIN_VAL>
+			<MAX_VAL>0.5</MAX_VAL>
+			<ABS_VAL>0.2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+
+	</SYNTH>	
+	
+	<SYNTH>
+		<NAME>flyCliche</NAME>
+		<PARAM>
+			<NAME>amp</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0.2</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>pan</NAME><MAP_TYPE>x</MAP_TYPE>
+			<MIN_VAL>-1</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>lFreq</NAME>
+			<MIN_VAL>50</MIN_VAL>
+			<MAX_VAL>1000</MAX_VAL>
+			<ABS_VAL>400</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
+		<PARAM>
+			<NAME>hFreq</NAME>
+			<MIN_VAL>50</MIN_VAL>
+			<MAX_VAL>1000</MAX_VAL>
+			<ABS_VAL>450</ABS_VAL>
+			<WARP>exp</WARP>
+			<UNIT/>
+		</PARAM>
 	</SYNTH>
 
 </CLAMOUR_SYNTHS>

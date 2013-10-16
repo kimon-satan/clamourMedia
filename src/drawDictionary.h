@@ -37,6 +37,7 @@ class drawDictionary{
     static void flickerDrawData(baseData &bd);
     static void roundDrawData(baseData &bd);
     static void simplePointerData(baseData &bd);
+    static void fanPointerData(baseData &bd);
 
 
 
