@@ -4,8 +4,8 @@
 void ofApp::setup() {
 
     //ofSetLogLevel(OF_LOG_VERBOSE);
-    //ofSetVerticalSync(true); // only when dual screen
-    //ofSetFrameRate(60);
+    ofSetVerticalSync(false); // only when dual screen
+    ofSetFrameRate(60);
     ofSetCircleResolution(50);
     ofSetWindowPosition(800, 100);
     ofSetWindowTitle("CLAMOUR CONTROL");
@@ -485,7 +485,13 @@ void ofApp::incrementStage() {
    /* if(mCurrentGame->getCurrentStage()
     mGameBrowseIndex = min((int)mGames.size()-1, mGameBrowseIndex + 1);*/
 
-    mCurrentGame->incrementStage();
+    if(mCurrentGame->getCurrentStage() == mCurrentGame->getNumStages() - 1){
+        mGameBrowseIndex = min((int)mGames.size()-1, mGameBrowseIndex + 1);
+        mCurrentGame = mGames[mGameBrowseIndex];
+        mCurrentGame->reset();
+    }else{
+        mCurrentGame->incrementStage();
+    }
     bool isRepeat = !(mCurrentGame->getCurrentStage() >=  mCurrentGame->getFurthestStage());
     implementStage(isRepeat); //sometimes a repeat - how can this be worked out  ? // game stores highest stage reached
     updateGUIElements();
@@ -647,7 +653,7 @@ void ofApp::implementCommand(command &cmd) {
 
         t.text = cmd.stringParams["TEXT"];
         if(cmd.floatParams.find("ATTACK_SECS") != cmd.floatParams.end())t.att_secs = cmd.floatParams["ATTACK_SECS"];
-        if(cmd.floatParams.find("DECAY_SECS") != cmd.floatParams.end())t.att_secs = cmd.floatParams["DECAY_SECS"];
+        if(cmd.floatParams.find("DECAY_SECS") != cmd.floatParams.end())t.dec_secs = cmd.floatParams["DECAY_SECS"];
 
         mSplashManager->addTitle(cmd.stringParams["NAME"], t);
 
@@ -682,7 +688,6 @@ void ofApp::implementCommand(command &cmd) {
         }
     } else if(cmd.mCommand == "SET_NODE") {
         mNodeManager->setNodes(clients, cmd.mNode);
-
     } else if(cmd.mCommand == "CREATE_ZONE") {
         mZoneManager->createZone(cmd.mZone);
     } else if(cmd.mCommand == "DESTROY_ZONE") {
@@ -695,14 +700,19 @@ void ofApp::implementCommand(command &cmd) {
         mSplashManager->endSynth(cmd.sTargets);
     } else if(cmd.mCommand == "STOP_ALL_SYNTHS") {
         mSplashManager->stopAllSynths();
+    } else if(cmd.mCommand == "MUTE_ALL_SYNTHS") {
+        mSplashManager->muteAllSynths();
     } else if(cmd.mCommand == "CLEAR_SCHED"){
         mCurrentGame->clearSchedCommands();
     } else if(cmd.mCommand == "ZONE_COMM") {
         mZoneManager->implementComm(cmd.zTargets, cmd.stringParams["TYPE"]); //needs implementing other parts
-
+    }else if(cmd.mCommand == "INCREMENT_STAGE") {
+        incrementStage();
+    }else if(cmd.mCommand == "RESET_GAME"){
+         resetEverything();
+        implementStage();
+        updateGUIElements();
     }
-
-
 
 
 }

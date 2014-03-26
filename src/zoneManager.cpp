@@ -368,10 +368,10 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
         while(c_it != cap.end()) {
 
             parameter p = c_it->second->getDrawData().getParameter("size");
+            p.abs_val *= r.floatParams["SCALE"];
 
-            if((p.abs_val < 0.75 && r.floatParams["SCALE"] > 1 )|| ( p.abs_val > 0.01 && r.floatParams["SCALE"] < 1 )){
-                p.abs_val *= r.floatParams["SCALE"];
-                p.abs_val = min(1.0f, p.abs_val);
+            if((p.abs_val < 0.8 && r.floatParams["SCALE"] > 1 )|| ( p.abs_val > 0.02 && r.floatParams["SCALE"] < 1 )){
+
                 c_it->second->setDrawParameter(p);
                 ofPath pt = c_it->second->getEdgeTemplate();
 
@@ -399,8 +399,9 @@ void zoneManager::implementReaction(reaction &r, ofPtr<zone> z, bool isReverse) 
         while(c_it != cap.end()) {
 
             float att = c_it->second->getAttSecs();
+            att *= r.floatParams["SCALE"];
              if((att > 0.2 && r.floatParams["SCALE"] < 1 )|| ( att < 1 && r.floatParams["SCALE"] > 1 )){
-                c_it->second->setAttSecs(att* r.floatParams["SCALE"]);
+                c_it->second->setAttSecs(att);
              }
             ++c_it;
         }
@@ -468,6 +469,7 @@ void zoneManager::showZone(string name) {
 
 void zoneManager::destroyZone(string name) {
 
+    mZones[name]->silenceSounds();
     mZones[name]->endEvents();
     mZones[name]->endSound();
 

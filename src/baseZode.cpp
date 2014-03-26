@@ -177,6 +177,19 @@ void baseZode::endSound(){
 
 }
 
+void baseZode::silenceSounds(){
+
+    for(int s = 0; s < mSounds.size(); s ++){
+
+        parameter p = mSounds[s].getParameter("amp");
+        p.abs_val = 0;
+        mSounds[s].setParameter(p);
+        scMessenger::updateSynth(name, mSounds[s]);
+
+    }
+
+}
+
 void baseZode::endEvents(){
 
     for(int i = 0; i < mEvents.size(); i ++)endEvent(i + 1);

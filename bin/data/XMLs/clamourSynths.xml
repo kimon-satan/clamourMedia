@@ -619,6 +619,14 @@
 			<WARP>lin</WARP>
 			<UNIT/>
 		</PARAM>
+		<PARAM>
+			<NAME>mute</NAME>
+			<MIN_VAL>0</MIN_VAL>
+			<MAX_VAL>1</MAX_VAL>
+			<ABS_VAL>0</ABS_VAL>
+			<WARP>lin</WARP>
+			<UNIT/>
+		</PARAM>
 
 	</SYNTH>
 

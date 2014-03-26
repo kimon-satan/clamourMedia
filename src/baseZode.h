@@ -94,6 +94,8 @@ public:
     vector<baseData> getSounds();
     void setSounds(vector<baseData> bd);
 
+    void silenceSounds();
+
 protected:
 
     string name;

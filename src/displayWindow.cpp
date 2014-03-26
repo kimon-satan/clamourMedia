@@ -41,7 +41,7 @@ void displayWindow::draw()
     mNodeRenderer.renderNodes(pNodeManager->getNodes());
     mSplashRenderer.drawTitles(pSplashManager->getOnTitles());
     ofSetColor(255);
-    smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
+    //smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
 
 
 }
