@@ -145,7 +145,9 @@ bool zoneManager::checkInZone(ofPtr<clamourNode> n, ofPtr<zone> z) {
     //  return clamourUtils::pointInPath(z->getOuterEdge(), n->getMeanPos_abs());
     ofPoint intersect;
     bool isIntersect = clamourUtils::pathInPath( n->getOuterEdge(), z->getOuterEdge(), intersect);
-    if(isIntersect)n->setIntersect(intersect);
+    if(isIntersect){
+      n->setIntersect(intersect);  
+    }
     return isIntersect;
 
 }

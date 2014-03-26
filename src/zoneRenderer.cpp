@@ -13,7 +13,7 @@ void zoneRenderer::setupPostProc() {
     mPost->init(screenData::width, screenData::height);
     mPost->createPass<BloomPass>()->setEnabled(true);
     //mPost->createPass<GodRaysPass>()->setEnabled(true);
-    mPost->setFlip(false);
+    mPost->setFlip(true);
 
 
 }

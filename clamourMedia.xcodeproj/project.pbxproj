@@ -559,10 +559,10 @@
 				02b07b2970422ca0f70290e5c4c2eac2 /* nodeRenderer.cpp */,
 				6590eded5e2544b10b3f8f8850b58d30 /* clamourNode.cpp */,
 				e7915ecfe0e99353e0259e0f5077bbed /* clamourNode.h */,
-				877121fc7c3f50c05a80387d726620b2 /* zoneRenderer.h */,
 				c0e17b9a4bf9e91590c94d410ca22bf1 /* nodeRenderer.h */,
 				164cabbd3142e90b354c21863a35c4fc /* baseZode.h */,
 				cf474ff92dd55dc2702f468f830dcb7d /* zoneRenderer.cpp */,
+				877121fc7c3f50c05a80387d726620b2 /* zoneRenderer.h */,
 			);
 			name = zones;
 			sourceTree = "<group>";
