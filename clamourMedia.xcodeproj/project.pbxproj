@@ -546,6 +546,65 @@
 			name = "3rd party frameworks";
 			sourceTree = "<group>";
 		};
+		D947A29618E3724400472F3A /* zones */ = {
+			isa = PBXGroup;
+			children = (
+				ad1f5a449594daf59c98dac09b2ce322 /* zone.cpp */,
+				3d8735197650581b65fd8adc48e9f107 /* zone.h */,
+				eda5cad493be147badb5a08e3b656ffc /* zoneManager.cpp */,
+				321a835fc49ec6555f92d22a8c68e6d2 /* zoneManager.h */,
+				977617fe7c4b6c48dec32dc6040952c5 /* baseZode.cpp */,
+				401ac4e2bf6120d1f76a5646b5e44816 /* nodeManager.cpp */,
+				da4e54d2199a1635135f3bd448c23dd4 /* nodeManager.h */,
+				02b07b2970422ca0f70290e5c4c2eac2 /* nodeRenderer.cpp */,
+				6590eded5e2544b10b3f8f8850b58d30 /* clamourNode.cpp */,
+				e7915ecfe0e99353e0259e0f5077bbed /* clamourNode.h */,
+				877121fc7c3f50c05a80387d726620b2 /* zoneRenderer.h */,
+				c0e17b9a4bf9e91590c94d410ca22bf1 /* nodeRenderer.h */,
+				164cabbd3142e90b354c21863a35c4fc /* baseZode.h */,
+				cf474ff92dd55dc2702f468f830dcb7d /* zoneRenderer.cpp */,
+			);
+			name = zones;
+			sourceTree = "<group>";
+		};
+		D947A29718E3729500472F3A /* display */ = {
+			isa = PBXGroup;
+			children = (
+				a12fb8ca3bee16304a2dd47ea586b8d7 /* splashManager.cpp */,
+				6d857079c91d266a2250d45c26478fa6 /* splashManager.h */,
+				fde8599fcd87901644f9e2da98420a24 /* splashRenderer.cpp */,
+				c74b1bad6c5240044c8a7cdf9606632a /* splashRenderer.h */,
+				5602411ed4b7947ff8474db44f3db6d4 /* title.cpp */,
+				8d0176d41afee21e2816a1adb831cf5d /* title.h */,
+				475caa77da3b999163a23d8b863d5206 /* displayWindow.cpp */,
+				9a891e366467d96a5d26a50c0a888306 /* displayWindow.h */,
+				10a9d5bb111f5611b35490a2462fdb64 /* pathFactory.cpp */,
+				94851d22ffdf0ee5656f77e4eec695f7 /* pathFactory.h */,
+				bfcd99c3c6c5d63f9f18ee08a95acdf7 /* drawDictionary.cpp */,
+				9ae77a5e0a08876f150d942f3200a63d /* drawDictionary.h */,
+			);
+			name = display;
+			sourceTree = "<group>";
+		};
+		D947A29818E372C600472F3A /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				51a7995d4c5c887be37872a7311a9857 /* presetStore.cpp */,
+				729a4ec59ca786ddba3f620c1f080d24 /* presetStore.h */,
+				6ac4378d65d2f38c96f49aae0073a5ca /* parameter.cpp */,
+				47f6b708a7a8ab6c6c6a342e15dc370f /* parameter.h */,
+				1d7d980fbc46f7882b0effba1fbdf3d3 /* clamourEvent.cpp */,
+				e42310e69663b4d17b8aad2124cdc883 /* clamourEvent.h */,
+				d7cf37d562debf35a923313700fb62e7 /* clamourUtils.cpp */,
+				27c3a4ea253c2e210106fc335432dc39 /* clamourUtils.h */,
+				4a957833526e4500bbed65a2bd0de719 /* xmlLoader.cpp */,
+				51c06ad61ec347c56a72bcb9a4cbe753 /* xmlLoader.h */,
+				640629b5b882628b9ef12900b76c4e5e /* clientManager.cpp */,
+				a77b12dabfcc6500c790eaa6d8999989 /* clientManager.h */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
 		D980E3CD18E3007D0026DD77 /* libs */ = {
 			isa = PBXGroup;
 			children = (
@@ -696,54 +755,19 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				977617fe7c4b6c48dec32dc6040952c5 /* baseZode.cpp */,
-				164cabbd3142e90b354c21863a35c4fc /* baseZode.h */,
-				1d7d980fbc46f7882b0effba1fbdf3d3 /* clamourEvent.cpp */,
-				e42310e69663b4d17b8aad2124cdc883 /* clamourEvent.h */,
-				6590eded5e2544b10b3f8f8850b58d30 /* clamourNode.cpp */,
-				e7915ecfe0e99353e0259e0f5077bbed /* clamourNode.h */,
-				d7cf37d562debf35a923313700fb62e7 /* clamourUtils.cpp */,
-				27c3a4ea253c2e210106fc335432dc39 /* clamourUtils.h */,
-				640629b5b882628b9ef12900b76c4e5e /* clientManager.cpp */,
-				a77b12dabfcc6500c790eaa6d8999989 /* clientManager.h */,
-				475caa77da3b999163a23d8b863d5206 /* displayWindow.cpp */,
-				9a891e366467d96a5d26a50c0a888306 /* displayWindow.h */,
-				bfcd99c3c6c5d63f9f18ee08a95acdf7 /* drawDictionary.cpp */,
-				9ae77a5e0a08876f150d942f3200a63d /* drawDictionary.h */,
-				f782d84504522e744e33b783a7a320f0 /* game.cpp */,
-				d5d640ca72455f05db04c11797f05fe7 /* game.h */,
-				401ac4e2bf6120d1f76a5646b5e44816 /* nodeManager.cpp */,
-				da4e54d2199a1635135f3bd448c23dd4 /* nodeManager.h */,
-				02b07b2970422ca0f70290e5c4c2eac2 /* nodeRenderer.cpp */,
-				c0e17b9a4bf9e91590c94d410ca22bf1 /* nodeRenderer.h */,
 				19c22cd05d10f78b32ff80c6be3a9385 /* ofApp.cpp */,
 				84f6287fa54b66c746947875f6690182 /* ofApp.h */,
+				D947A29818E372C600472F3A /* utils */,
+				D947A29618E3724400472F3A /* zones */,
+				D947A29718E3729500472F3A /* display */,
+				f782d84504522e744e33b783a7a320f0 /* game.cpp */,
+				d5d640ca72455f05db04c11797f05fe7 /* game.h */,
 				53d9ed7a16c25c65179af5538a41dce5 /* oscManager.cpp */,
 				eed54047ed7ea0abb6849c627942b169 /* oscManager.h */,
-				6ac4378d65d2f38c96f49aae0073a5ca /* parameter.cpp */,
-				47f6b708a7a8ab6c6c6a342e15dc370f /* parameter.h */,
-				10a9d5bb111f5611b35490a2462fdb64 /* pathFactory.cpp */,
-				94851d22ffdf0ee5656f77e4eec695f7 /* pathFactory.h */,
-				51a7995d4c5c887be37872a7311a9857 /* presetStore.cpp */,
-				729a4ec59ca786ddba3f620c1f080d24 /* presetStore.h */,
 				f02194e2f54e371d1dc9bc8a428e01de /* scMessenger.cpp */,
 				a4ca4fbac24bfa829b361bd3e38a85ec /* scMessenger.h */,
 				33ad83d6dedea6110f064332fb1914d6 /* soundDictionary.cpp */,
 				3663b9ab9467a820e6017dad4f68802d /* soundDictionary.h */,
-				a12fb8ca3bee16304a2dd47ea586b8d7 /* splashManager.cpp */,
-				6d857079c91d266a2250d45c26478fa6 /* splashManager.h */,
-				fde8599fcd87901644f9e2da98420a24 /* splashRenderer.cpp */,
-				c74b1bad6c5240044c8a7cdf9606632a /* splashRenderer.h */,
-				5602411ed4b7947ff8474db44f3db6d4 /* title.cpp */,
-				8d0176d41afee21e2816a1adb831cf5d /* title.h */,
-				4a957833526e4500bbed65a2bd0de719 /* xmlLoader.cpp */,
-				51c06ad61ec347c56a72bcb9a4cbe753 /* xmlLoader.h */,
-				ad1f5a449594daf59c98dac09b2ce322 /* zone.cpp */,
-				3d8735197650581b65fd8adc48e9f107 /* zone.h */,
-				eda5cad493be147badb5a08e3b656ffc /* zoneManager.cpp */,
-				321a835fc49ec6555f92d22a8c68e6d2 /* zoneManager.h */,
-				cf474ff92dd55dc2702f468f830dcb7d /* zoneRenderer.cpp */,
-				877121fc7c3f50c05a80387d726620b2 /* zoneRenderer.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

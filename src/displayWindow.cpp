@@ -5,9 +5,9 @@
 void displayWindow::setup()
 {
 
-    setWindowShape(screenData::width, screenData::height);
-    setWindowPosition(50, 50);
-    setWindowTitle("CLAMOUR DISPLAY");
+    //setWindowShape(screenData::width, screenData::height);
+    //setWindowPosition(50, 50);
+    //setWindowTitle("CLAMOUR DISPLAY");
     smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
     mZoneRenderer.setupPostProc();
     isScreenChanged = false;
@@ -19,8 +19,8 @@ void displayWindow::update()
 
     //could do with a flag but leave for now
     if(isScreenChanged){
-        screenData::width = getWidth();
-        screenData::height = getHeight();
+        //screenData::width = getWidth();
+        //screenData::height = getHeight();
         mZoneRenderer.setupPostProc();
         pNodeManager->setupRegions();
         isScreenChanged = false;
@@ -41,7 +41,7 @@ void displayWindow::draw()
     mNodeRenderer.renderNodes(pNodeManager->getNodes());
     mSplashRenderer.drawTitles(pSplashManager->getOnTitles());
     ofSetColor(255);
-    //smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
+    smallFont.drawString(ofToString(ofGetFrameRate(),2),20,20);
 
 
 }
@@ -54,7 +54,7 @@ void displayWindow::keyPressed(int key)
     if(key == 102)
     {
         isScreenChanged = true;
-        toggleFullscreen();
+        //toggleFullscreen();
     }
 
 

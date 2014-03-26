@@ -4,15 +4,18 @@
 void ofApp::setup() {
 
     //ofSetLogLevel(OF_LOG_VERBOSE);
-    ofSetVerticalSync(false); // only when dual screen
+    ofSetVerticalSync(false); 
     ofSetFrameRate(60);
     ofSetCircleResolution(50);
     ofSetWindowPosition(800, 100);
     ofSetWindowTitle("CLAMOUR CONTROL");
      smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
 
-    //ofxFensterManager::get()->setupWindow(&mDisplay);
-
+    window2 = ofxFensterManager::get()->createFenster(0, 0, 400, 400, OF_WINDOW);
+    mDisplay = new displayWindow();
+    window2->addListener(mDisplay);
+    mDisplay->setup();
+    
     for(int i = 0; i < NUM_SEATS; i++) {
         for(int j = 0; j < NUM_ROWS; j++) {
 
@@ -32,14 +35,14 @@ void ofApp::setup() {
     mOscManager->setNodeManager(mNodeManager);
     mOscManager->setClientManager(mClientManager);
 
-    mDisplay.setNodeManager(mNodeManager);
+    mDisplay->setNodeManager(mNodeManager);
 
     mZoneManager = ofPtr<zoneManager>(new zoneManager());
-    mDisplay.setZoneManager(mZoneManager);
+    mDisplay->setZoneManager(mZoneManager);
     mOscManager->setZoneManager(mZoneManager);
 
     mSplashManager = ofPtr<splashManager>(new splashManager());
-    mDisplay.setSplashManager(mSplashManager);
+    mDisplay->setSplashManager(mSplashManager);
     mOscManager->setSplashManager(mSplashManager);
 
     mNodeManager->setupRegions();
@@ -311,6 +314,7 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 
+    ofBackground(100);
     gui->draw();
 
     ofSetColor(255);

@@ -55,7 +55,8 @@ private:
 
     void resetEverything();
 
-    displayWindow mDisplay;
+    ofxFenster * window2;
+    displayWindow * mDisplay;
 
     ofxUICanvas *gui;
 

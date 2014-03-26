@@ -12,7 +12,7 @@
 #include "splashManager.h"
 
 
-class displayWindow : public ofxFenster{
+class displayWindow : public ofxFensterListener{
 
     public:
         void setup();
