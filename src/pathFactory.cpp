@@ -18,7 +18,8 @@ void pathFactory::roundedRect(ofPath &p, float x_dim, float y_dim, float t_size)
 
     ofRectangle r;
     r.setFromCenter(0,0, x_dim * t_size, y_dim * t_size);
-    p.rectRounded(r, t_size/10);
+    //p.rectRounded(r, t_size/10); //need to draw manually in of0072
+    
 
 }
 

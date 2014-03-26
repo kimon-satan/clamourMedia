@@ -1,4 +1,5 @@
-ofxOsc
-ofxXmlSettings
 ofxFenster
+ofxOsc
+ofxPostProcessing
 ofxUI
+ofxXmlSettings

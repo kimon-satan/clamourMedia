@@ -11,7 +11,7 @@ void ofApp::setup() {
     ofSetWindowTitle("CLAMOUR CONTROL");
      smallFont.loadFont("fonts/Goulong/Goulong.ttf", 10);
 
-    ofxFensterManager::get()->setupWindow(&mDisplay);
+    //ofxFensterManager::get()->setupWindow(&mDisplay);
 
     for(int i = 0; i < NUM_SEATS; i++) {
         for(int j = 0; j < NUM_ROWS; j++) {
